@@ -5,6 +5,9 @@ model FlowMachineInterface
 
   import cha = AixLib.Fluid.Movers.BaseClasses.Characteristics;
 
+  constant Boolean homotopyInitialization = true "= true, use homotopy method"
+    annotation(HideResult=true);
+
   parameter AixLib.Fluid.Movers.Data.Generic per
     "Record with performance data"
     annotation (choicesAllMatching=true,
@@ -15,23 +18,20 @@ model FlowMachineInterface
   parameter Boolean computePowerUsingSimilarityLaws
     "= true, compute power exactly, using similarity laws. Otherwise approximate.";
 
-  final parameter Modelica.SIunits.VolumeFlowRate V_flow_nominal=
-    per.pressure.V_flow[nOri] "Nominal volume flow rate, used for homotopy";
+  final parameter Modelica.Units.SI.VolumeFlowRate V_flow_nominal=per.pressure.V_flow[
+      nOri] "Nominal volume flow rate, used for homotopy";
 
-  parameter Modelica.SIunits.Density rho_default
+  parameter Modelica.Units.SI.Density rho_default
     "Fluid density at medium default state";
 
   parameter Boolean haveVMax
     "Flag, true if user specified data that contain V_flow_max";
 
-  parameter Modelica.SIunits.VolumeFlowRate V_flow_max
+  parameter Modelica.Units.SI.VolumeFlowRate V_flow_max
     "Maximum volume flow rate, used for smoothing";
 
   parameter Integer nOri(min=1) "Number of data points for pressure curve"
     annotation(Evaluate=true);
-
-  parameter Boolean homotopyInitialization = true "= true, use homotopy method"
-    annotation(Evaluate=true, Dialog(tab="Advanced"));
 
  // Normalized speed
   Modelica.Blocks.Interfaces.RealInput y_in(final unit="1") if preSpe
@@ -124,13 +124,10 @@ protected
   final parameter Real hydDer[size(per.hydraulicEfficiency.V_flow,1)](each fixed=false)
     "Coefficients for polynomial of hydraulic efficiency vs. volume flow rate";
 
-  parameter Modelica.SIunits.PressureDifference dpMax(displayUnit="Pa")=
-    if haveDPMax then
-      per.pressure.dp[1]
-    else
-      per.pressure.dp[1] - ((per.pressure.dp[2] - per.pressure.dp[1])/(
-        per.pressure.V_flow[2] - per.pressure.V_flow[1]))*per.pressure.V_flow[1]
-    "Maximum head";
+  parameter Modelica.Units.SI.PressureDifference dpMax(displayUnit="Pa") = if
+    haveDPMax then per.pressure.dp[1] else per.pressure.dp[1] - ((per.pressure.dp[
+    2] - per.pressure.dp[1])/(per.pressure.V_flow[2] - per.pressure.V_flow[1]))
+    *per.pressure.V_flow[1] "Maximum head";
 
   parameter Real delta = 0.05
     "Small value used to for regularization and to approximate an internal flow resistance of the fan";
@@ -336,6 +333,10 @@ the simulation stops.");
     1)) elseif (size(per.hydraulicEfficiency.V_flow, 1) == 1) then {0}
      else AixLib.Utilities.Math.Functions.splineDerivatives(x=per.hydraulicEfficiency.V_flow,
     y=per.hydraulicEfficiency.eta);
+
+  assert(homotopyInitialization, "In " + getInstanceName() +
+    ": The constant homotopyInitialization has been modified from its default value. This constant will be removed in future releases.",
+    level = AssertionLevel.warning);
 
 equation
   //assign values of dp and r_N, depending on which variable exists and is prescribed
@@ -667,6 +668,12 @@ to be used during the simulation.
 </html>",
 revisions="<html>
 <ul>
+<li>
+April 14, 2020, by Michael Wetter:<br/>
+Changed <code>homotopyInitialization</code> to a constant.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1341\">AixLib, #1341</a>.
+</li>
 <li>
 December 2, 2016, by Michael Wetter:<br/>
 Removed <code>min</code> attribute as otherwise numerical noise can cause

@@ -5,11 +5,10 @@ model Borefields
 
   package Medium = AixLib.Media.Water;
 
-  parameter Modelica.SIunits.Time tLoaAgg=300
+  parameter Modelica.Units.SI.Time tLoaAgg=300
     "Time resolution of load aggregation";
 
-  parameter Modelica.SIunits.Temperature TGro = 283.15
-    "Ground temperature";
+  parameter Modelica.Units.SI.Temperature TGro=283.15 "Ground temperature";
   AixLib.Fluid.Geothermal.Borefields.TwoUTubes borFie2UTubPar(
     redeclare package Medium = Medium,
     borFieDat=borFie2UTubParDat,
@@ -46,7 +45,7 @@ model Borefields
     tau=0)
     "Outlet temperature of the borefield with 2-UTube in parallel configuration"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-  AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFieUTubDat(
+  parameter AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFieUTubDat(
     conDat=AixLib.Fluid.Geothermal.Borefields.Data.Configuration.Example(
     borCon=AixLib.Fluid.Geothermal.Borefields.Types.BoreholeConfiguration.SingleUTube))
     annotation (Placement(transformation(extent={{70,-100},{90,-80}})));
@@ -88,7 +87,7 @@ model Borefields
     tau=0)
     "Outlet temperature of the borefield with 2-UTube in serie configuration"
     annotation (Placement(transformation(extent={{42,50},{62,70}})));
-  AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFie2UTubParDat(
+  parameter AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFie2UTubParDat(
     conDat=AixLib.Fluid.Geothermal.Borefields.Data.Configuration.Example(
     borCon=AixLib.Fluid.Geothermal.Borefields.Types.BoreholeConfiguration.DoubleUTubeParallel))
     "Data from the borefield with 2-UTube in parallel borehole configuration"
@@ -129,7 +128,7 @@ model Borefields
     tau=0)
     "Inlet temperature of the borefield with UTube configuration"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
-  AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFie2UTubSerDat(
+  parameter AixLib.Fluid.Geothermal.Borefields.Data.Borefield.Example borFie2UTubSerDat(
     conDat=AixLib.Fluid.Geothermal.Borefields.Data.Configuration.Example(
     borCon=AixLib.Fluid.Geothermal.Borefields.Types.BoreholeConfiguration.DoubleUTubeSeries))
     "Data from the borefield with 2-UTube in serie borehole configuration"
@@ -171,6 +170,11 @@ the thermal behaviour of the circulating fluid in each case.
 </html>",
 revisions="<html>
 <ul>
+<li>
+April 8, 2021, by Michael Wetter:<br/>
+Added missing <code>parameter</code> keyword.<br/>
+For <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1464\">AixLib, issue 1464</a>.
+</li>
 <li>
 June 2018, by Damien Picard:<br/>
 First implementation.

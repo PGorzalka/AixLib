@@ -10,16 +10,15 @@ model EfficiencyModels
    Modelica.Media.R134a.R134a_ph
    "Actual medium of the compressor";
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal = 0.1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=0.1
     "Nominal mass flow rate";
 
   // Definition of variables
   //
-  Modelica.SIunits.AbsolutePressure pInl=
-    Medium.pressure(Medium.setBubbleState(Medium.setSat_T(preInp.y[2]-1)))
-    "Actual pressure at inlet conditions";
-  Modelica.SIunits.AbsolutePressure pOut=
-    Medium.pressure(Medium.setDewState(Medium.setSat_T(preInp.y[3]-1)))
+  Modelica.Units.SI.AbsolutePressure pInl=Medium.pressure(Medium.setBubbleState(
+      Medium.setSat_T(preInp.y[2] - 1))) "Actual pressure at inlet conditions";
+  Modelica.Units.SI.AbsolutePressure pOut=Medium.pressure(Medium.setDewState(
+      Medium.setSat_T(preInp.y[3] - 1)))
     "Actual set point of the compressor's outlet pressure";
 
   // Definition of models
@@ -99,42 +98,46 @@ equation
     annotation (Line(points={{-35.6,8},{-32,8}},
                                                color={0,0,127}));
 
-  annotation (experiment(StopTime=21168), Documentation(revisions="<html>
-<ul>
-  <li>
-  October 24, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
+  annotation (experiment(StopTime=21168), Documentation(revisions="<html><ul>
+  <li>October 24, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a validation model to test various efficiency models 
-presented in 
-<a href=\"modelica://AixLib.Fluid.Movers.Compressors.Utilities.EngineEfficiency\">
-AixLib.Fluid.Movers.Compressors.Utilities.EngineEfficiency</a>,
-<a href=\"modelica://AixLib.Fluid.Movers.Compressors.Utilities.IsentropicEfficiency\">
-AixLib.Fluid.Movers.Compressors.Utilities.IsentropicEfficiency</a> and
-<a href=\"modelica://AixLib.Fluid.Movers.Compressors.Utilities.VolumetricEfficiency\">
-AixLib.Fluid.Movers.Compressors.Utilities.VolumetricEfficiency</a>. 
-Therefore, both the compressor's inlet and outlet conditions are 
-prescribed in terms of pressure and temperature; additionally, 
-the ambient temperature as well as the rotational speed of the 
-compressor are prescribed. These four variables are varied in
-the following range:
+  This is a validation model to test various efficiency models
+  presented in <a href=
+  \"modelica://AixLib.Fluid.Movers.Compressors.Utilities.EngineEfficiency\">
+  AixLib.Fluid.Movers.Compressors.Utilities.EngineEfficiency</a>,
+  <a href=
+  \"modelica://AixLib.Fluid.Movers.Compressors.Utilities.IsentropicEfficiency\">
+  AixLib.Fluid.Movers.Compressors.Utilities.IsentropicEfficiency</a>
+  and <a href=
+  \"modelica://AixLib.Fluid.Movers.Compressors.Utilities.VolumetricEfficiency\">
+  AixLib.Fluid.Movers.Compressors.Utilities.VolumetricEfficiency</a>.
+  Therefore, both the compressor's inlet and outlet conditions are
+  prescribed in terms of pressure and temperature; additionally, the
+  ambient temperature as well as the rotational speed of the compressor
+  are prescribed. These four variables are varied in the following
+  range:
 </p>
 <ul>
-<li>Ambient temperature: -20 - 20 °C</li>
-<li>Inlet temperature: -20 - 20 °C</li>
-<li>Outlet temperature: 40 - 70 °C</li>
-<li>Rotational speed: 40 - 120 Hz</li>
+  <li>Ambient temperature: -20 - 20 °C
+  </li>
+  <li>Inlet temperature: -20 - 20 °C
+  </li>
+  <li>Outlet temperature: 40 - 70 °C
+  </li>
+  <li>Rotational speed: 40 - 120 Hz
+  </li>
 </ul>
 <p>
-The pressures at inlet and outlet of the compressor depend on
-the temperatures at inlet and outlet of the compressor. Thus,
-it is possible to check if the efficiency models provide efficiencies
-that are physically correct (i.e. to check if the efficiencies are
-smaller than unity).
+  The pressures at inlet and outlet of the compressor depend on the
+  temperatures at inlet and outlet of the compressor. Thus, it is
+  possible to check if the efficiency models provide efficiencies that
+  are physically correct (i.e. to check if the efficiencies are smaller
+  than unity).
 </p>
 </html>"));
 end EfficiencyModels;

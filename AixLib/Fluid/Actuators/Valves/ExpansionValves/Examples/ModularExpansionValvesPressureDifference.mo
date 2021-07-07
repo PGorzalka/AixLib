@@ -12,15 +12,15 @@ model ModularExpansionValvesPressureDifference
 
   parameter Integer nVal = 3
     "Number of valves - each valve will be connected to an individual port_b";
-  parameter Modelica.SIunits.AbsolutePressure pInl=
-    Medium.pressure(Medium.setBubbleState(Medium.setSat_T(TInl+5)))
+  parameter Modelica.Units.SI.AbsolutePressure pInl=Medium.pressure(
+      Medium.setBubbleState(Medium.setSat_T(TInl + 5)))
     "Current pressure at inlet conditions";
-  parameter Modelica.SIunits.Temperature TInl = 348.15
+  parameter Modelica.Units.SI.Temperature TInl=348.15
     "Current temperature at inlet conditions";
-  parameter Modelica.SIunits.AbsolutePressure pOut=
-    Medium.pressure(Medium.setDewState(Medium.setSat_T(TOut)))
+  parameter Modelica.Units.SI.AbsolutePressure pOut=Medium.pressure(
+      Medium.setDewState(Medium.setSat_T(TOut)))
     "Current set point of the compressor's outlet pressure";
-  parameter Modelica.SIunits.Temperature TOut = 278.15
+  parameter Modelica.Units.SI.Temperature TOut=278.15
     "Current temperature at outlet conditions";
 
   // Definition of models
@@ -79,10 +79,9 @@ Sources.MassFlowSource_T source(
     "Replicating the valves' opening signal"
     annotation (Placement(transformation(extent={{40,40},{20,60}})));
   Modelica.Blocks.Sources.Sine valOpe(
-    freqHz=1,
+    f=1,
     amplitude=0.45,
-    offset=0.5)
-    "Input signal to prediscribe expansion valve's opening"
+    offset=0.5) "Input signal to prediscribe expansion valve's opening"
     annotation (Placement(transformation(extent={{80,16},{60,36}})));
   Modelica.Blocks.Routing.Replicator repInt(nout=nVal)
     "Replicating the internal set signal"
@@ -130,31 +129,33 @@ equation
           extent={{12,86},{88,74}},
           lineColor={28,108,200},
           textString="Provide dummy signals"), Rectangle(extent={{10,90},{90,70}},
-            lineColor={28,108,200})}), Documentation(revisions="<html>
-<ul>
-  <li>
-  October 17, 2017, by Mirko Engelpracht, Christian Vering:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
+            lineColor={28,108,200})}), Documentation(revisions="<html><ul>
+  <li>October 17, 2017, by Mirko Engelpracht, Christian Vering:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a simple example model to test expansion valves presented in
-<a href=\"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.ModularExpansionValves\">
-AixLib.Fluid.Actuators.Valves.ExpansionValves.ModularExpansionValves</a>. 
-Therefore, both the valve's inlet and outlet conditions are prescribed
-in terms of pressure and temperature. Furthermore, dummy signals are
-provided for the following data bus signals:
+  This is a simple example model to test expansion valves presented in
+  <a href=
+  \"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.ModularExpansionValves\">
+  AixLib.Fluid.Actuators.Valves.ExpansionValves.ModularExpansionValves</a>.
+  Therefore, both the valve's inlet and outlet conditions are
+  prescribed in terms of pressure and temperature. Furthermore, dummy
+  signals are provided for the following data bus signals:
 </p>
 <ol>
-<li>Set signal for internal controllers.</li>
-<li>Manipulated signals given externally.</li>
-<li>Measured values of controlled variables.</li>
+  <li>Set signal for internal controllers.
+  </li>
+  <li>Manipulated signals given externally.
+  </li>
+  <li>Measured values of controlled variables.
+  </li>
 </ol>
 <p>
-Then, both the internal controllers and the manipulated signals given
-externaly can be tested by changing the controller mode.
+  Then, both the internal controllers and the manipulated signals given
+  externaly can be tested by changing the controller mode.
 </p>
 </html>"));
 end ModularExpansionValvesPressureDifference;

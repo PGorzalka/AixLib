@@ -36,7 +36,11 @@ model MSLAIT2Nodes
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-96,152})));
-  Modelica.Blocks.Sources.CombiTimeTable DataReader(table=pipeDataAIT151218.data)
+  Modelica.Blocks.Sources.CombiTimeTable DataReader(
+    tableOnFile=true,
+    tableName="dat",
+    columns=2:pipeDataAIT151218.nCol,
+    fileName=pipeDataAIT151218.filNam)
     "Read measurement data"
     annotation (Placement(transformation(extent={{0,-158},{20,-138}})));
   Data.PipeDataAIT151218 pipeDataAIT151218 "Measurement data from AIT"
@@ -245,12 +249,10 @@ model MSLAIT2Nodes
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-28,68})));
-  parameter Modelica.SIunits.ThermalConductivity kIns=0.024
+  parameter Modelica.Units.SI.ThermalConductivity kIns=0.024
     "Heat conductivity";
-  parameter Modelica.SIunits.Length dIns=0.045
-    "Thickness of pipe insulation";
-  parameter Modelica.SIunits.Diameter diameter=0.089
-    "Outer diameter of pipe";
+  parameter Modelica.Units.SI.Length dIns=0.045 "Thickness of pipe insulation";
+  parameter Modelica.Units.SI.Diameter diameter=0.089 "Outer diameter of pipe";
   Fluid.Sensors.TemperatureTwoPort
                             senTem_p2(redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,
@@ -290,9 +292,9 @@ model MSLAIT2Nodes
         rotation=90,
         origin={18,112})));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=1
     "Nominal mass flow rate, used for regularization near zero flow";
-  parameter Modelica.SIunits.Time tauHeaTra=6500
+  parameter Modelica.Units.SI.Time tauHeaTra=6500
     "Time constant for heat transfer, default 20 minutes";
 
   Modelica.Blocks.Logical.Switch switch
@@ -494,8 +496,15 @@ Where the thermal conductivity of the ground <code>lambda_g</code> = 2.4 W/(m K)
 </html>", revisions="<html>
 <ul>
 <li>
+March 7, 2020, by Michael Wetter:<br/>
+Replaced measured data from specification in Modelica file to external table,
+as this reduces the computing time.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1289\"> #1289</a>.
+</li>
+<li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>November 28, 2016 by Bram van der Heijde:<br/>Remove <code>pipVol.</code>

@@ -1,7 +1,7 @@
 within AixLib.BoundaryConditions.SolarGeometry.BaseClasses;
 block SolarAzimuth "Solar azimuth"
   extends Modelica.Blocks.Icons.Block;
-  parameter Modelica.SIunits.Angle lat "Latitude";
+  parameter Modelica.Units.SI.Angle lat "Latitude";
   Modelica.Blocks.Interfaces.RealInput zen(quantity="Angle", unit="rad")
     "Zenith angle"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
@@ -22,36 +22,24 @@ protected
   Real tmp "cos(solAzi) before data validity check";
   Real solAziTem "Temporary variable for solar azimuth";
 
-  constant Modelica.SIunits.Time day=86400 "Number of seconds in a day";
-  constant Modelica.SIunits.Angle polarCircle = 1.1617
+  constant Modelica.Units.SI.Time day=86400 "Number of seconds in a day";
+  constant Modelica.Units.SI.Angle polarCircle=1.1617
     "Latitude of polar circle (66 degree 33 min 44 sec)";
   final parameter Boolean outsidePolarCircle = lat < polarCircle and lat > -polarCircle
     "Flag, true if latitude is outside polar region";
 equation
   tmp = (Modelica.Math.sin(lat)*Modelica.Math.cos(zen) - Modelica.Math.sin(
     decAng))/(Modelica.Math.cos(lat)*Modelica.Math.sin(zen));
-
   arg = min(1.0, max(-1.0, tmp));
 
   solAziTem =  Modelica.Math.acos(arg); // Solar azimuth (A4.9a and b) as a positive number
 
-  if outsidePolarCircle then
-    // Outside the polar circle, the only non-differentiability is at night when the sun is set.
-    // Hence, we use noEvent.
-    if noEvent(solTim - integer(solTim/day)*day < 43200) then
-      solAzi =-solAziTem;
-    else
-      solAzi = solAziTem;
-    end if;
-  else
-    // Inside the polar circle, there is a jump at (solar-)midnight when the sun can
-    // be above the horizon. Hence, we do not use noEvent(...)
-    if solTim - integer(solTim/day)*day < 43200 then
-      solAzi =-solAziTem;
-    else
-      solAzi = solAziTem;
-    end if;
-  end if;
+  // If outside the polar circle, the only non-differentiability is at night when the sun is set.
+  // Hence, we use noEvent.
+  // If inside the polar circle, there is a jump at (solar-)midnight when the sun can
+  // be above the horizon. Hence, we do not use noEvent(...)
+  // Written as one line with functions so that lat does not become structural parameter with JModelica.org
+  solAzi = if outsidePolarCircle then solarAzimuthNoEvent(solAziTem, solTim, day) else solarAzimuthWithEvent(solAziTem, solTim, day);
 
   annotation (
     defaultComponentName="solAzi",
@@ -61,6 +49,12 @@ This component computes the solar azimuth angle.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+June 9, 2020, by David Blum:<br/>
+Reformulated to use one-line if-statements.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1373\">issue 1373</a>.
+</li>
 <li>
 October 13, 2017, by Michael Wetter:<br/>
 Reformulated to use equation rather than algorithm section.<br/>

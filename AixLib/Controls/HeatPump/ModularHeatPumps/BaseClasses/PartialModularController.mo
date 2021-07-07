@@ -35,19 +35,17 @@ partial model PartialModularController
     annotation(Dialog(tab="Controller",group="Proportional term"),
                HideResult=true);
 
-  parameter Modelica.SIunits.Time Ti[nCom] = fill(0.5,nCom)
-    "Time constant of integrator block"
-    annotation(Dialog(tab="Controller",group="Integral term"),
-               HideResult=true);
+  parameter Modelica.Units.SI.Time Ti[nCom]=fill(0.5, nCom)
+    "Time constant of integrator block" annotation (Dialog(tab="Controller",
+        group="Integral term"), HideResult=true);
   parameter Real Ni[nCom] = fill(0.9,nCom)
     "Ni*Ti is time constant of anti-windup compensation"
     annotation(Dialog(tab="Controller",group="Integral term"),
                HideResult=true);
 
-  parameter Modelica.SIunits.Time Td[nCom] = fill(0.1,nCom)
-    "Time constant of derivative block"
-    annotation(Dialog(tab="Controller",group="Derivative term"),
-               HideResult=true);
+  parameter Modelica.Units.SI.Time Td[nCom]=fill(0.1, nCom)
+    "Time constant of derivative block" annotation (Dialog(tab="Controller",
+        group="Derivative term"), HideResult=true);
   parameter Real Nd[nCom] = fill(10,nCom)
     "The higher Nd, the more ideal the derivative block"
     annotation(Dialog(tab="Controller",group="Derivative term"),
@@ -71,11 +69,10 @@ partial model PartialModularController
     annotation(Dialog(tab="Controller",group="Controller limits"),
                HideResult=true);
 
-  parameter Modelica.Blocks.Types.InitPID initType[nCom]=
-    fill(Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState,nCom)
+  parameter Modelica.Blocks.Types.Init initType[nCom]=fill(Modelica.Blocks.Types.Init.InitialState,
+      nCom)
     "Init: (1: no init, 2: steady state, 3: initial state, 4: initial output)"
-    annotation(Dialog(tab="Initialisation",group="General"),
-               HideResult=true);
+    annotation (Dialog(tab="Initialisation", group="General"), HideResult=true);
   parameter Real xi_start[nCom] = fill(0,nCom)
     "Initial or guess value value for integrator output (= integrator state)"
     annotation(Dialog(tab="Initialisation",group="Start values"),
@@ -106,7 +103,7 @@ partial model PartialModularController
     final xi_start=xi_start,
     final xd_start=xd_start,
     final y_start=y_start,
-    final reverseAction=reverseAction,
+    final reverseActing=reverseAction,
     final reset=reset) if not useExt
     "Internal controller if internal controller is required"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
@@ -203,43 +200,43 @@ partial model PartialModularController
           textString="%name")}),
         Diagram(
           coordinateSystem(preserveAspectRatio=false)),
-    Documentation(revisions="<html>
-<ul>
-  <li>
-
-  October 17, 2017, by Mirko Engelpracht:<br/>
-
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
+    Documentation(revisions="<html><ul>
+  <li>October 17, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a base model used by all modular controller models. It defines basic 
-inputs, outputs, parameters and sub-models.
-The main inputs and outputs are the modular heat pump control bus 
-<a href=\"modelica://AixLib.Controls.Interfaces.ModularHeatPumpControlBus\">
-AixLib.Controls.Interfaces.ModularHeatPumpControlBus</a>, the manipulated
-signals passed to the controlled components and the current manipulated 
-signals. The main sub-model is a PID controller presented in 
-<a href=\"modelica://AixLib.Controls.Continuous.LimPID\">
-AixLib.Controls.Continuous.LimPID</a> that is initialised if no external
-controller is used. Furthermore, all parameters with respect to the PID
-controller are propagated because the modular controller shall be used
-in an architectural modeling approach.
+  This is a base model used by all modular controller models. It
+  defines basic inputs, outputs, parameters and sub-models. The main
+  inputs and outputs are the modular heat pump control bus <a href=
+  \"modelica://AixLib.Controls.Interfaces.ModularHeatPumpControlBus\">AixLib.Controls.Interfaces.ModularHeatPumpControlBus</a>,
+  the manipulated signals passed to the controlled components and the
+  current manipulated signals. The main sub-model is a PID controller
+  presented in <a href=
+  \"modelica://AixLib.Controls.Continuous.LimPID\">AixLib.Controls.Continuous.LimPID</a>
+  that is initialised if no external controller is used. Furthermore,
+  all parameters with respect to the PID controller are propagated
+  because the modular controller shall be used in an architectural
+  modeling approach.
 </p>
-<h4>Equations needed for completion</h4>
+<h4>
+  Equations needed for completion
+</h4>
 <p>
-For completion of a modular controller extending from this base class, 
-it is necessary to provide an internal control strategy. This strategy
-may differ from component to component. Therefore, the User must define
-two things:
+  For completion of a modular controller extending from this base
+  class, it is necessary to provide an internal control strategy. This
+  strategy may differ from component to component. Therefore, the User
+  must define two things:
 </p>
 <ul>
-<li>Connect <code>useExtBlo</code> with the appropriate data bus 
-connector if required.</li>
-<li>Connect <code>setVal</code> with internal or external manipulated 
-signal depending on <code>useExtBlo</code>.</li>
+  <li>Connect <code>useExtBlo</code> with the appropriate data bus
+  connector if required.
+  </li>
+  <li>Connect <code>setVal</code> with internal or external manipulated
+  signal depending on <code>useExtBlo</code>.
+  </li>
 </ul>
 </html>"));
 end PartialModularController;

@@ -3,7 +3,7 @@ model TwoWayPressureIndependent "Model of a pressure-independent two way valve"
   extends AixLib.Fluid.Actuators.BaseClasses.PartialTwoWayValve(
             final linearized = false,
             from_dp=true,
-            phi=max(0, l + y_actual*(1 - l)));
+            phi=max(0.1*l, l + y_actual*(1 - l)));
 
   parameter Real l2(min=1e-10) = 0.01
     "Gain for mass flow increase if pressure is above nominal pressure"
@@ -18,17 +18,24 @@ protected
     "Parameter for avoiding unnecessary computations";
   constant Real y2dd = 0
     "Second derivative at second support point";
-  Modelica.SIunits.MassFlowRate m_flow_set
-    "Requested mass flow rate";
-  Modelica.SIunits.PressureDifference dp_min(displayUnit="Pa")
+  Modelica.Units.SI.MassFlowRate m_flow_set "Requested mass flow rate";
+  Modelica.Units.SI.PressureDifference dp_min(displayUnit="Pa")
     "Minimum pressure difference required for delivering requested mass flow rate";
-  Modelica.SIunits.PressureDifference dp_x, dp_x1, dp_x2, dp_y2, dp_y1
+  Modelica.Units.SI.PressureDifference dp_x;
+  Modelica.Units.SI.PressureDifference dp_x1;
+  Modelica.Units.SI.PressureDifference dp_x2;
+  Modelica.Units.SI.PressureDifference dp_y2;
+  Modelica.Units.SI.PressureDifference dp_y1
     "Support points for interpolation flow functions";
-  Modelica.SIunits.MassFlowRate m_flow_x, m_flow_x1, m_flow_x2, m_flow_y2, m_flow_y1
+  Modelica.Units.SI.MassFlowRate m_flow_x;
+  Modelica.Units.SI.MassFlowRate m_flow_x1;
+  Modelica.Units.SI.MassFlowRate m_flow_x2;
+  Modelica.Units.SI.MassFlowRate m_flow_y2;
+  Modelica.Units.SI.MassFlowRate m_flow_y1
     "Support points for interpolation flow functions";
-  Modelica.SIunits.MassFlowRate m_flow_smooth
+  Modelica.Units.SI.MassFlowRate m_flow_smooth
     "Smooth interpolation result between two flow regimes";
-  Modelica.SIunits.PressureDifference dp_smooth
+  Modelica.Units.SI.PressureDifference dp_smooth
     "Smooth interpolation result between two flow regimes";
 
 equation
@@ -219,6 +226,14 @@ can serve both puroposes.
 </html>",
 revisions="<html>
 <ul>
+<li>
+August 7, 2020, by Ettore Zanetti:<br/>
+changed the computation of <code>phi</code> using
+<code>max(0.1*l, . )</code> to avoid
+phi=0.
+See <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1376\">
+issue 1376</a>.
+</li>
 <li>
 November 9, 2019, by Filip Jorissen:<br/>
 Guarded the computation of <code>phi</code> using

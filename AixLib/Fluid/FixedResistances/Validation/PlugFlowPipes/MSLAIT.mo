@@ -37,7 +37,11 @@ model MSLAIT
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-104,110})));
-  Modelica.Blocks.Sources.CombiTimeTable DataReader(table=pipeDataAIT151218.data)
+  Modelica.Blocks.Sources.CombiTimeTable DataReader(
+    tableOnFile=true,
+    tableName="dat",
+    columns=2:pipeDataAIT151218.nCol,
+    fileName=pipeDataAIT151218.filNam)
     "Read measurement data"
     annotation (Placement(transformation(extent={{34,-152},{54,-132}})));
   Data.PipeDataAIT151218 pipeDataAIT151218 "Record with measurement data"
@@ -83,11 +87,11 @@ model MSLAIT
         origin={124,-8})));
   inner Modelica.Fluid.System system
     annotation (Placement(transformation(extent={{-140,140},{-120,160}})));
-  parameter Modelica.SIunits.ThermalResistance R=
-    1/(2*kIns*Modelica.Constants.pi)*log(0.18/0.0899) + 1/(2*2.4*Modelica.Constants.pi)*log(2/0.18)
+  parameter Modelica.Units.SI.ThermalResistance R=1/(2*kIns*Modelica.Constants.pi)
+      *log(0.18/0.0899) + 1/(2*2.4*Modelica.Constants.pi)*log(2/0.18)
     "Thermal resistance of main pipes";
-  parameter Modelica.SIunits.ThermalResistance R80=
-    1/(2*0.024*Modelica.Constants.pi)*log(0.07/0.0337) + 1/(2*2.4*Modelica.Constants.pi)*log(2/0.07)
+  parameter Modelica.Units.SI.ThermalResistance R80=1/(2*0.024*Modelica.Constants.pi)
+      *log(0.07/0.0337) + 1/(2*2.4*Modelica.Constants.pi)*log(2/0.07)
     "Thermal resistance of service pipes";
 
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor res0[pip0.nNodes](each R=
@@ -246,12 +250,10 @@ model MSLAIT
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-22,62})));
-  parameter Modelica.SIunits.ThermalConductivity kIns=0.024
+  parameter Modelica.Units.SI.ThermalConductivity kIns=0.024
     "Heat conductivity of pipe insulation material";
-  parameter Modelica.SIunits.Length dIns=0.045
-    "Thickness of pipe insulation";
-  parameter Modelica.SIunits.Diameter diameter=0.089
-    "Outer diameter of pipe";
+  parameter Modelica.Units.SI.Length dIns=0.045 "Thickness of pipe insulation";
+  parameter Modelica.Units.SI.Diameter diameter=0.089 "Outer diameter of pipe";
   Fluid.Sensors.TemperatureTwoPort
                             senTem_p2(redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,
@@ -291,9 +293,9 @@ model MSLAIT
         rotation=90,
         origin={42,80})));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=1
     "Nominal mass flow rate, used for regularization near zero flow";
-  parameter Modelica.SIunits.Time tauHeaTra=6500
+  parameter Modelica.Units.SI.Time tauHeaTra=6500
     "Time constant for heat transfer, default 20 minutes";
 
   Fluid.Sources.MassFlowSource_T Point5(
@@ -505,8 +507,15 @@ Where the thermal conductivity of the ground <code>lambda_g</code> = 2.4 W/(m K)
 </html>", revisions="<html>
 <ul>
 <li>
+March 7, 2020, by Michael Wetter:<br/>
+Replaced measured data from specification in Modelica file to external table,
+as this reduces the computing time.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1289\"> #1289</a>.
+</li>
+<li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>November 28, 2016 by Bram van der Heijde:<br/>Remove <code>pipVol.</code>

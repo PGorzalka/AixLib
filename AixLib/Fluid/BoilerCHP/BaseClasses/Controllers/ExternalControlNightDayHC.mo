@@ -11,15 +11,15 @@ model ExternalControlNightDayHC
   parameter Real declination
     "Declination"
     annotation (Dialog( group= "Heating curves"));
-  parameter Modelica.SIunits.TemperatureDifference Tdelta_Max
+  parameter Modelica.Units.SI.TemperatureDifference Tdelta_Max
     "Difference from set flow temperature over which boiler stops"
-    annotation ( Dialog(group = "OnOff"));
-  parameter Modelica.SIunits.TemperatureDifference Tdelta_Min
+    annotation (Dialog(group="OnOff"));
+  parameter Modelica.Units.SI.TemperatureDifference Tdelta_Min
     "Difference from set flow temperature under which boiler starts"
-    annotation ( Dialog(group = "OnOff"));
-  parameter Modelica.SIunits.Time Fb
+    annotation (Dialog(group="OnOff"));
+  parameter Modelica.Units.SI.Time Fb
     "Period of time for increased set temperature"
-    annotation ( Dialog(group = "Day/Night Mode"));
+    annotation (Dialog(group="Day/Night Mode"));
   parameter Real FA
     "Increment for increased set temperature"
     annotation ( Dialog(group = "Day/Night Mode"));
@@ -60,12 +60,10 @@ model ExternalControlNightDayHC
     annotation (Placement(transformation(extent={{-84,48},{-76.5,55.5}})));
 
 protected
-  Modelica.Blocks.Tables.CombiTable2D flowTempNight(
-    final table=paramHC.varFlowTempNight)
+  Modelica.Blocks.Tables.CombiTable2Ds flowTempNight(final table=paramHC.varFlowTempNight)
     "Table for setting the flow temperature during night according to the outside temperature"
     annotation (Placement(transformation(extent={{-49.5,49.5},{-31.5,67.5}})));
-  Modelica.Blocks.Tables.CombiTable2D flowTempDay(
-    final table=paramHC.varFlowTempDay)
+  Modelica.Blocks.Tables.CombiTable2Ds flowTempDay(final table=paramHC.varFlowTempDay)
     "Table for setting the flow temperature druing day according to the outside temperature"
     annotation (Placement(transformation(extent={{-49.5,22.5},{-31.5,40.5}})));
   Modelica.Blocks.Math.UnitConversions.To_degC to_degC
@@ -270,29 +268,51 @@ equation
           fillColor={255,255,170},
           fillPattern=FillPattern.Solid,
           textString="%name")}),
-    Documentation(info="<html>
-<h4><span style=\"color:#008000\">Overview</span></h4>
-<p>This is a controller model, modelled after the <a href=\"DataBase.Boiler.DayNightMode.HeatingCurves_Vitotronic_Day25_Night10\">Vitotronic 200</a>. </p>
-<h4><span style=\"color:#008000\">Concept</span></h4>
-<p>The following control decisions are implemented:</p>
+    Documentation(info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  This is a controller model, modelled after the <a href=
+  \"DataBase.Boiler.DayNightMode.HeatingCurves_Vitotronic_Day25_Night10\">
+  Vitotronic 200</a>.
+</p>
+<h4>
+  <span style=\"color:#008000\">Concept</span>
+</h4>
+<p>
+  The following control decisions are implemented:
+</p>
 <ul>
-<li>Switch on/off when the fluid temperature is under/over the set fluid
-temperature </li>
-<li>Heating curve: fluid temperature depending on the outside temperature</li>
-<li>Average outside temperature</li>
-<li>Increase the set fluid temperature when going to day mode in order to
-shorten the heating up period </li>
+  <li>Switch on/off when the fluid temperature is under/over the set
+  fluid temperature
+  </li>
+  <li>Heating curve: fluid temperature depending on the outside
+  temperature
+  </li>
+  <li>Average outside temperature
+  </li>
+  <li>Increase the set fluid temperature when going to day mode in
+  order to shorten the heating up period
+  </li>
 </ul>
 </html>",
-revisions="<html>
-<ul>
-<li><i>December 08, 2016&nbsp;</i> by Moritz Lauster:<br/>Adapted to AixLib
-conventions</li>
-<li><i>October 11, 2016&nbsp;</i> by Pooyan Jahangiri:<br/>Merged with
-AixLib</li>
-<li><i>October 7, 2013&nbsp;</i> by Ole Odendahl:<br/>Formatted documentation
-appropriately</li>
-<li><i>October 12, 2011</i> by Ana Constantin:<br/>Implemented</li>
+revisions="<html><ul>
+  <li>
+    <i>December 08, 2016&#160;</i> by Moritz Lauster:<br/>
+    Adapted to AixLib conventions
+  </li>
+  <li>
+    <i>October 11, 2016&#160;</i> by Pooyan Jahangiri:<br/>
+    Merged with AixLib
+  </li>
+  <li>
+    <i>October 7, 2013&#160;</i> by Ole Odendahl:<br/>
+    Formatted documentation appropriately
+  </li>
+  <li>
+    <i>October 12, 2011</i> by Ana Constantin:<br/>
+    Implemented
+  </li>
 </ul>
 </html>"));
 end ExternalControlNightDayHC;

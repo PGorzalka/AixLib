@@ -21,12 +21,11 @@ partial model PartialHeatPumpSystem
     annotation (Dialog(group="Sink"),choicesAllMatching=true);
   replaceable package Medium_eva = Modelica.Media.Interfaces.PartialMedium "Medium at source side"
     annotation (Dialog(group="Source"), choicesAllMatching=true);
-  parameter Modelica.SIunits.MassFlowRate mFlow_conNominal
+  parameter Modelica.Units.SI.MassFlowRate mFlow_conNominal
     "Nominal mass flow rate, used for regularization near zero flow"
     annotation (Dialog(group="Nominal condition"));
-  parameter Modelica.SIunits.MassFlowRate mFlow_evaNominal
-    "Nominal mass flow rate"
-    annotation (Dialog(group="Nominal condition"));
+  parameter Modelica.Units.SI.MassFlowRate mFlow_evaNominal
+    "Nominal mass flow rate" annotation (Dialog(group="Nominal condition"));
   final parameter Medium_con.ThermodynamicState stateCon_default = Medium_con.setState_pTX(
     T=Medium_con.T_default,
     p=Medium_con.p_default,
@@ -42,7 +41,7 @@ partial model PartialHeatPumpSystem
 
   replaceable model SecHeatGen = AixLib.Fluid.HeatExchangers.HeaterCooler_u                                                                                   annotation(Dialog(group="System", enable=
           use_secHeaGen), choicesAllMatching=true);
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal
     "Nominal heat flow rate of second heat generator. Used to calculate input singal y."
     annotation (Dialog(group="System", enable=use_secHeaGen), Evaluate=true);
   parameter Boolean use_conPum=true
@@ -66,7 +65,7 @@ partial model PartialHeatPumpSystem
 
 //HeatPump Control
   replaceable model TSetToNSet = Controls.HeatPump.BaseClasses.OnOffHP
-    constrainedby Controls.HeatPump.BaseClasses.OnOffHP annotation (Dialog(tab="Heat Pump Control"),choicesAllMatching=true);
+    constrainedby Controls.HeatPump.BaseClasses.PartialTSetToNSet annotation (Dialog(tab="Heat Pump Control"),choicesAllMatching=true);
   parameter Boolean use_tableData=true
     "Choose between tables or function to calculate TSet"
     annotation (Dialog(tab="Heat Pump Control", group="Heating Curve"),choices(
@@ -94,12 +93,12 @@ partial model PartialHeatPumpSystem
   parameter Boolean use_antLeg=true
     "True if Anti-Legionella control is considered"
     annotation (Dialog(tab="Heat Pump Control", group="Anti Legionella", descriptionLabel = true),choices(checkBox=true));
-  parameter Modelica.SIunits.ThermodynamicTemperature TLegMin=333.15
+  parameter Modelica.Units.SI.ThermodynamicTemperature TLegMin=333.15
     "Temperature at which the legionella in DWH dies" annotation (Dialog(
       tab="Heat Pump Control",
       group="Anti Legionella",
       enable=use_antLeg), Evaluate=true);
-  parameter Modelica.SIunits.Time minTimeAntLeg
+  parameter Modelica.Units.SI.Time minTimeAntLeg
     "Minimal duration of antilegionella control" annotation (Dialog(
       tab="Heat Pump Control",
       group="Anti Legionella",
@@ -121,93 +120,95 @@ partial model PartialHeatPumpSystem
       tab="Heat Pump Control",
       group="Anti Legionella",
       enable=use_antLeg));
-//Security Control
+//Safety Control
   parameter Boolean use_sec=true
-    "False if the Security block should be disabled"
+    "False if the Safety block should be disabled"
                                      annotation (choices(checkBox=true), Dialog(
-        tab="Security Control", group="General", descriptionLabel = true));
+        tab="Safety Control", group="General", descriptionLabel = true));
   parameter Boolean use_minRunTime=false
     "False if minimal runtime of HP is not considered"
-    annotation (Dialog(enable=use_sec, tab="Security Control", group="On-/Off Control", descriptionLabel = true), choices(checkBox=true));
-  parameter Modelica.SIunits.Time minRunTime=300
-    "Minimum runtime of heat pump"
-    annotation (Dialog(tab="Security Control", group="On-/Off Control",
+    annotation (Dialog(enable=use_sec, tab="Safety Control", group="On-/Off Control", descriptionLabel = true), choices(checkBox=true));
+  parameter Modelica.Units.SI.Time minRunTime=300
+    "Minimum runtime of heat pump" annotation (Dialog(
+      tab="Safety Control",
+      group="On-/Off Control",
       enable=use_sec and use_minRunTime), Evaluate=true);
   parameter Boolean use_minLocTime=false
     "False if minimal locktime of HP is not considered"
-    annotation (Dialog(tab="Security Control", group="On-/Off Control", descriptionLabel = true, enable=use_sec), choices(checkBox=true));
-  parameter Modelica.SIunits.Time minLocTime=300
-    "Minimum lock time of heat pump"
-    annotation (Dialog(tab="Security Control", group="On-/Off Control",
+    annotation (Dialog(tab="Safety Control", group="On-/Off Control", descriptionLabel = true, enable=use_sec), choices(checkBox=true));
+  parameter Modelica.Units.SI.Time minLocTime=300
+    "Minimum lock time of heat pump" annotation (Dialog(
+      tab="Safety Control",
+      group="On-/Off Control",
       enable=use_sec and use_minLocTime), Evaluate=true);
   parameter Boolean use_runPerHou=false
     "False if maximal runs per hour of HP are not considered"
-    annotation (Dialog(tab="Security Control", group="On-/Off Control", descriptionLabel = true, enable=use_sec), choices(checkBox=true));
+    annotation (Dialog(tab="Safety Control", group="On-/Off Control", descriptionLabel = true, enable=use_sec), choices(checkBox=true));
   parameter Integer maxRunPerHou=3
                               "Maximal number of on/off cycles in one hour"
-    annotation (Dialog(tab="Security Control", group="On-/Off Control",
+    annotation (Dialog(tab="Safety Control", group="On-/Off Control",
       enable=use_sec and use_runPerHou), Evaluate=true);
   parameter Boolean pre_n_start=false
                                      "Start value of pre(n) at initial time"
     annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="On-/Off Control",
       enable=use_sec), choices(checkBox=true));
   parameter Boolean use_opeEnv=true
     "False to allow HP to run out of operational envelope"
-    annotation (Dialog(tab="Security Control", group="Operational Envelope",
+    annotation (Dialog(tab="Safety Control", group="Operational Envelope",
       enable=use_sec, descriptionLabel = true),choices(checkBox=true));
   parameter Boolean use_opeEnvFroRec=false
     "Use a the operational envelope given in the datasheet" annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Operational Envelope",
       enable=use_sec and use_opeEnv,
       descriptionLabel=true),choices(checkBox=true));
-  parameter DataBase.ThermalMachines.HeatPump.HeatPumpBaseDataDefinition
+  parameter DataBase.HeatPump.HeatPumpBaseDataDefinition
     dataTable "Data Table of HP" annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Operational Envelope",
       enable=use_sec and use_opeEnv and use_opeEnvFroRec), choicesAllMatching=
         true);
   parameter Real tableUpp[:,2]=[0,60; 5,70; 30,70]
                                "Upper boundary of envelope" annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Operational Envelope",
       enable=use_sec and use_opeEnv and not use_opeEnvFroRec));
   parameter Boolean use_deFro=true "False if defrost in not considered"
                                     annotation (choices(checkBox=true), Dialog(
-        tab="Security Control",group="Defrost", descriptionLabel = true, enable=use_sec));
+        tab="Safety Control",group="Defrost", descriptionLabel = true, enable=use_sec));
   parameter Real minIceFac "Minimal value above which no defrost is necessary"
     annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Defrost",
       enable=use_sec and use_deFro));
   parameter Real deltaIceFac = 0.1 "Bandwitdth for hystereses. If the icing factor is based on the duration of defrost, this value is necessary to avoid state-events."
   annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Defrost",
       enable=use_sec and use_deFro));
   parameter Boolean use_chiller=false
     "True if defrost operates by changing mode to cooling. False to use an electrical heater"
     annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Defrost",
       enable=use_sec and use_deFro), choices(checkBox=true));
-  parameter Modelica.SIunits.Power calcPel_deFro
-    "Calculate how much eletrical energy is used to melt ice"
-    annotation (Dialog(
-      tab="Security Control",
+  parameter Modelica.Units.SI.Power calcPel_deFro
+    "Calculate how much eletrical energy is used to melt ice" annotation (
+      Dialog(
+      tab="Safety Control",
       group="Defrost",
       enable=use_sec and use_deFro and not use_chiller));
   parameter Boolean use_antFre=false
-    "True if anti freeze control is part of security control" annotation (
+    "True if anti freeze control is part of safety control" annotation (
       Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Anti Freeze Control",
       enable=use_sec),choices(checkBox=true));
-  parameter Modelica.SIunits.ThermodynamicTemperature TantFre=276.15
+  parameter Modelica.Units.SI.ThermodynamicTemperature TantFre=276.15
     "Limit temperature for anti freeze control" annotation (Dialog(
-      tab="Security Control",
+      tab="Safety Control",
       group="Anti Freeze Control",
       enable=use_sec and use_antFre));
 //Initialization
@@ -235,13 +236,13 @@ partial model PartialHeatPumpSystem
 
 //Dynamics
   parameter Modelica.Fluid.Types.Dynamics massDynamics
-    "Type of mass balance: dynamic (3 initialization options) or steady state"
+    "Type of mass balance: dynamic (3 initialization options) or steady state (only affects fluid-models)"
     annotation (Dialog(tab="Dynamics", group="Equation"));
   parameter Modelica.Fluid.Types.Dynamics energyDynamics
-    "Type of energy balance: dynamic (3 initialization options) or steady state"
+    "Type of energy balance: dynamic (3 initialization options) or steady state (only affects fluid-models)"
     annotation (Dialog(tab="Dynamics", group="Equation"));
 //Assumptions
-  parameter Modelica.SIunits.Time tauSenT=1
+  parameter Modelica.Units.SI.Time tauSenT=1
     "Time constant at nominal flow rate (use tau=0 for steady-state sensor, but see user guide for potential problems)"
     annotation (Dialog(tab="Assumptions", group="Temperature sensors"));
   parameter Boolean transferHeat=true
@@ -262,18 +263,30 @@ partial model PartialHeatPumpSystem
     annotation (Dialog(tab="Assumptions", group="Condenser",
       enable=use_conPum), choices(checkBox=true));
 
-  parameter Modelica.SIunits.Time tauHeaTraEva=1200
+  parameter Modelica.Units.SI.Time tauHeaTraEva=1200
     "Time constant for heat transfer in temperature sensors in evaporator, default 20 minutes"
-    annotation (Dialog(tab="Assumptions", group="Temperature sensors",enable=transferHeat), Evaluate=true);
-  parameter Modelica.SIunits.Temperature TAmbEva_nominal=273.15
+    annotation (Dialog(
+      tab="Assumptions",
+      group="Temperature sensors",
+      enable=transferHeat), Evaluate=true);
+  parameter Modelica.Units.SI.Temperature TAmbEva_nominal=273.15
     "Fixed ambient temperature for heat transfer of sensors at the evaporator side"
-    annotation (Dialog(tab="Assumptions", group="Temperature sensors",enable=transferHeat));
-  parameter Modelica.SIunits.Time tauHeaTraCon=1200
+    annotation (Dialog(
+      tab="Assumptions",
+      group="Temperature sensors",
+      enable=transferHeat));
+  parameter Modelica.Units.SI.Time tauHeaTraCon=1200
     "Time constant for heat transfer in temperature sensors in condenser, default 20 minutes"
-    annotation (Dialog(tab="Assumptions", group="Temperature sensors",enable=transferHeat),Evaluate=true);
-  parameter Modelica.SIunits.Temperature TAmbCon_nominal=291.15
+    annotation (Dialog(
+      tab="Assumptions",
+      group="Temperature sensors",
+      enable=transferHeat), Evaluate=true);
+  parameter Modelica.Units.SI.Temperature TAmbCon_nominal=291.15
     "Fixed ambient temperature for heat transfer of sensors at the condenser side"
-    annotation (Dialog(tab="Assumptions", group="Temperature sensors",enable=transferHeat));
+    annotation (Dialog(
+      tab="Assumptions",
+      group="Temperature sensors",
+      enable=transferHeat));
 
   replaceable Fluid.Interfaces.PartialFourPortInterface heatPump constrainedby
     Fluid.Interfaces.PartialFourPortInterface annotation (Placement(
@@ -386,6 +399,7 @@ partial model PartialHeatPumpSystem
     final tableUpp=tableUpp,
     final use_deFro=use_deFro,
     final minIceFac=minIceFac,
+    final deltaIceFac=deltaIceFac,
     final use_chiller=use_chiller,
     final calcPel_deFro=calcPel_deFro,
     final use_antFre=use_antFre,
@@ -394,36 +408,38 @@ partial model PartialHeatPumpSystem
     final maxRunPerHou=maxRunPerHou,
     final cp_con=cpCon)
     annotation (Placement(transformation(extent={{-50,98},{48,168}})));
-  Modelica.Blocks.Interfaces.RealInput TAct(unit="K") "Outdoor air temperature"
+  Modelica.Blocks.Interfaces.RealInput TAct(unit="K")
+    "Supply temperature for controls"
     annotation (Placement(transformation(extent={{-130,146},{-100,176}})));
 equation
   connect(pumSin.port_b, heatPump.port_a1) annotation (Line(
-      points={{-62,40},{-62,11.2},{-26,11.2}},
+      points={{-62,40},{-62,9},{-26,9}},
       color={0,127,255},
       pattern=LinePattern.Dash));
 
   connect(pumSou.port_b, heatPump.port_a2) annotation (Line(
-      points={{52,-42},{30,-42},{30,-15.2},{18,-15.2}},
+      points={{52,-42},{30,-42},{30,-13},{18,-13}},
       color={0,127,255},
       pattern=LinePattern.Dash));
   connect(mediumPassThroughSin.port_b, heatPump.port_a1) annotation (Line(
-      points={{-64,12},{-26,12},{-26,11.2}},
+      points={{-64,12},{-26,12},{-26,9}},
       color={0,127,255},
       pattern=LinePattern.Dash));
   connect(mediumPassThroughSou.port_b, heatPump.port_a2) annotation (Line(
-      points={{54,-16},{18,-16},{18,-15.2}},
+      points={{54,-16},{18,-16},{18,-13}},
       color={0,127,255},
       pattern=LinePattern.Dash));
   connect(heatPump.port_b1, secHeaGen.port_a) annotation (Line(
-      points={{18,11.2},{18,60},{32,60},{32,61}},
+      points={{18,9},{18,60},{32,60},{32,61}},
       color={0,127,255},
       pattern=LinePattern.Dash));
   connect(heatPump.port_b1, mediumPassThroughSecHeaGen.port_a) annotation (Line(
-      points={{18,11.2},{18,34},{32,34}},
+      points={{18,9},{18,34},{32,34}},
       color={0,127,255},
       pattern=LinePattern.Dash));
-  connect(heatPump.port_b2, port_b2) annotation (Line(points={{-26,-15.2},{-60,-15.2},
-          {-60,-60},{-100,-60}}, color={0,127,255}));
+  connect(heatPump.port_b2, port_b2) annotation (Line(points={{-26,-13},{-60,
+          -13},{-60,-60},{-100,-60}},
+                                 color={0,127,255}));
 connect(pumSou.port_a, port_a2) annotation (Line(
       points={{68,-42},{86,-42},{86,-16},{100,-16},{100,-60}},
       color={0,127,255},
@@ -444,12 +460,13 @@ connect(pumSou.port_a, port_a2) annotation (Line(
           {100,60}}, color={0,127,255}));
   connect(T_oda, hPSystemController.T_oda) annotation (Line(points={{-115,119},{
           -90,119},{-90,133},{-56.86,133}}, color={0,0,127}));
-  connect(hPSystemController.y_sou, pumSin.y) annotation (Line(points={{-40.2,93.1},
-          {-40.2,66},{-70,66},{-70,49.6}}, color={0,0,127}));
-  connect(hPSystemController.ySecHeaGen, secHeaGen.u) annotation (Line(points={{18.6,
-          93.1},{18.6,66.4},{30.4,66.4}},      color={0,0,127}));
-  connect(hPSystemController.y_sin, pumSou.y) annotation (Line(points={{38.2,93.1},
-          {38.2,76},{58,76},{58,-2},{36,-2},{36,-66},{60,-66},{60,-51.6}},
+  connect(hPSystemController.y_sou, pumSin.y) annotation (Line(points={{-30.4,
+          93.1},{-30.4,66},{-70,66},{-70,49.6}},
+                                           color={0,0,127}));
+  connect(hPSystemController.ySecHeaGen, secHeaGen.u) annotation (Line(points={{-1,93.1},
+          {-1,66.4},{30.4,66.4}},              color={0,0,127}));
+  connect(hPSystemController.y_sin, pumSou.y) annotation (Line(points={{28.4,
+          93.1},{28.4,76},{58,76},{58,-2},{36,-2},{36,-66},{60,-66},{60,-51.6}},
         color={0,0,127}));
   connect(secHeaGen.port_b, port_b1) annotation (Line(
       points={{48,61},{82,61},{82,60},{100,60}},
@@ -552,7 +569,7 @@ connect(pumSou.port_a, port_a2) annotation (Line(
           lineColor={0,0,127},
           fillColor={255,255,255},
           fillPattern=FillPattern.None,
-          textString="Security",
+          textString="Safety",
           visible=use_sec),
         Rectangle(
           extent={{-16,182},{52,144}},

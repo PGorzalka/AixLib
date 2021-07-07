@@ -4,9 +4,9 @@ model ClosedLoop_y "Flow machine with feedback control"
 
   package Medium = AixLib.Media.Air;
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal= 0.1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=0.1
     "Nominal mass flow rate";
-  parameter Modelica.SIunits.PressureDifference dp_nominal = 500
+  parameter Modelica.Units.SI.PressureDifference dp_nominal=500
     "Nominal pressure difference";
 
   Modelica.Blocks.Sources.Pulse y(
@@ -42,7 +42,6 @@ model ClosedLoop_y "Flow machine with feedback control"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
   AixLib.Controls.Continuous.LimPID conPID(
     Td=1,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=0.5,
     Ti=15) annotation (Placement(transformation(extent={{0,100},{20,120}})));
   Modelica.Blocks.Math.Gain gain1(k=1/m_flow_nominal)

@@ -18,30 +18,26 @@ model RefrigerantProperties
 
   // Define the fluid limits of the medium that shall be tested
   //
-  parameter Modelica.SIunits.SpecificEnthalpy h_min = 145e3
+  parameter Modelica.Units.SI.SpecificEnthalpy h_min=145e3
     "Fluid limit: Minimum specific enthalpy"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.SpecificEnthalpy h_max = 480e3
+  parameter Modelica.Units.SI.SpecificEnthalpy h_max=480e3
     "Fluid limit: Maximum specific enthalpy"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.Density d_min = 2
-    "Fluid limit: Minimum density"
+  parameter Modelica.Units.SI.Density d_min=2 "Fluid limit: Minimum density"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.Density d_max = 1325
-    "Fluid limit: Maximum density"
+  parameter Modelica.Units.SI.Density d_max=1325 "Fluid limit: Maximum density"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.AbsolutePressure p_min = 1e5
+  parameter Modelica.Units.SI.AbsolutePressure p_min=1e5
     "Fluid limit: Minimum absolute pressure"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.AbsolutePressure p_max = 39e5
+  parameter Modelica.Units.SI.AbsolutePressure p_max=39e5
     "Fluid limit: Maximum absolute pressure"
     annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.Temperature T_min = 233.15
-    "Fluid limit: Minimum temperature"
-    annotation (Dialog(group="Fluid limits"));
-  parameter Modelica.SIunits.Temperature T_max = 455.15
-    "Fluid limit: Maximum temperature"
-    annotation (Dialog(group="Fluid limits"));
+  parameter Modelica.Units.SI.Temperature T_min=233.15
+    "Fluid limit: Minimum temperature" annotation (Dialog(group="Fluid limits"));
+  parameter Modelica.Units.SI.Temperature T_max=455.15
+    "Fluid limit: Maximum temperature" annotation (Dialog(group="Fluid limits"));
 
   // Define the conversion factor for the test
   //
@@ -52,22 +48,14 @@ model RefrigerantProperties
 
   // Define variables that shall be tested
   //
-  Modelica.SIunits.Temperature T(start = T_min)
-    "Actual temperature";
-  Modelica.SIunits.AbsolutePressure p(start = p_min)
-    "Actual absolute presure";
-  Modelica.SIunits.Density d(start = d_min)
-    "Actual density";
-  Modelica.SIunits.SpecificEnthalpy h(start = h_min)
-    "Actual specific enthalpy";
-  Modelica.SIunits.SpecificEntropy s
-    "Actual specific entropy";
-  Modelica.SIunits.SpecificInternalEnergy u
-    "Actual specific internal energy";
-  Modelica.SIunits.SpecificEnergy g
-    "Actual specific Gibbs energy";
-  Modelica.SIunits.SpecificEnergy f
-    "Actual specific Helmholtz energy";
+  Modelica.Units.SI.Temperature T(start=T_min) "Actual temperature";
+  Modelica.Units.SI.AbsolutePressure p(start=p_min) "Actual absolute presure";
+  Modelica.Units.SI.Density d(start=d_min) "Actual density";
+  Modelica.Units.SI.SpecificEnthalpy h(start=h_min) "Actual specific enthalpy";
+  Modelica.Units.SI.SpecificEntropy s "Actual specific entropy";
+  Modelica.Units.SI.SpecificInternalEnergy u "Actual specific internal energy";
+  Modelica.Units.SI.SpecificEnergy g "Actual specific Gibbs energy";
+  Modelica.Units.SI.SpecificEnergy f "Actual specific Helmholtz energy";
 
   Medium.SaturationProperties satT
     "Actual saturation properties calculated with temperature";
@@ -99,10 +87,9 @@ model RefrigerantProperties
       "Actual velocity of sound";
     Medium.IsobaricExpansionCoefficient betta
       "Actual isobaric expansion coefficient";
-    Modelica.SIunits.IsothermalCompressibility kappa
+    Modelica.Units.SI.IsothermalCompressibility kappa
       "Actual isothermal compressibility";
-    Modelica.SIunits.IsentropicExponent gamma
-      "Actual isentropic coefficient";
+    Modelica.Units.SI.IsentropicExponent gamma "Actual isentropic coefficient";
     Real delta_T(unit= "J/(Pa.kg)")
       "Actual isothermal throttling coefficient";
     Real my(unit="K/Pa")
@@ -178,9 +165,9 @@ model RefrigerantProperties
     setState functions";
 
 protected
-  Modelica.SIunits.Time convChange(start = 0)
+  Modelica.Units.SI.Time convChange(start=0)
     "Time to reset calculation of actual temperature or pressure";
-  Modelica.SIunits.Time convChangeTmp(start = 0)
+  Modelica.Units.SI.Time convChangeTmp(start=0)
     "Temporary time to reset calculation of actual temperature or pressure";
 
 algorithm
@@ -293,57 +280,60 @@ equation
     abs(state_pT.h)*100;
 
    annotation(experiment(StopTime=6400, Tolerance=1e-006),
-      Documentation(info="<html>
-<p>
-This example models checks the implementation of the<b> refrigerant&apos;s
-thermophysical properties</b> depending on the independent variables pressure
-and temperature. Therefore, the user has first to introduce some information
-about the refrigerant and afterwards the thermophysical properties are
-calculated. The following <b>refrigerant&apos;s information</b> is required:
+      Documentation(info="<html><p>
+  This example models checks the implementation of the <b>refrigerant's
+  thermophysical properties</b> depending on the independent variables
+  pressure and temperature. Therefore, the user has first to introduce
+  some information about the refrigerant and afterwards the
+  thermophysical properties are calculated. The following
+  <b>refrigerant's information</b> is required:
 </p>
 <ol>
-<li>The <i>refrigerant package</i> that shall be tested.
-</li>
-<li>The <i>way of calculating</i> the thermophysical properties. Therefore,
-the user can choose between either (wayOfCalc = true) a slowly raising
-pressure from p<sub>min</sub> to p<sub>max</sub> and a fast pulsating
-temperature from T<sub>min</sub> to T<sub>max</sub> or (wayOfCalc = false) a
-fast pulsating pressure from p<sub>min</sub> to p<sub>max</sub> and a slowly
-raising temperature from T<sub>min</sub> to T<sub>max</sub>. In both modes,
-the overall simulating time is set to 6400 s and, hence, the slowly raising
-property will reach its maximum value after 6400 s. The fast pulsating
-property will reach its maximum value after 80 s.
-</li>
-<li>The <i>refrigerant&apos;s fluid limits</i> that are determined by the
-fitting procedure.
-</li>
+  <li>The <i>refrigerant package</i> that shall be tested.
+  </li>
+  <li>The <i>way of calculating</i> the thermophysical properties.
+  Therefore, the user can choose between either (wayOfCalc = true) a
+  slowly raising pressure from p<sub>min</sub> to p<sub>max</sub> and a
+  fast pulsating temperature from T<sub>min</sub> to T<sub>max</sub> or
+  (wayOfCalc = false) a fast pulsating pressure from p<sub>min</sub> to
+  p<sub>max</sub> and a slowly raising temperature from T<sub>min</sub>
+  to T<sub>max</sub>. In both modes, the overall simulating time is set
+  to 6400 s and, hence, the slowly raising property will reach its
+  maximum value after 6400 s. The fast pulsating property will reach
+  its maximum value after 80 s.
+  </li>
+  <li>The <i>refrigerant's fluid limits</i> that are determined by the
+  fitting procedure.
+  </li>
 </ol>
 <p>
-The following <b>refrigerant&apos;s thermophysical properties</b> are
-calculated and checked:
+  The following <b>refrigerant's thermophysical properties</b> are
+  calculated and checked:
 </p>
 <ol>
-<li>Calculation of basic properties like the specific enthalpy or density
-using pressure and temperature.</li>
-<li>Calculation of saturation properties using both pressure and temperature.
-The results of both calculations are compared to each other.</li>
-<li>Calculation of the &quot;setState&quot;-functions and comparing the
-results to the &quot;setState_pT&quot;-results.</li>
-<li>Calculation of furhter properties like the thermal conductivity or
-isothermal compressbility.</li>
+  <li>Calculation of basic properties like the specific enthalpy or
+  density using pressure and temperature.
+  </li>
+  <li>Calculation of saturation properties using both pressure and
+  temperature. The results of both calculations are compared to each
+  other.
+  </li>
+  <li>Calculation of the \"setState\"-functions and comparing the results
+  to the \"setState_pT\"-results.
+  </li>
+  <li>Calculation of furhter properties like the thermal conductivity
+  or isothermal compressbility.
+  </li>
 </ol>
 <p>
-Additionally, the &quot;setState&quot;-functions&apos; <b>absolute and
-relative errors</b> compared to the &quot;setState_pT&quot;-results are
-calculated.
+  Additionally, the \"setState\"-functions' <b>absolute and relative
+  errors</b> compared to the \"setState_pT\"-results are calculated.
 </p>
 </html>",
-revisions="<html>
-<ul>
-  <li>
-  June 13, 2017, by Mirko Engelpracht, Christian Vering:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/408\">issue 408</a>).
+revisions="<html><ul>
+  <li>June 13, 2017, by Mirko Engelpracht, Christian Vering:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/408\">issue 408</a>).
   </li>
 </ul>
 </html>"));

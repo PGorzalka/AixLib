@@ -1,7 +1,8 @@
-within AixLib.Fluid.BoilerCHP;
+﻿within AixLib.Fluid.BoilerCHP;
 model Boiler "Boiler with internal and external control"
-  extends AixLib.Fluid.BoilerCHP.BaseClasses.PartialHeatGenerator(pressureDrop(
-        a=paramBoiler.pressureDrop), vol(V=paramBoiler.volume));
+  extends AixLib.Fluid.BoilerCHP.BaseClasses.PartialHeatGenerator(a=paramBoiler.pressureDrop,
+                                     vol(energyDynamics=energyDynamics,
+                                         V=paramBoiler.volume));
 
   parameter AixLib.DataBase.Boiler.General.BoilerTwoPointBaseDataDefinition
     paramBoiler
@@ -16,26 +17,30 @@ model Boiler "Boiler with internal and external control"
   parameter Real KR=1
     "Gain of Boiler heater"
     annotation (Dialog(tab = "General", group = "Boiler type"));
-  parameter Modelica.SIunits.Time TN=0.1
+  parameter Modelica.Units.SI.Time TN=0.1
     "Time Constant of boiler heater (T>0 required)"
-    annotation (Dialog(tab = "General", group = "Boiler type"));
-  parameter Modelica.SIunits.Time riseTime=30
+    annotation (Dialog(tab="General", group="Boiler type"));
+  parameter Modelica.Units.SI.Time riseTime=30
     "Rise/Fall time for step input(T>0 required)"
-    annotation (Dialog(tab = "General", group = "Boiler type"));
+    annotation (Dialog(tab="General", group="Boiler type"));
   parameter Real declination=1.1
     "Declination"
     annotation(Dialog(tab="External Control"));
-  parameter Modelica.SIunits.TemperatureDifference Tdelta_Max=2
+  parameter Modelica.Units.SI.TemperatureDifference Tdelta_Max=2
     "Difference from set flow temperature over which boiler stops"
-    annotation(Dialog(tab="External Control"));
-  parameter Modelica.SIunits.TemperatureDifference Tdelta_Min=2
+    annotation (Dialog(tab="External Control"));
+  parameter Modelica.Units.SI.TemperatureDifference Tdelta_Min=2
     "Difference from set flow temperature under which boiler starts"
-    annotation(Dialog(tab="External Control"));
-  parameter Modelica.SIunits.Time Fb=3600
+    annotation (Dialog(tab="External Control"));
+  parameter Modelica.Units.SI.Time Fb=3600
     "Period of time for increased set temperature"
-    annotation(Dialog(tab="External Control"));
+    annotation (Dialog(tab="External Control"));
   parameter Real FA=0.2 "Increment for increased set temperature"
     annotation(Dialog(tab="External Control"));
+
+  parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial
+    "Type of energy balance: dynamic (3 initialization options) or steady state"
+    annotation (Dialog(tab="Dynamics"));
   Modelica.Blocks.Interfaces.BooleanInput isOn
     "Switches Controler on and off"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},
@@ -67,7 +72,8 @@ model Boiler "Boiler with internal and external control"
     final paramBoiler=paramBoiler,
     final KR=KR,
     final TN=TN,
-    final riseTime=riseTime)
+    final riseTime=riseTime,
+    final energyDynamics=energyDynamics)
     "Internal control"
     annotation (Placement(transformation(extent={{-50,-10},{-70,10}})));
   ExtControl myExternalControl(
@@ -80,6 +86,7 @@ model Boiler "Boiler with internal and external control"
     "External control"
      annotation (Placement(transformation(extent={{-10,38},
             {10,58}})));
+
 
 equation
   connect(internalControl.QflowHeater, heater.Q_flow) annotation (Line(points={
@@ -125,29 +132,50 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           fillColor={192,192,192})}),                            Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-        Documentation(info="<html>
-<h4><span style=\"color:#008000\">Overview</span></h4>
-<p>A boiler model consisting of the internal boiler controller and a replaceable
-outer controller.
-This controller can be chosen to provide the boiler temperature setpoint based
-on the chosen conditions such as ambient air temperature, etc.
+        Documentation(info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  A boiler model consisting of the internal boiler controller and a
+  replaceable outer controller. This controller can be chosen to
+  provide the boiler temperature setpoint based on the chosen
+  conditions such as ambient air temperature, etc.
 </p>
 </html>",
-        revisions="<html>
-<ul>
-<li><i>December 08, 2016&nbsp;</i> by Moritz Lauster:<br/>Adapted to AixLib
-conventions</li>
-<li><i>October 11, 2016&nbsp;</i> by Pooyan Jahangiri:<br/>Merged with
-AixLib</li>
-<li><i>January 09, 2006&nbsp;</i> by Peter Matthes:<br/>V0.1: Initial
-configuration.</li>
-<li><i>December 4, 2014&nbsp;</i> by Ana Constantin:<br/>Removed cardinality
-equations for boolean inputs</li>
-<li><i>November 28, 2014&nbsp;</i> by Roozbeh Sangi:<br/>Output for heat flow
-added.</li>
-<li><i>October 7, 2013&nbsp;</i> by Ole Odendahl:<br/>Formatted documentation
-appropriately</li>
-<li><i>April 20, 2012&nbsp;</i> by Ana Constantin:<br/>Implemented</li>
+        revisions="<html><ul>
+  <li>
+    <i>May 5, 2021</i> by Fabian Wüllhorst:<br/>
+    Add energyDynamics as parameter (see issue <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/1093\">#1093</a>)
+  </li>
+  <li>
+    <i>December 08, 2016&#160;</i> by Moritz Lauster:<br/>
+    Adapted to AixLib conventions
+  </li>
+  <li>
+    <i>October 11, 2016&#160;</i> by Pooyan Jahangiri:<br/>
+    Merged with AixLib
+  </li>
+  <li>
+    <i>January 09, 2006&#160;</i> by Peter Matthes:<br/>
+    V0.1: Initial configuration.
+  </li>
+  <li>
+    <i>December 4, 2014&#160;</i> by Ana Constantin:<br/>
+    Removed cardinality equations for boolean inputs
+  </li>
+  <li>
+    <i>November 28, 2014&#160;</i> by Roozbeh Sangi:<br/>
+    Output for heat flow added.
+  </li>
+  <li>
+    <i>October 7, 2013&#160;</i> by Ole Odendahl:<br/>
+    Formatted documentation appropriately
+  </li>
+  <li>
+    <i>April 20, 2012&#160;</i> by Ana Constantin:<br/>
+    Implemented
+  </li>
 </ul>
 </html>"));
 end Boiler;

@@ -1,15 +1,15 @@
-within AixLib.Fluid.FixedResistances.Validation.PlugFlowPipes;
+﻿within AixLib.Fluid.FixedResistances.Validation.PlugFlowPipes;
 model PlugFlowULg "Validation against data from Université de Liège"
   extends Modelica.Icons.Example;
   package Medium = AixLib.Media.Water;
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=1
     "Nominal mass flow rate, used for regularization near zero flow";
-  parameter Modelica.SIunits.Temperature T_start_in=pipeDataULg.T_start_in + 273.15
-    "Initial temperature at pipe inlet";
-  parameter Modelica.SIunits.Temperature T_start_out=pipeDataULg.T_start_out + 273.15
-    "Initial temperature at pipe outlet";
-  parameter Modelica.SIunits.SpecificHeatCapacity cp_default=
+  parameter Modelica.Units.SI.Temperature T_start_in=pipeDataULg.T_start_in +
+      273.15 "Initial temperature at pipe inlet";
+  parameter Modelica.Units.SI.Temperature T_start_out=pipeDataULg.T_start_out
+       + 273.15 "Initial temperature at pipe outlet";
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_default=
       Medium.specificHeatCapacityCp(state=sta_default)
     "Heat capacity of medium";
   parameter Medium.ThermodynamicState sta_default=Medium.setState_pTX(
@@ -53,8 +53,13 @@ model PlugFlowULg "Validation against data from Université de Liège"
     tau=0,
     T_start=T_start_in) "Temperature sensor"
     annotation (Placement(transformation(extent={{0,-10},{-20,10}})));
-  Modelica.Blocks.Sources.CombiTimeTable DataReader(table=pipeDataULg.data,
-      extrapolation=Modelica.Blocks.Types.Extrapolation.HoldLastPoint)
+  Modelica.Blocks.Sources.CombiTimeTable DataReader(
+    tableOnFile=true,
+    tableName="dat",
+    fileName=pipeDataULg.filNam,
+    columns=2:pipeDataULg.nCol,
+    extrapolation=Modelica.Blocks.Types.Extrapolation.HoldLastPoint)
+    "Measurement data"
     annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
 
   Modelica.Blocks.Math.UnitConversions.From_degC Tout
@@ -204,6 +209,13 @@ R=((1/(2*pipe.kIns)*log((0.0603+2*pipe.dIns)/(0.0603)))+1/(5*(0.0603+2*pipe.dIns
 U = 1/R = 0.462 W/(m K)</p>
 </html>", revisions="<html>
 <ul>
+<li>
+March 7, 2020, by Michael Wetter:<br/>
+Replaced measured data from specification in Modelica file to external table,
+as this reduces the computing time.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1289\"> #1289</a>.
+</li>
 <li>
 November 24, 2016 by Bram van der Heijde:<br/>Add pipe thickness for wall
 capacity calculation and expand documentation section.</li>

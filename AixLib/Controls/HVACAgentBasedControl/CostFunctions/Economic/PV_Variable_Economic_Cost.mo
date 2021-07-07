@@ -16,12 +16,11 @@ model PV_Variable_Economic_Cost
                                              lessEqualThreshold(threshold=
         rad_treshold)
     annotation (Placement(transformation(extent={{6,-36},{26,-16}})));
-  Modelica_Synchronous.RealSignals.Sampler.SampleClocked sample1
+  Modelica.Clocked.RealSignals.Sampler.SampleClocked sample1
     annotation (Placement(transformation(extent={{66,-16},{54,-4}})));
-  Modelica_Synchronous.ClockSignals.Clocks.PeriodicRealClock periodicClock1(period=
-        300)
-    annotation (Placement(transformation(extent={{82,-56},{70,-44}})));
-  Modelica_Synchronous.RealSignals.Sampler.Hold hold1(y_start=100)
+  Modelica.Clocked.ClockSignals.Clocks.PeriodicRealClock periodicClock1(period=
+        300) annotation (Placement(transformation(extent={{82,-56},{70,-44}})));
+  Modelica.Clocked.RealSignals.Sampler.Hold hold1(y_start=100)
     annotation (Placement(transformation(extent={{50,-16},{38,-4}})));
   Modelica.Blocks.Math.Product product
     annotation (Placement(transformation(extent={{-32,-62},{-12,-42}})));
@@ -85,15 +84,21 @@ equation
           textString="Heating Rod
 (with PV)")}),                              Diagram(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
-    Documentation(revisions="<html>
-<ul>
-<li>December 2015, by Felix Bünning: Developed and implemented</li>
+    Documentation(revisions="<html><ul>
+  <li>December 2015, by Felix Bünning: Developed and implemented
+  </li>
 </ul>
 </html>",
-    info="<html>
-<p><b><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span></b></p>
+    info="<html><p>
+  <b><span style=
+  \"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span></b>
+</p>
 <ul>
-<li><span style=\"font-family: MS Shell Dlg 2;\">This model </span>calculates the economic cost for PV systems based on the capacity and the variable solar radiation input.</li>
+  <li>
+    <span style=\"font-family: MS Shell Dlg 2;\">This model</span>
+    calculates the economic cost for PV systems based on the capacity
+    and the variable solar radiation input.
+  </li>
 </ul>
 </html>"));
 end PV_Variable_Economic_Cost;

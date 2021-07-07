@@ -1,34 +1,34 @@
 within AixLib.Fluid.FixedResistances.BaseClasses;
 model PlugFlowTransportDelay "Delay time for given normalized velocity"
 
-  parameter Modelica.SIunits.Length length "Pipe length";
-  parameter Modelica.SIunits.Length dh
+  parameter Modelica.Units.SI.Length length "Pipe length";
+  parameter Modelica.Units.SI.Length dh
     "Hydraulic diameter (assuming a round cross section area)";
-  parameter Modelica.SIunits.Density rho "Standard density of fluid";
+  parameter Modelica.Units.SI.Density rho "Standard density of fluid";
   parameter Boolean initDelay=false
     "Initialize delay for a constant m_flow_start if true, otherwise start from 0"
     annotation (Dialog(group="Initialization"));
-  parameter Modelica.SIunits.MassFlowRate m_flow_start=0
+  parameter Modelica.Units.SI.MassFlowRate m_flow_start=0
     "Initialization of mass flow rate to calculate initial time delay"
     annotation (Dialog(group="Initialization", enable=initDelay));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal(min=0)
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal(min=0)
     "Nominal mass flow rate" annotation (Dialog(group="Nominal condition"));
 
-  final parameter Modelica.SIunits.Time t_in_start=
-    if initDelay and (abs(m_flow_start) > 1E-10*m_flow_nominal)
-      then min(length/m_flow_start*(rho*dh^2/4*Modelica.Constants.pi), 0) else 0
+  final parameter Modelica.Units.SI.Time t_in_start=if initDelay and (abs(
+      m_flow_start) > 1E-10*m_flow_nominal) then min(length/m_flow_start*(rho*
+      dh^2/4*Modelica.Constants.pi), 0) else 0
     "Initial value of input time at inlet";
-  final parameter Modelica.SIunits.Time t_out_start=
-    if initDelay and (abs(m_flow_start) > 1E-10*m_flow_nominal)
-     then min(-length/m_flow_start*(rho*dh^2/4*Modelica.Constants.pi), 0) else 0
+  final parameter Modelica.Units.SI.Time t_out_start=if initDelay and (abs(
+      m_flow_start) > 1E-10*m_flow_nominal) then min(-length/m_flow_start*(rho*
+      dh^2/4*Modelica.Constants.pi), 0) else 0
     "Initial value of input time at outlet";
 
-  Modelica.SIunits.Time time_out_rev "Reverse flow direction output time";
-  Modelica.SIunits.Time time_out_des "Design flow direction output time";
+  Modelica.Units.SI.Time time_out_rev "Reverse flow direction output time";
+  Modelica.Units.SI.Time time_out_des "Design flow direction output time";
 
   Real x(start=0) "Spatial coordinate for spatialDistribution operator";
-  Modelica.SIunits.Frequency u "Normalized fluid velocity (1/s)";
+  Modelica.Units.SI.Frequency u "Normalized fluid velocity (1/s)";
 
   Modelica.Blocks.Interfaces.RealInput m_flow "Mass flow of fluid" annotation (
       Placement(transformation(extent={{-140,-20},{-100,20}}),
@@ -41,7 +41,8 @@ model PlugFlowTransportDelay "Delay time for given normalized velocity"
     annotation (Placement(transformation(extent={{100,30},{120,50}})));
 
 protected
-  parameter Modelica.SIunits.Time t0(fixed = false) "Start time of the simulation";
+  parameter Modelica.Units.SI.Time t0(fixed=false)
+    "Start time of the simulation";
 
 initial equation
   x = 0;
@@ -59,8 +60,8 @@ equation
     initialPoints = {0.0, 1.0},
     initialValues = {t0 + t_in_start, t0 + t_out_start});
 
-  tau = time - time_out_des;
-  tauRev = time - time_out_rev;
+  tau    = max(0, time - time_out_des);
+  tauRev = max(0, time - time_out_rev);
 
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
@@ -133,11 +134,19 @@ During reverse, the opposite is true and only the reverse output is used.
 </html>", revisions="<html>
 <ul>
 <li>
+December 2, 2020, by Philipp Mehrfeld:<br/>
+Corrected calculation of <code>tau</code> and <code>tauRev</code> to be be 
+only positive.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1427\">#1427</a>.
+</li>
+<li>
 December 14, 2018, by Michael Wetter:<br/>
 Corrected argument of <code>spatialDistribution</code> operator to be a parameter
 expression.<br/>
 This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1055\">#1055</a>.
+</li>
 <li>
 September 9, 2016 by Bram van der Heijde:<br/>
 Rename from PDETime_massFlowMod to PlugFlowTransportDelayMod

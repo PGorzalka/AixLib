@@ -1,19 +1,19 @@
 ﻿within AixLib.Fluid.BoilerCHP;
 model BoilerNoControl "Boiler model with physics only"
-  extends AixLib.Fluid.BoilerCHP.BaseClasses.PartialHeatGenerator(pressureDrop(final a=a),
+  extends AixLib.Fluid.BoilerCHP.BaseClasses.PartialHeatGenerator(a=paramBoiler.pressureDrop,
                                      vol(energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
                                          final V=V));
 
   parameter AixLib.DataBase.Boiler.General.BoilerTwoPointBaseDataDefinition
     paramBoiler "Parameters for Boiler" annotation (Dialog(tab="General", group=
          "Boiler type"), choicesAllMatching=true);
-  parameter Modelica.SIunits.ThermalConductance G=0.003*Q_nom/50
+  parameter Modelica.Units.SI.ThermalConductance G=0.003*Q_nom/50
     "Constant thermal conductance to environment(G=Q_loss/dT)";
-  parameter Modelica.SIunits.HeatCapacity C=1.5*Q_nom
+  parameter Modelica.Units.SI.HeatCapacity C=1.5*Q_nom
     "Heat capacity of metal (J/K)";
-  parameter Modelica.SIunits.Volume V=paramBoiler.volume "Volume";
+  parameter Modelica.Units.SI.Volume V=paramBoiler.volume "Volume";
 
-  parameter Modelica.SIunits.Power Q_nom=paramBoiler.Q_nom
+  parameter Modelica.Units.SI.Power Q_nom=paramBoiler.Q_nom
     "Nominal heating power";
 
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor internalCapacity(
@@ -58,7 +58,7 @@ model BoilerNoControl "Boiler model with physics only"
       Placement(transformation(extent={{30,-30},{50,-10}}), iconTransformation(
           extent={{58,-60},{78,-40}})));
 
-  Modelica.Blocks.Tables.CombiTable1D efficiencyTableLoadDepending(
+  Modelica.Blocks.Tables.CombiTable1Dv efficiencyTableLoadDepending(
     final tableOnFile=false,
     final table=etaLoadBased,
     final columns={2},
@@ -72,8 +72,6 @@ model BoilerNoControl "Boiler model with physics only"
         rotation=270,
         origin={-60,2})));
 
-  parameter Real a=paramBoiler.pressureDrop
-    "Coefficient for quadratic pressure drop term";
   Modelica.Blocks.Interfaces.RealOutput T_out
     "Outflow temperature of the passing fluid" annotation (Placement(transformation(
           extent={{100,50},{120,70}}), iconTransformation(extent={{62,22},{82,42}})));
@@ -90,7 +88,7 @@ model BoilerNoControl "Boiler model with physics only"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={10,50})));
-  Modelica.Blocks.Tables.CombiTable1D efficiencyTableLoadDepending1(
+  Modelica.Blocks.Tables.CombiTable1Dv efficiencyTableLoadDepending1(
     final tableOnFile=false,
     final table=etaTempBased,
     final columns={2},
@@ -188,17 +186,33 @@ equation
           color={28,108,200},
           thickness=1)}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
-    Documentation(info="<html>
-<h4><span style=\"color: #008000\">Overview</span></h4>
-<p>A boiler model consisting of physical components.The efficiency is based on the part load rate and the inflow water temperature.</p>
+    Documentation(info="<html><h4>
+  <span style=\"color: #008000\">Overview</span>
+</h4>
 <p>
-<br/>Assumptions for predefined parameter values (based on <i><a href=\"http://www.viessmann.com/web/netherlands/nl_tdis.nsf/39085ab6c8b4f206c1257195003fd054/8A84BA9E240BA23DC12575210055DB56/$file/5811_009-DE_Simplex-PS.pdf\">Vissmann data cheat</a></i>): 
+  A boiler model consisting of physical components.The efficiency is
+  based on the part load rate and the inflow water temperature.
 </p>
-<p>G: a heat loss of 0.3 % of nominal power at a temperature difference of 50 K to ambient is assumed.</p>
-<p>C: factor C/Q_nom is in range of 1.2 to 2 for boilers with nominal power between 460 kW and 80 kW (with c of 500J/kgK for steel). Thus, a value of 1.5 is used as default.</p>
-</html>", revisions="<html>
+<p>
+  <br/>
+  Assumptions for predefined parameter values (based on <i><a href=
+  \"http://www.viessmann.com/web/netherlands/nl_tdis.nsf/39085ab6c8b4f206c1257195003fd054/8A84BA9E240BA23DC12575210055DB56/$file/5811_009-DE_Simplex-PS.pdf\">
+  Vissmann data cheat</a></i>):
+</p>
+<p>
+  G: a heat loss of 0.3 % of nominal power at a temperature difference
+  of 50 K to ambient is assumed.
+</p>
+<p>
+  C: factor C/Q_nom is in range of 1.2 to 2 for boilers with nominal
+  power between 460 kW and 80 kW (with c of 500J/kgK for steel). Thus,
+  a value of 1.5 is used as default.
+</p>
 <ul>
-<li><i>September 19, 2019&nbsp;</i> by Alexander Kümpel:<br/>First implementation</li>
+  <li>
+    <i>September 19, 2019&#160;</i> by Alexander Kümpel:<br/>
+    First implementation
+  </li>
 </ul>
 </html>"));
 end BoilerNoControl;

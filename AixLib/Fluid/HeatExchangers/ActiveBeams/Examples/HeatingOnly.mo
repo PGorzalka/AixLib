@@ -36,10 +36,8 @@ model HeatingOnly
   AixLib.Controls.Continuous.LimPID conPID(
     yMax=0.094,
     Td=0,
-    reverseAction=false,
     Ti=100,
-    k=0.1,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI) "Controller"
+    k=0.1) "Controller"
          annotation (Placement(transformation(extent={{-70,-20},{-50,0}})));
   AixLib.Fluid.Sources.Boundary_pT sou_1(
     redeclare package Medium = MediumW,
@@ -62,7 +60,7 @@ model HeatingOnly
     nPorts=1) "Sink for hot water"
     annotation (Placement(transformation(extent={{100,50},{80,70}})));
   Modelica.Blocks.Sources.Sine sine(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=1,
     phase=-1.5707963267949) "Source for thermal loads"
     annotation (Placement(transformation(extent={{-110,-70},{-90,-50}})));
@@ -126,14 +124,14 @@ equation
 <p>
 This example tests the implementation of <a href=\"modelica://AixLib.Fluid.HeatExchangers.ActiveBeams.CoolingAndHeating\">
 AixLib.Fluid.HeatExchangers.ActiveBeams.CoolingAndHeating</a>, but operates it only in heating mode.
-An air volume is maintained at a temperature above <i>22&circ;</i>C by a controller
+An air volume is maintained at a temperature above <i>22&deg;</i>C by a controller
 that regulates the water flow rate in the active beam.
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>

@@ -6,30 +6,29 @@ model HydraulicSeparator
       annotation (choicesAllMatching = true);
   parameter Boolean allowFlowReversal=true;
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal
-    "Nominal mass flow rate"
-    annotation(Dialog(group = "Nominal condition"));
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal
+    "Nominal mass flow rate" annotation (Dialog(group="Nominal condition"));
 
     ///////////////////////////////////////////////////////////////////////////
     //Geometric parameters                                                   //
     ///////////////////////////////////////////////////////////////////////////
-  parameter Modelica.SIunits.VolumeFlowRate pumpMaxVolumeFlow
+  parameter Modelica.Units.SI.VolumeFlowRate pumpMaxVolumeFlow
     "Maximum VolumeFlowRate of either primary or secondary Pump";
-  parameter Modelica.SIunits.Velocity vmaxExchange=0.2
+  parameter Modelica.Units.SI.Velocity vmaxExchange=0.2
     "Maximum velocity of the exchange-flow between top and bottom of the Hydraulic Separator";
-  parameter Modelica.SIunits.Diameter DFlange "Diameter of the flanges";
-  parameter Modelica.SIunits.Diameter D = sqrt(pumpMaxVolumeFlow*4/(Modelica.Constants.pi*vmaxExchange))
+  parameter Modelica.Units.SI.Diameter DFlange "Diameter of the flanges";
+  parameter Modelica.Units.SI.Diameter D=sqrt(pumpMaxVolumeFlow*4/(Modelica.Constants.pi
+      *vmaxExchange))
     "Diameter of the main-body (Calculated by the model to not exceed vmaxExchang)";
 
     ///////////////////////////////////////////////////////////////////////////
     //Initialization of temperatures                                         //
     ///////////////////////////////////////////////////////////////////////////
-  parameter Modelica.SIunits.Temperature T_top = 293.15
-    "Initial temperature in the top"
-    annotation (Dialog(tab = "Initialization"));
-  parameter Modelica.SIunits.Temperature T_bottom = 293.15
+  parameter Modelica.Units.SI.Temperature T_top=293.15
+    "Initial temperature in the top" annotation (Dialog(tab="Initialization"));
+  parameter Modelica.Units.SI.Temperature T_bottom=293.15
     "Initial temperature in the bottom"
-    annotation (Dialog(tab = "Initialization"));
+    annotation (Dialog(tab="Initialization"));
 
     ///////////////////////////////////////////////////////////////////////////
     //Measurement of water exchanged between primary and secondary circuit   //
@@ -55,12 +54,12 @@ model HydraulicSeparator
         Medium) "Top-flange primary circuit" annotation (Placement(
         transformation(extent={{-110,40},{-90,60}}), iconTransformation(extent={
             {-110,40},{-90,60}})));
-  Modelica.Fluid.Interfaces.FluidPort_a port_a_secondary(redeclare package
-      Medium = Medium) "Bottom-flange secondary circuit" annotation (Placement(
+  Modelica.Fluid.Interfaces.FluidPort_a port_a_secondary(redeclare package Medium =
+               Medium) "Bottom-flange secondary circuit" annotation (Placement(
         transformation(extent={{90,-60},{110,-40}}), iconTransformation(extent={
             {90,-60},{110,-40}})));
-  Modelica.Fluid.Interfaces.FluidPort_b port_b_secondary(redeclare package
-      Medium = Medium) "Top-flange secondary circuit" annotation (Placement(
+  Modelica.Fluid.Interfaces.FluidPort_b port_b_secondary(redeclare package Medium =
+               Medium) "Top-flange secondary circuit" annotation (Placement(
         transformation(extent={{90,40},{110,60}}), iconTransformation(extent={{90,
             40},{110,60}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_b_primary(redeclare package Medium =
@@ -244,20 +243,56 @@ equation
               40},{34,-40},{60,-40},{60,-60},{34,-60},{34,-80},{-34,-80},{-34,-60},
               {-60,-60},{-60,-40},{-34,-40},{-34,40},{-60,40},{-60,60}},
           lineColor={0,0,0},
-          smooth=Smooth.None)}),Documentation(info="<html>
-<h4><span style=\"color:#008000\">Overview</span></h4>
-<p>The component HydraulicSeparator is used to hydraulically decouple the heating circuit from the consumer circuit. It is basically a big cylinder with four flanges to mount the primary and secondary circuit. </p>
-<h4><span style=\"color:#008000\">Assumptions</span></h4>
-<p>The HydraulicSeparator is a vertical zylinder with two flanges attached to the top and two attached to the bottom.</p>
-<h4><span style=\"color:#008000\">Concept</span></h4>
-<p>A HydraulicSeparator should have a diameter that allows a maximum velocity of 0.2 m/s (vmaxExchange)for the water exchanged between the top and bottom layer in order to prevent turbulences. The diameter of the main body is therefore calculated with the help of the maximum VolumeFlowRate in either primary or secondary circuit. This is done by the model itself. The height of the HydraulicSeparator is calculated according to VDMA 24770 also depending on the maximum VolumeFlowRate. The model therefore simulates a HydraulicSeparator which is suitable for the circuit used. The size of the flanges has to be set by the user. </p>
-<p><br/><b><font style=\"color: #008000; \">References</font></b></p>
-<p><a href=\"http://www.sinusverteiler.com/files/ausgleich_von_last_und_leistung_01.pdf\">Catalogue Sinusverteiler (Explanation of design and function)</a> </p>
+          smooth=Smooth.None)}),Documentation(info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  The component HydraulicSeparator is used to hydraulically decouple
+  the heating circuit from the consumer circuit. It is basically a big
+  cylinder with four flanges to mount the primary and secondary
+  circuit.
+</p>
+<h4>
+  <span style=\"color:#008000\">Assumptions</span>
+</h4>
+<p>
+  The HydraulicSeparator is a vertical zylinder with two flanges
+  attached to the top and two attached to the bottom.
+</p>
+<h4>
+  <span style=\"color:#008000\">Concept</span>
+</h4>
+<p>
+  A HydraulicSeparator should have a diameter that allows a maximum
+  velocity of 0.2 m/s (vmaxExchange)for the water exchanged between the
+  top and bottom layer in order to prevent turbulences. The diameter of
+  the main body is therefore calculated with the help of the maximum
+  VolumeFlowRate in either primary or secondary circuit. This is done
+  by the model itself. The height of the HydraulicSeparator is
+  calculated according to VDMA 24770 also depending on the maximum
+  VolumeFlowRate. The model therefore simulates a HydraulicSeparator
+  which is suitable for the circuit used. The size of the flanges has
+  to be set by the user.
+</p>
+<p>
+  <br/>
+  <b><span style=\"color: #008000\">References</span></b>
+</p>
+<p>
+  <a href=
+  \"http://www.sinusverteiler.com/files/ausgleich_von_last_und_leistung_01.pdf\">
+  Catalogue Sinusverteiler (Explanation of design and function)</a>
+</p>
 </html>",
-        revisions="<html>
-<ul>
-<li><i>October 11, 2016&nbsp;</i> by Marcus Fuchs:<br/>Transferred alternative version</li>
-<li><i>November 26, 2014&nbsp;</i> by Roozbeh Sangi:<br/>implemented</li>
+        revisions="<html><ul>
+  <li>
+    <i>October 11, 2016&#160;</i> by Marcus Fuchs:<br/>
+    Transferred alternative version
+  </li>
+  <li>
+    <i>November 26, 2014&#160;</i> by Roozbeh Sangi:<br/>
+    implemented
+  </li>
 </ul>
 </html>"));
 end HydraulicSeparator;

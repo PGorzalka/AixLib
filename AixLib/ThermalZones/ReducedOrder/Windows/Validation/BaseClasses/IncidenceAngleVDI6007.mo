@@ -2,10 +2,9 @@ within AixLib.ThermalZones.ReducedOrder.Windows.Validation.BaseClasses;
 block IncidenceAngleVDI6007
   "The solar incidence angle on a tilted surface"
   extends Modelica.Blocks.Icons.Block;
-  parameter Modelica.SIunits.Angle azi(displayUnit="degree")
-    "Surface azimuth. azi=-90 degree if surface outward unit normal points
+  parameter Modelica.Units.SI.Angle azi(displayUnit="degree") "Surface azimuth. azi=-90 degree if surface outward unit normal points
      toward east; azi=0 if it points toward south";
-  parameter Modelica.SIunits.Angle til(displayUnit="degree")
+  parameter Modelica.Units.SI.Angle til(displayUnit="degree")
     "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for roof";
   Modelica.Blocks.Interfaces.RealInput solAzi(final quantity="Angle",
     final unit="rad")
@@ -34,21 +33,18 @@ equation
 
   annotation (
     defaultComponentName="incAng",
-    Documentation(info="<html>
-<p>
-This component computes the solar incidence angle on a tilted surface using the
- solar hour angle and the declination angle as input.
+    Documentation(info="<html><p>
+  This component computes the solar incidence angle on a tilted surface
+  using the solar hour angle and the declination angle as input.
 </p>
-</html>", revisions="<html>
 <ul>
-<li>
-Dec 7, 2010, by Michael Wetter:<br/>
-Rewrote equation in explicit form to avoid nonlinear equations in room model.
-</li>
-<li>
-May 19, 2010, by Wangda Zuo:<br/>
-First implementation.
-</li>
+  <li>Dec 7, 2010, by Michael Wetter:<br/>
+    Rewrote equation in explicit form to avoid nonlinear equations in
+    room model.
+  </li>
+  <li>May 19, 2010, by Wangda Zuo:<br/>
+    First implementation.
+  </li>
 </ul>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,

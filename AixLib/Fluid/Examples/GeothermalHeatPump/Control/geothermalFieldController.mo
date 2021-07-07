@@ -1,14 +1,14 @@
-within AixLib.Fluid.Examples.GeothermalHeatPump.Control;
+﻿within AixLib.Fluid.Examples.GeothermalHeatPump.Control;
 model geothermalFieldController
   "Controls the heat exchange with a heat or cold source by setting two valves"
 
-  parameter Modelica.SIunits.Temperature temperature_low=273.15 + 40
+  parameter Modelica.Units.SI.Temperature temperature_low=273.15 + 40
     "Lower temperature threshold for hysteresis";
-  parameter Modelica.SIunits.Temperature temperature_high=273.15 + 45
+  parameter Modelica.Units.SI.Temperature temperature_high=273.15 + 45
     "Upper temperature threshold for hysteresis";
   parameter Boolean warmSide=true
     "true = hysteresis with negation = for warm side";
-  parameter Modelica.SIunits.Time delayTime=10
+  parameter Modelica.Units.SI.Time delayTime=10
     "Time delay between opening of valve 1 and 2";
 
   Modelica.Blocks.Logical.Switch switch
@@ -142,22 +142,25 @@ equation
           Text(extent={{
               -56,28},{64,-24}},
               lineColor = {175, 175, 175}, textString = "%name")}),
-    Documentation(info="<html>
-<p>
-This is a model of a controller, which manipulates the opening of two valves. If
-the measured temperature drops below the lower thrshold, the first valve is
-fully closed and the second valve is fully opened. The opposite constellation
-applies if the temperature exceeds the higher threshold. To avoid zero mass flow
-rates, the opening is only close 0. Additionally, a delay can be set so that the
-valves do not react simultaneously (opened valve is closed first). It can be
-used in <a
-href=\"modelica://AixLib.Fluid.Examples.GeothermalHeatPump.Components.GeothermalHeatPump\">
-AixLib.Fluid.Examples.GeothermalHeatPump.Components.GeothermalHeatPump</a>.
+    Documentation(info="<html><p>
+  This is a model of a controller, which manipulates the opening of two
+  valves. If the measured temperature drops below the lower thrshold,
+  the first valve is fully closed and the second valve is fully opened.
+  The opposite constellation applies if the temperature exceeds the
+  higher threshold. To avoid zero mass flow rates, the opening is only
+  close 0. Additionally, a delay can be set so that the valves do not
+  react simultaneously (opened valve is closed first). It can be used
+  in <a href=
+  \"modelica://AixLib.Fluid.Examples.GeothermalHeatPump.Components.GeothermalHeatPump\">
+  AixLib.Fluid.Examples.GeothermalHeatPump.Components.GeothermalHeatPump</a>.
 </p>
-</html>", revisions="<html>
 <ul>
-<li>May 24, 2017, by Alexander K&uuml;mpel:<br/>Delay improved.</li>
-<li>May 19, 2017, by Marc Baranski:<br/>First implementation. </li>
+  <li>May 24, 2017, by Alexander Kümpel:<br/>
+    Delay improved.
+  </li>
+  <li>May 19, 2017, by Marc Baranski:<br/>
+    First implementation.
+  </li>
 </ul>
 </html>"));
 end geothermalFieldController;

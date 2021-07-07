@@ -22,7 +22,7 @@ package LiquidFuel_Petrol "Simple petrol fuel for CHP-engine combustion"
     Fuel=PetrolFuel() "Needed fuel data for combustion calculations"
     annotation (choicesAllMatching=true, Dialog(group="Natural gas type"));
 
-   import Modelica.SIunits.*;
+   import Modelica.Units.SI.*;
 
   constant Boolean isGas = Fuel.isGasoline "True = Gasoline fuel, False = Liquid fuel";
   constant MolarMass MM = Fuel.MM_liq "Molar mass of the fuel";
@@ -33,8 +33,7 @@ package LiquidFuel_Petrol "Simple petrol fuel for CHP-engine combustion"
   constant MoleFraction moleFractions_Gas[:] = Fuel.Xi_mole;
 
   record PetrolFuel "Data record for simple petrol fuel"
-    extends
-      AixLib.DataBase.CHP.ModularCHPEngineMedia.CombustionEngineFuelDataBaseRecord(
+    extends AixLib.DataBase.CHP.ModularCHPEngineMedia.CombustionEngineFuelDataBaseRecord(
     fuelType = "Simple petrol fuel",
     isGasoline = false,
     H_U = 42000000,

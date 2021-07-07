@@ -7,16 +7,21 @@ model GenericHumidifier_u
     redeclare final AixLib.Fluid.MixingVolumes.MixingVolumeMoistAir vol(
     final prescribedHeatFlowRate=true));
 
-  parameter Modelica.SIunits.MassFlowRate mWat_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal
     "Water mass flow rate at u=1, positive for humidification";
 
-  parameter Modelica.SIunits.Temperature TLiqWat_in "Temperature of liquid water that is vaporized";
+  parameter Modelica.Units.SI.Temperature TLiqWat_in
+    "Temperature of liquid water that is vaporized";
 
   parameter Boolean steamHumidifier=true  "True: steam humidifier, false: adiabatic (water) humidifier";
 
   parameter Boolean TVapFixed = true "True: fixed vaporization temperature, false: vaporization temperature from pressure" annotation (Dialog(enable=steamHumidifier, tab = "Advanced", group = "Vaporization"));
 
-  parameter Modelica.SIunits.Temperature TVap=373.15   "Vaporization temperature of steam" annotation (Dialog(enable=TVapFixed and steamHumidifier,tab = "Advanced", group = "Vaporization"));
+  parameter Modelica.Units.SI.Temperature TVap=373.15
+    "Vaporization temperature of steam" annotation (Dialog(
+      enable=TVapFixed and steamHumidifier,
+      tab="Advanced",
+      group="Vaporization"));
 
   Modelica.Blocks.Interfaces.RealInput u(unit="1") "Control input"
     annotation (Placement(transformation(
@@ -231,32 +236,37 @@ equation
               108,200},
           thickness=0.5)}),
 defaultComponentName="hum",
-Documentation(info="<html>
-<p>
-Model for an air humidifier.
+Documentation(info="<html><p>
+  Model for an air humidifier.
 </p>
 <p>
-This model adds moisture to the air stream. The moisture can be either liquid (adiabatic) or steam. If steam is chosen, the vaporization temperature can be fixed or calculated from the pressure.
+  This model adds moisture to the air stream. The moisture can be
+  either liquid (adiabatic) or steam. If steam is chosen, the
+  vaporization temperature can be fixed or calculated from the
+  pressure.
 </p>
 <p>
-The amount of added moisture is equal to 
+  The amount of added moisture is equal to
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
-m&#775;<sub>wat</sub> = u  m&#775;<sub>wat,nom</sub>,
+<p style=\"text-align:center;font-style:italic;\">
+  ṁ<sub>wat</sub> = u ṁ<sub>wat,nom</sub>,
 </p>
 <p>
-where <i>u</i> is the control input signal and
-<i>m&#775;<sub>wat,nom</sub></i> is equal to the parameter <code>mWat_flow_nominal</code>.
-The parameter <code>mWat_flow_nominal</code> must be positive.
+  where <i>u</i> is the control input signal and
+  <i>ṁ<sub>wat,nom</sub></i> is equal to the parameter
+  <code>mWat_flow_nominal</code>. The parameter
+  <code>mWat_flow_nominal</code> must be positive.
 </p>
-<p>Twater_in is used to calculate the thermal power for the vaporization (sensible and latent heat) of the steam humidifier and to calculate the enthalpy for the liquid in the adiabatic case.</p>
+<p>
+  Twater_in is used to calculate the thermal power for the vaporization
+  (sensible and latent heat) of the steam humidifier and to calculate
+  the enthalpy for the liquid in the adiabatic case.
+</p>
 </html>",
-revisions="<html>
-<ul>
-<li>
-October 22, 2019, by Alexander Kümpel:<br/>
-First implementation.
-</li>
+revisions="<html><ul>
+  <li>October 22, 2019, by Alexander Kümpel:<br/>
+    First implementation.
+  </li>
 </ul>
 </html>"));
 end GenericHumidifier_u;

@@ -1,4 +1,4 @@
-within AixLib.Controls.HVACAgentBasedControl.Agents;
+﻿within AixLib.Controls.HVACAgentBasedControl.Agents;
 model IntermediateAgent
   extends BaseClasses.PartialAgent;
   parameter Integer broker = 10003 "Name of the corresponding broker-agent";
@@ -22,10 +22,10 @@ model IntermediateAgent
         extent={{10,10},{-10,-10}},
         rotation=0,
         origin={-160,-136})));
-  Modelica.StateGraph.Step message(nOut=2)
+  Modelica.StateGraph.Step message(nOut=2, nIn=1)
     annotation (Placement(transformation(extent={{-178,-98},{-158,-78}})));
 
-  Modelica.StateGraph.Step passOnCall
+  Modelica.StateGraph.Step passOnCall(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-36,86},{-16,106}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=noEvent(
         getperformative.y[1] == 4))
@@ -37,7 +37,7 @@ model IntermediateAgent
       enableTimer=true)
     annotation (Placement(transformation(extent={{14,86},{34,106}})));
 
-  Modelica.StateGraph.StepWithSignal sendCall(nOut=2)
+  Modelica.StateGraph.StepWithSignal sendCall(nOut=2, nIn=1)
     annotation (Placement(transformation(extent={{74,86},{94,106}})));
   Modelica.Blocks.Math.IntegerChange integerChange annotation (Placement(
         transformation(extent={{-176,-34},{-156,-14}})));
@@ -50,12 +50,12 @@ model IntermediateAgent
     annotation (Placement(transformation(extent={{-120,-250},{-94,-232}})));
   Modelica.Blocks.Logical.Not not1
     annotation (Placement(transformation(extent={{-88,-244},{-82,-238}})));
-  Modelica.StateGraph.Step composeNotUnderstood
+  Modelica.StateGraph.Step composeNotUnderstood(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-34,-238},{-14,-218}})));
   Modelica.StateGraph.Transition transition3(enableTimer=true, waitTime=1)
     annotation (Placement(transformation(extent={{4,-238},{24,-218}})));
 
-  Modelica.StateGraph.StepWithSignal sendNotUnderstood(nOut=1)
+  Modelica.StateGraph.StepWithSignal sendNotUnderstood(nOut=1, nIn=1)
     annotation (Placement(transformation(extent={{44,-238},{64,-218}})));
   Modelica.StateGraph.Transition transition4(enableTimer=true, waitTime=1)
     annotation (Placement(transformation(extent={{84,-238},{104,-218}})));
@@ -69,17 +69,17 @@ model IntermediateAgent
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-108,40})));
-  Modelica.StateGraph.Step check
+  Modelica.StateGraph.Step check(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-82,30},{-62,50}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression4(y=noEvent((
         getperformative.y[1] == 8) and (getsender.y[1] == broker)))
     annotation (Placement(transformation(extent={{-70,6},{-44,24}})));
-  Modelica.StateGraph.Step passOnInformation
+  Modelica.StateGraph.Step passOnInformation(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{2,30},{22,50}})));
   Modelica.StateGraph.Transition transition7(                  waitTime=0.1,
       enableTimer=true)
     annotation (Placement(transformation(extent={{44,30},{64,50}})));
-  Modelica.StateGraph.StepWithSignal sendInformation(nOut=2)
+  Modelica.StateGraph.StepWithSignal sendInformation(nOut=2, nIn=1)
     annotation (Placement(transformation(extent={{84,30},{104,50}})));
   Modelica.StateGraph.TransitionWithSignal newMessage2
                                                       annotation (Placement(
@@ -87,18 +87,18 @@ model IntermediateAgent
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-110,-40})));
-  Modelica.StateGraph.Step check1
+  Modelica.StateGraph.Step check1(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-86,-50},{-66,-30}})));
   Modelica.StateGraph.TransitionWithSignal fromBottomBroker(waitTime=0.5,
       enableTimer=false)
     annotation (Placement(transformation(extent={{-50,-50},{-30,-30}})));
-  Modelica.StateGraph.Step passOnConfirmation
+  Modelica.StateGraph.Step passOnConfirmation(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-2,-50},{18,-30}})));
   Modelica.StateGraph.Transition transition8(                  waitTime=0.1,
       enableTimer=true)
     annotation (Placement(transformation(extent={{38,-50},{58,-30}})));
   Modelica.StateGraph.StepWithSignal sendConfirmation(
-                                                     nOut=1)
+                                                     nOut=1, nIn=1)
     annotation (Placement(transformation(extent={{82,-50},{102,-30}})));
   Modelica.Blocks.Sources.BooleanExpression booleanExpression1(y=noEvent((
         getsender.y[1] == currentClient)))
@@ -106,13 +106,13 @@ model IntermediateAgent
   Modelica.StateGraph.Transition transition2(                  waitTime=0.1,
       enableTimer=true)
     annotation (Placement(transformation(extent={{-112,-118},{-92,-98}})));
-  Modelica.StateGraph.Step confirmToBottom
+  Modelica.StateGraph.Step confirmToBottom(nIn=1, nOut=1)
     annotation (Placement(transformation(extent={{-70,-118},{-50,-98}})));
   Modelica.StateGraph.Transition transition5(                  waitTime=0.1,
       enableTimer=true)
     annotation (Placement(transformation(extent={{-22,-118},{-2,-98}})));
   Modelica.StateGraph.StepWithSignal sendConfirmation1(
-                                                     nOut=1)
+                                                     nOut=1, nIn=1)
     annotation (Placement(transformation(extent={{34,-118},{54,-98}})));
   Modelica.StateGraph.Transition transition6(                  waitTime=0.1,
       enableTimer=true)
@@ -176,7 +176,7 @@ model IntermediateAgent
   Modelica.Blocks.Logical.And and1
     annotation (Placement(transformation(extent={{-150,-300},{-130,-280}})));
   Modelica.StateGraph.Step shutDown(
-                                   nOut=2)
+                                   nOut=2, nIn=1)
     annotation (Placement(transformation(extent={{-80,-274},{-60,-254}})));
   Modelica.StateGraph.Transition transition9(                  waitTime=0.1,
       enableTimer=true)
@@ -658,33 +658,83 @@ equation
           fillColor={0,0,0},
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None)}),
-    Documentation(info="<html>
-<h4><span style=\"color: #008000\">Overview</span></h4>
+    Documentation(info="<html><h4>
+  <span style=\"color: #008000\">Overview</span>
+</h4>
 <ul>
-<li>This model is an intermediate agent which represents devices to connect thermal circuits (heat exchanger, mixing valve).</li>
-<li>It is based on communication via UDP and logic implemented with the help of the StateGraph Modelica library.</li>
-<li>It is used together with a broker-agent and at least one producer-agent.</li>
+  <li>This model is an intermediate agent which represents devices to
+  connect thermal circuits (heat exchanger, mixing valve).
+  </li>
+  <li>It is based on communication via UDP and logic implemented with
+  the help of the StateGraph Modelica library.
+  </li>
+  <li>It is used together with a broker-agent and at least one
+  producer-agent.
+  </li>
 </ul>
-<h4><span style=\"color: #008000\">Concept</span></h4>
-<p>The intermediate agent acts as a producer in front of one broker (bottom) and consumer in front of another broker (top). When it gets a call for proposal from the bottom broker, it passes it on to the top broker as an request. This broker handels the request and responds with a price information. The intermediate agent adds its own costs and passes it on as a proposal to the bottom broker. The proposal gets either rejected or accepted. This is passed on a confirm/reject to the top broker. The intermediate agent also adjusts it capacity according to the requested adjustment. The logic is implemented with the help of the StateGraph library. Communication is realized with the help of the DeviceDriver library and follows the language standards for multi-agent-systems set by the FIPA to the highest possible extend for Modelica models. The following figure shows the behaviour of the roomagent. For further information please refer to the first reference.</p>
-<p><img src=\"modelica://AixLib/Resources/Images/Controls/HVACAgentBasedControl/IntermediateAgent.png\" alt=\"Intermediate agent\"/></p>
-<h4><span style=\"color: #008000\">References</span></h4>
+<h4>
+  <span style=\"color: #008000\">Concept</span>
+</h4>
+<p>
+  The intermediate agent acts as a producer in front of one broker
+  (bottom) and consumer in front of another broker (top). When it gets
+  a call for proposal from the bottom broker, it passes it on to the
+  top broker as an request. This broker handels the request and
+  responds with a price information. The intermediate agent adds its
+  own costs and passes it on as a proposal to the bottom broker. The
+  proposal gets either rejected or accepted. This is passed on a
+  confirm/reject to the top broker. The intermediate agent also adjusts
+  it capacity according to the requested adjustment. The logic is
+  implemented with the help of the StateGraph library. Communication is
+  realized with the help of the DeviceDriver library and follows the
+  language standards for multi-agent-systems set by the FIPA to the
+  highest possible extend for Modelica models. The following figure
+  shows the behaviour of the roomagent. For further information please
+  refer to the first reference.
+</p>
+<p>
+  <img src=
+  \"modelica://AixLib/Resources/Images/Controls/HVACAgentBasedControl/IntermediateAgent.png\"
+  alt=\"Intermediate agent\">
+</p>
+<h4>
+  <span style=\"color: #008000\">References</span>
+</h4>
 <ul>
-<li>Roozbeh Sangi, Felix B&uuml;nning, Johannes F&uuml;tterer, Dirk M&uuml;ller. A Platform for the Agent-based Control of HVAC Systems. Modelica Conference, 2017, Prague, Czech Republic. </li>
-<li>FIPA ACL Message Structure Specification</li>
-<li>FIPA Communicative Act Library Specification </li>
-<li>Felix B&uuml;nning, Roozbeh Sangi, Dirk M&uuml;ller. A Modelica library for agent-based control of building HVAC systems. Applied Energy, 193:52-59, 2017. </li>
+  <li>Roozbeh Sangi, Felix Bünning, Johannes Fütterer, Dirk Müller. A
+  Platform for the Agent-based Control of HVAC Systems. Modelica
+  Conference, 2017, Prague, Czech Republic.
+  </li>
+  <li>FIPA ACL Message Structure Specification
+  </li>
+  <li>FIPA Communicative Act Library Specification
+  </li>
+  <li>Felix Bünning, Roozbeh Sangi, Dirk Müller. A Modelica library for
+  agent-based control of building HVAC systems. Applied Energy,
+  193:52-59, 2017.
+  </li>
 </ul>
-<h4><span style=\"color: #008000\">Example Results</span></h4>
+<h4>
+  <span style=\"color: #008000\">Example Results</span>
+</h4>
 <ul>
-<li><a href=\"HVACAgentBasedControl.Examples.HVACAgentsCommunications.SimpleCommunication\">ExampleAgentSystem</a></li>
+  <li>
+    <a href=
+    \"HVACAgentBasedControl.Examples.HVACAgentsCommunications.SimpleCommunication\">
+    ExampleAgentSystem</a>
+  </li>
 </ul>
 </html>",
-      revisions="<html>
-<ul>
-<li>December 2016, by Roozbeh Sangi:<br/>revised</li>
-<li>December 2016, by Felix B&uuml;nning: Changed some variables to Integer type in order to avoid warnings caused by using the &quot;==&quot; operator</li>
-<li>October 2015, by Felix B&uuml;nning: Developed and implemented</li>
+      revisions="<html><ul>
+  <li>December 2016, by Roozbeh Sangi:<br/>
+    revised
+  </li>
+  <li>December 2016, by Felix Bünning: Changed some variables to
+  Integer type in order to avoid warnings caused by using the \"==\"
+  operator
+  </li>
+  <li>October 2015, by Felix Bünning: Developed and implemented
+  </li>
 </ul>
 </html>"));
 end IntermediateAgent;

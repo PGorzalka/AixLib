@@ -17,12 +17,14 @@ model HeatTransfer_test "Test routine for heat transfer models"
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor heatTrans(G = 16 * 1.5) annotation(Placement(transformation(extent = {{-10, -56}, {10, -36}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TempOutside annotation(Placement(transformation(extent = {{-80, 0}, {-60, 20}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TempInside annotation(Placement(transformation(extent = {{80, 0}, {60, 20}})));
-  Modelica.Blocks.Sources.Sine sineWindSpeed(amplitude = 10, freqHz = 0.5) annotation(Placement(transformation(extent = {{-34, -24}, {-24, -14}})));
+  Modelica.Blocks.Sources.Sine sineWindSpeed(amplitude=10, f=0.5)
+    annotation (Placement(transformation(extent={{-34,-24},{-24,-14}})));
   Modelica.Blocks.Interfaces.RealOutput Q_flow[6] annotation(Placement(transformation(extent = {{76, 50}, {94, 68}})));
-  Modelica.Blocks.Sources.Sine     sine(
+  Modelica.Blocks.Sources.Sine sine(
     amplitude=15,
-    freqHz=1/3600/12,
-    offset=273.15 + 15)                                      annotation(Placement(transformation(extent = {{-100, -20}, {-86, -6}})));
+    f=1/3600/12,
+    offset=273.15 + 15)
+    annotation (Placement(transformation(extent={{-100,-20},{-86,-6}})));
   Modelica.Blocks.Sources.Constant constTempInside(k=273.15 + 20)
                                                             annotation(Placement(transformation(extent = {{7, -7}, {-7, 7}}, origin = {93, -15})));
 equation
@@ -51,22 +53,34 @@ equation
   connect(heatTrans.port_b, TempInside.port) annotation(Line(points = {{10, -46}, {46, -46}, {46, 10}, {60, 10}}, color = {191, 0, 0}));
   connect(heatTransfer_Outside.port_a, TempOutside.port) annotation(Line(points = {{-10, -28}, {-40, -28}, {-40, 10}, {-60, 10}}, color = {191, 0, 0}));
   connect(heatTransfer_Outside.port_b, TempInside.port) annotation(Line(points = {{10, -28}, {46, -28}, {46, 10}, {60, 10}}, color = {191, 0, 0}));
-  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Text(extent = {{14, 46}, {26, 36}}, lineColor = {0, 0, 255}, textString = "1"), Text(extent = {{14, 30}, {26, 20}}, lineColor = {0, 0, 255}, textString = "2"), Text(extent = {{14, 10}, {26, 0}}, lineColor = {0, 0, 255}, textString = "3"), Text(extent = {{14, -10}, {26, -20}}, lineColor = {0, 0, 255}, textString = "4"), Text(extent = {{14, -30}, {26, -40}}, lineColor = {0, 0, 255}, textString = "5"), Text(extent = {{14, -48}, {26, -58}}, lineColor = {0, 0, 255}, textString = "6")}), Documentation(info = "<html>
- <h4><span style=\"color:#008000\">Overview</span></h4>
- <p>Test routine to check simple heat transfer models with a maximum of 2 temperature connectors.</p>
- <h4><span style=\"color:#008000\">Concept</span></h4>
- <p>Simple test to calculate the heat flux through the different conduction and convection models.</p>
- <p>Boundary conditions can be given by 2 different temperatur values on each side of the model. Models with additional inputs (e.g. variable thermal conductivity, wind speed, ...) will be given preferably alternating input values, for example customized sine values.</p>
- </html>", revisions="<html>
+  annotation(Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Text(extent = {{14, 46}, {26, 36}}, lineColor = {0, 0, 255}, textString = "1"), Text(extent = {{14, 30}, {26, 20}}, lineColor = {0, 0, 255}, textString = "2"), Text(extent = {{14, 10}, {26, 0}}, lineColor = {0, 0, 255}, textString = "3"), Text(extent = {{14, -10}, {26, -20}}, lineColor = {0, 0, 255}, textString = "4"), Text(extent = {{14, -30}, {26, -40}}, lineColor = {0, 0, 255}, textString = "5"), Text(extent = {{14, -48}, {26, -58}}, lineColor = {0, 0, 255}, textString = "6")}), Documentation(info = "<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  Test routine to check simple heat transfer models with a maximum of 2
+  temperature connectors.
+</p>
+<h4>
+  <span style=\"color:#008000\">Concept</span>
+</h4>
+<p>
+  Simple test to calculate the heat flux through the different
+  conduction and convection models.
+</p>
+<p>
+  Boundary conditions can be given by 2 different temperatur values on
+  each side of the model. Models with additional inputs (e.g. variable
+  thermal conductivity, wind speed, ...) will be given preferably
+  alternating input values, for example customized sine values.
+</p>
 <ul>
-<li>
-September 25, 2015 by Marcus Fuchs:<br/>
-Fixed unknown variable problem for <a href=\"https://github.com/RWTH-EBC/AixLib/issues/115\">#115</a>
-</li>
-<li>
-April 16, 2013, by Ole Odendahl:<br/>
-Implemented, added documentation and formatted appropriately
-</li>
+  <li>September 25, 2015 by Marcus Fuchs:<br/>
+    Fixed unknown variable problem for <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/115\">#115</a>
+  </li>
+  <li>April 16, 2013, by Ole Odendahl:<br/>
+    Implemented, added documentation and formatted appropriately
+  </li>
 </ul>
 </html>
  "), experiment(

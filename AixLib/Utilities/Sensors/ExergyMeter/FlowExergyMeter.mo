@@ -2,7 +2,7 @@ within AixLib.Utilities.Sensors.ExergyMeter;
 model FlowExergyMeter
 
   extends AixLib.Fluid.Interfaces.PartialTwoPort;
-  extends Modelica.Icons.RotationalSensor;
+  extends Modelica.Icons.RoundSensor;
 
   Modelica.Blocks.Interfaces.RealInput X_ref[Medium.nX](
   final quantity="MassFraction", final unit="1", min=0, max=1)
@@ -25,12 +25,12 @@ model FlowExergyMeter
     "Mass flow rate of the medium flow used in exergy calculations"
     annotation (Placement(transformation(extent={{-10,10},{10,-10}})));
   Modelica.Fluid.Sensors.SpecificEntropy specificEntropy(
-  redeclare package
-      Medium = Medium)
+  redeclare package Medium =
+               Medium)
     "Specific entropy of the medium flow used in exergy calculations"
     annotation (Placement(transformation(extent={{70,0},{50,20}})));
-  Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpy(redeclare package
-      Medium = Medium)
+  Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpy(redeclare package Medium =
+               Medium)
     "Specific enthalpy of the medium flow used in exergy calculations"
     annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
 
@@ -46,10 +46,11 @@ model FlowExergyMeter
         rotation=90,
         origin={0,-100})));
   Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpyRef(redeclare package
-      Medium = Medium) "Specific enthalpy of the reference environment"
+                                                                                Medium =
+               Medium) "Specific enthalpy of the reference environment"
     annotation (Placement(transformation(extent={{-12,-62},{-32,-42}})));
-  Modelica.Fluid.Sensors.SpecificEntropy specificEntropy_ref(redeclare package
-      Medium = Medium) "Specific entropy of the reference environment"
+  Modelica.Fluid.Sensors.SpecificEntropy specificEntropy_ref(redeclare package Medium =
+               Medium) "Specific entropy of the reference environment"
     annotation (Placement(transformation(extent={{18,-64},{38,-42}})));
   Modelica.Blocks.Interfaces.RealOutput exergyFlow(final quantity="Power",
       final unit="W") "Exergy content of the medium flow" annotation (Placement(
@@ -128,18 +129,22 @@ equation
   connect(specificEnthalpy.port, massFlowRate.port_a)
     annotation (Line(points={{-60,0},{-36,0},{-10,0}}, color={0,127,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), Documentation(info="<html>
-<p><b><span style=\"color: #008000;\">Overview</span></b> </p>
-<p>The model calculates the exergy content of a medium flow consisting of 
-multiple substances. The reference environment is variable and modeled 
-using a boundary with temperature, pressure and composition as input. The 
-medium model is replaceable. The physical enthalpy and entropy are determined 
-using the respective sensors from MSL. The sensor is ideal, i.e., it does not 
-influence the fluid.</p>
-</html>", revisions="<html>
- <ul>
- <li>by Marc Baranski and Roozbeh Sangi:<br/>implemented</li>
- </ul>
+            -100},{100,100}})), Documentation(info="<html><p>
+  <b><span style=\"color: #008000;\">Overview</span></b>
+</p>
+<p>
+  The model calculates the exergy content of a medium flow consisting
+  of multiple substances. The reference environment is variable and
+  modeled using a boundary with temperature, pressure and composition
+  as input. The medium model is replaceable. The physical enthalpy and
+  entropy are determined using the respective sensors from MSL. The
+  sensor is ideal, i.e., it does not influence the fluid.
+</p>
+<ul>
+  <li>by Marc Baranski and Roozbeh Sangi:<br/>
+    implemented
+  </li>
+</ul>
 </html>"),
     Icon(coordinateSystem(extent={{-100,-100},{120,100}})));
 end FlowExergyMeter;

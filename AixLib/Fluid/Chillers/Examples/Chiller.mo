@@ -15,7 +15,8 @@ model Chiller "Example for the reversible chiller model."
     annotation (Placement(transformation(extent={{-54,-58},{-34,-38}})));
 
   Sources.Boundary_pT                sinkSideFixedBoundary(          redeclare
-      package Medium = Medium_sin, nPorts=1)
+      package                                                                          Medium =
+                       Medium_sin, nPorts=1)
     "Fixed boundary at the outlet of the sink side" annotation (Placement(
         transformation(
         extent={{-10,10},{10,-10}},
@@ -45,13 +46,13 @@ model Chiller "Example for the reversible chiller model."
     use_refIne=false,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     redeclare model PerDataMainChi =
-        AixLib.DataBase.ThermalMachines.Chiller.PerformanceData.LookUpTable2D (
+        AixLib.DataBase.Chiller.PerformanceData.LookUpTable2D (
           dataTable=
-            AixLib.DataBase.ThermalMachines.Chiller.EN14511.Vitocal200AWO201()),
+            AixLib.DataBase.Chiller.EN14511.Vitocal200AWO201()),
     redeclare model PerDataRevChi =
-        AixLib.DataBase.ThermalMachines.HeatPump.PerformanceData.LookUpTable2D
-        (smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments, dataTable=
-            AixLib.DataBase.ThermalMachines.HeatPump.EN14511.Vitocal200AWO201()),
+        AixLib.DataBase.HeatPump.PerformanceData.LookUpTable2D (
+         smoothness=Modelica.Blocks.Types.Smoothness.LinearSegments, dataTable=
+            AixLib.DataBase.HeatPump.EN14511.Vitocal200AWO201()),
     use_rev=true,
     use_autoCalc=false,
     VEva=0.4,
@@ -78,7 +79,7 @@ model Chiller "Example for the reversible chiller model."
         rotation=0,
         origin={54,-38})));
   Modelica.Blocks.Sources.Sine sine(
-    freqHz=1/3600,
+    f=1/3600,
     amplitude=500,
     offset=500,
     phase=3.1415926535898)
@@ -130,7 +131,8 @@ model Chiller "Example for the reversible chiller model."
         extent={{10,-10},{-10,10}},
         rotation=0,
         origin={88,-38})));
-  Modelica.Blocks.Sources.Constant iceFac(final k=1) annotation (Placement(
+  Modelica.Blocks.Sources.Constant iceFac(final k=1)
+    "Fixed value for icing factor. 1 means no icing/frosting (full heat transfer in heat exchanger)" annotation (Placement(
         transformation(
         extent={{-6,-6},{6,6}},
         rotation=180,

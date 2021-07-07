@@ -16,8 +16,8 @@ protected
     annotation (Placement(transformation(extent={{60,-10},{80,10}},
           rotation=0)));
 public
-  parameter Modelica.SIunits.Time period=86400*4;
-  parameter Modelica.SIunits.Time sampleTime=86400;
+  parameter Modelica.Units.SI.Time period=86400*4;
+  parameter Modelica.Units.SI.Time sampleTime=86400;
   parameter Real ystart=279.15 "Start value of EMA";
 protected
   Modelica.Blocks.Continuous.CriticalDamping ExpAVG1(
@@ -53,16 +53,17 @@ equation
     annotation (Line(points={{19,0},{58,0}}, color={0,0,127}));
   connect(DEMAcont.y, y[2]) annotation (Line(points={{19,0},{32,0},{32,
           -18},{110,-18},{110,5}}, color={0,0,127}));
-  annotation (Diagram(graphics), Documentation(revisions="<html>
-  <ul>
-    <li><i>April, 2016&nbsp;</i>
-           by Peter Remmen:<br/>
-           Moved from Utilities to Controls</li>
-  </ul>
+  annotation (Diagram(graphics), Documentation(revisions="<html><ul>
+  <li>
+    <i>April, 2016&#160;</i> by Peter Remmen:<br/>
+    Moved from Utilities to Controls
+  </li>
+</ul>
 <ul>
-  <li><i>October, 2015&nbsp;</i>
-         by Moritz Lauster:<br/>
-         Adapted and moved to AixLib</li>
+  <li>
+    <i>October, 2015&#160;</i> by Moritz Lauster:<br/>
+    Adapted and moved to AixLib
+  </li>
 </ul>
 </html>"));
 end DEMA;

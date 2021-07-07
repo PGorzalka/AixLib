@@ -3,7 +3,7 @@ model Sandbox "Validation of BorefieldOneUTube based on the experiment of Beier 
   extends Modelica.Icons.Example;
   package Medium = AixLib.Media.Water;
 
-  parameter Modelica.SIunits.Temperature T_start = 273.15 + 22.09
+  parameter Modelica.Units.SI.Temperature T_start=273.15 + 22.09
     "Initial temperature of the sandbox";
 
   // mSenFac is set to its numerical value because it is a constant in the borehole model.
@@ -50,7 +50,7 @@ model Sandbox "Validation of BorefieldOneUTube based on the experiment of Beier 
     tau=0)
     "Outlet temperature of the borefield"
     annotation (Placement(transformation(extent={{70,-30},{90,-10}})));
-  AixLib.Fluid.Geothermal.Borefields.Validation.BaseClasses.SandBox_Borefield borFieDat "Borefield data"
+  parameter AixLib.Fluid.Geothermal.Borefields.Validation.BaseClasses.SandBox_Borefield borFieDat "Borefield data"
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
   AixLib.Fluid.Sources.Boundary_ph sin(
     redeclare package Medium = Medium,
@@ -129,6 +129,11 @@ spectral method to simulate borehole heat exchanger</i>. Geothermics 51:
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+April 8, 2021, by Michael Wetter:<br/>
+Added missing <code>parameter</code> keyword.<br/>
+For <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1464\">AixLib, issue 1464</a>.
+</li>
 <li>
 July 18, 2018, by Massimo Cimmino:<br/>
 First implementation.

@@ -9,9 +9,9 @@ model SimpleHeatTransfer
     Types.HeatTransferModels.Simplified
     "Choose heat transfer model"
     annotation (Dialog(tab="General",group="Heat transfer"));
-  parameter Modelica.SIunits.ThermalConductance kAMea = 25
+  parameter Modelica.Units.SI.ThermalConductance kAMea=25
     "Effective mean thermal conductance between medium and fictitious wall"
-    annotation (Dialog(tab="General",group="Heat transfer"));
+    annotation (Dialog(tab="General", group="Heat transfer"));
 
   // Extensions and parameter propagation
   //
@@ -25,10 +25,9 @@ model SimpleHeatTransfer
 
   // Definition of parameters describing advanced options
   //
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal = 0.1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=0.1
     "Nominal mass flow rate"
-    annotation(Dialog(tab="Advanced"),
-               HideResult=true);
+    annotation (Dialog(tab="Advanced"), HideResult=true);
 
   // Definition of submodels and connectors
   //
@@ -43,9 +42,9 @@ protected
   Medium.ThermodynamicState staOut
     "Thermodynamic state at outlet";
 
-  Modelica.SIunits.TemperatureDifference effTemDif
+  Modelica.Units.SI.TemperatureDifference effTemDif
     "Effective temperature difference between medium and wall";
-  Modelica.SIunits.Power Q_flow
+  Modelica.Units.SI.Power Q_flow
     "Heat flow exchanged between medium and heat port";
 
 
@@ -82,25 +81,26 @@ equation
 
   heatPort.Q_flow = -Q_flow "Connect heat flow with heat port";
 
-  annotation (Documentation(revisions="<html>
-<ul>
-  <li>
-  October 28, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
+  annotation (Documentation(revisions="<html><ul>
+  <li>October 28, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a model of a simple one-directional heat transfer without storage of
-energy or mass. Therefore, some assumptions are made:
+  This is a model of a simple one-directional heat transfer without
+  storage of energy or mass. Therefore, some assumptions are made:
 </p>
 <ul>
-<li>No storage of energy or mass.</li>
-<li>No pressure losses.</li>
-<li>Calculation of the heat flow between fluid and fictitious wall using a 
-logarithmic temperature difference and time invariante effective thermal
-conductance.</li>
+  <li>No storage of energy or mass.
+  </li>
+  <li>No pressure losses.
+  </li>
+  <li>Calculation of the heat flow between fluid and fictitious wall
+  using a logarithmic temperature difference and time invariante
+  effective thermal conductance.
+  </li>
 </ul>
 </html>"), Icon(graphics={
         Rectangle(

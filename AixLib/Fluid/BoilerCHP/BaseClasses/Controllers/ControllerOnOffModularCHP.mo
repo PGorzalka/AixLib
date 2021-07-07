@@ -6,7 +6,7 @@ model ControllerOnOffModularCHP
     CHPEngineModel=DataBase.CHP.ModularCHPEngineData.CHP_ECPowerXRGI15()
     "CHP engine data for calculations"
     annotation (choicesAllMatching=true, Dialog(group="Unit properties"));
-  parameter Modelica.SIunits.Time startTimeChp=0
+  parameter Modelica.Units.SI.Time startTimeChp=0
     "Start time for discontinous simulation tests to heat the Chp unit up to the prescribed return temperature";
   parameter Real modTab[:,2]=[0.0,0.8; 7200,0.8; 7200,0.93; 10800,0.93; 10800,
       0.62; 14400,0.62; 14400,0.8; 18000,0.8; 18000,0.0]
@@ -84,7 +84,6 @@ CHP")}),
   modulation factor (modFac) of 0 indicates that the machine is not in
   operation.
 </p>
-</html>", revisions="<html>
 <ul>
   <li>
     <i>April, 2019&#160;</i> by Julian Matthes:<br/>

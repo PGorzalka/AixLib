@@ -10,29 +10,32 @@ partial model PartialWaterToWater
     "Refrigerant in the component"
     annotation (choicesAllMatching = true);
 
+  constant Boolean homotopyInitialization = true "= true, use homotopy method"
+    annotation(HideResult=true);
+
   parameter Boolean enable_variable_speed = true
     "Set to true to allow modulating of compressor speed";
 
   parameter Real scaling_factor = 1.0
     "Scaling factor for heat pump capacity";
 
-  parameter Modelica.SIunits.ThermalConductance UACon
+  parameter Modelica.Units.SI.ThermalConductance UACon
     "Thermal conductance of condenser";
 
-  parameter Modelica.SIunits.ThermalConductance UAEva
+  parameter Modelica.Units.SI.ThermalConductance UAEva
     "Thermal conductance of evaporator";
 
-  parameter Modelica.SIunits.Time tau1=60
+  parameter Modelica.Units.SI.Time tau1=60
     "Time constant at nominal flow rate (used if energyDynamics1 <> Modelica.Fluid.Types.Dynamics.SteadyState)"
     annotation (Dialog(tab="Dynamics", group="Condenser"));
-  parameter Modelica.SIunits.Time tau2=60
+  parameter Modelica.Units.SI.Time tau2=60
     "Time constant at nominal flow rate (used if energyDynamics2 <> Modelica.Fluid.Types.Dynamics.SteadyState)"
     annotation (Dialog(tab="Dynamics", group="Evaporator"));
 
-  parameter Modelica.SIunits.Temperature T1_start=Medium1.T_default
+  parameter Modelica.Units.SI.Temperature T1_start=Medium1.T_default
     "Initial or guess value of set point"
     annotation (Dialog(tab="Dynamics", group="Condenser"));
-  parameter Modelica.SIunits.Temperature T2_start=Medium2.T_default
+  parameter Modelica.Units.SI.Temperature T2_start=Medium2.T_default
     "Initial or guess value of set point"
     annotation (Dialog(tab="Dynamics", group="Evaporator"));
 
@@ -41,17 +44,15 @@ partial model PartialWaterToWater
     "Type of energy balance: dynamic (3 initialization options) or steady state"
     annotation (Dialog(tab="Dynamics", group="Evaporator and condenser"));
 
-  parameter Boolean homotopyInitialization=true "= true, use homotopy method"
-    annotation (Dialog(tab="Advanced"));
   parameter Boolean enable_temperature_protection = true
     "Enable temperature protection"
     annotation(Evaluate=true, Dialog(group="Temperature protection"));
-  parameter Modelica.SIunits.Temperature TConMax = ref.TCri-5
-    "Upper bound for condenser temperature"
-    annotation(Dialog(enable=enable_temperature_protection, group="Temperature protection"));
-  parameter Modelica.SIunits.Temperature TEvaMin = 275.15
-    "Lower bound for evaporator temperature"
-    annotation(Dialog(enable=enable_temperature_protection, group="Temperature protection"));
+  parameter Modelica.Units.SI.Temperature TConMax=ref.TCri - 5
+    "Upper bound for condenser temperature" annotation (Dialog(enable=
+          enable_temperature_protection, group="Temperature protection"));
+  parameter Modelica.Units.SI.Temperature TEvaMin=275.15
+    "Lower bound for evaporator temperature" annotation (Dialog(enable=
+          enable_temperature_protection, group="Temperature protection"));
   parameter Real dTHys(unit="K",min=0) = 5
     "Hysteresis interval width"
     annotation(Dialog(enable=enable_temperature_protection, group="Temperature protection"));
@@ -149,6 +150,11 @@ protected
     final dTHys=dTHys) if enable_temperature_protection
     "Disables compressor when outside of allowed operation range"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
+
+initial equation
+  assert(homotopyInitialization, "In " + getInstanceName() +
+    ": The constant homotopyInitialization has been modified from its default value. This constant will be removed in future releases.",
+    level = AssertionLevel.warning);
 
 equation
   if enable_temperature_protection then
@@ -313,6 +319,12 @@ PhD Thesis. Oklahoma State University. Stillwater, Oklahoma, USA. 2012.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+April 14, 2020, by Michael Wetter:<br/>
+Changed <code>homotopyInitialization</code> to a constant.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1341\">AixLib, #1341</a>.
+</li>
 <li>
 May 30, 2017, by Filip Jorissen:<br/>
 Added temperature protection block and

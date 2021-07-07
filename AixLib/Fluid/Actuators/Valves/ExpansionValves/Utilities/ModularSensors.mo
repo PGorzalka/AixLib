@@ -5,35 +5,32 @@ model ModularSensors
 
   // Definition of parameters
   //
-  parameter Modelica.SIunits.Time tau = 1
-    "Time constant at nominal flow rate"
-    annotation(Dialog(tab="Sensors",group="General"));
+  parameter Modelica.Units.SI.Time tau=1 "Time constant at nominal flow rate"
+    annotation (Dialog(tab="Sensors", group="General"));
 
   parameter Boolean transferHeat=false
     "if true, temperature T converges towards TAmb when no flow"
     annotation(Dialog(tab="Sensors",group="Temperature sensor"));
-  parameter Modelica.SIunits.Temperature TAmb=Medium.T_default
+  parameter Modelica.Units.SI.Temperature TAmb=Medium.T_default
     "Fixed ambient temperature for heat transfer"
-    annotation(Dialog(tab="Sensors",group="Temperature sensor"));
-  parameter Modelica.SIunits.Time tauHeaTra=1200
+    annotation (Dialog(tab="Sensors", group="Temperature sensor"));
+  parameter Modelica.Units.SI.Time tauHeaTra=1200
     "Time constant for heat transfer, default 20 minutes"
-    annotation(Dialog(tab="Sensors",group="Temperature sensor"));
+    annotation (Dialog(tab="Sensors", group="Temperature sensor"));
 
   parameter Modelica.Blocks.Types.Init initType=
     Modelica.Blocks.Types.Init.InitialState
     "Type of initialization (InitialState and InitialOutput are identical)"
     annotation(Dialog(tab="Sensors",group="Initialisation"));
-  parameter Modelica.SIunits.Temperature T_start=
-    Medium.T_default
+  parameter Modelica.Units.SI.Temperature T_start=Medium.T_default
     "Initial or guess value of output (= state)"
-    annotation(Dialog(tab="Sensors",group="Initialisation"));
-  parameter Modelica.SIunits.SpecificEnthalpy h_out_start=
-    Medium.specificEnthalpy_pTX(
-    p=Medium.p_default,
-    T=Medium.T_default,
-    X=Medium.X_default)
-    "Initial or guess value of output (= state)"
-    annotation(Dialog(tab="Sensors",group="Initialisation"));
+    annotation (Dialog(tab="Sensors", group="Initialisation"));
+  parameter Modelica.Units.SI.SpecificEnthalpy h_out_start=
+      Medium.specificEnthalpy_pTX(
+      p=Medium.p_default,
+      T=Medium.T_default,
+      X=Medium.X_default) "Initial or guess value of output (= state)"
+    annotation (Dialog(tab="Sensors", group="Initialisation"));
 
   // Extensions
   //
@@ -44,9 +41,9 @@ model ModularSensors
   Medium.SaturationProperties satPro[nPorts]
     "Saturation states for each fluid port";
 
-  Modelica.SIunits.SpecificEnthalpy bubEnt[nPorts]
+  Modelica.Units.SI.SpecificEnthalpy bubEnt[nPorts]
     "Bubble enthalpies for each fluid port";
-  Modelica.SIunits.SpecificEnthalpy dewEnt[nPorts]
+  Modelica.Units.SI.SpecificEnthalpy dewEnt[nPorts]
     "Dew enthalpies for each fluid port";
   Real pTriCri[nPorts]
     "Trigger to check if medium exceeds critical pressure";
@@ -163,26 +160,29 @@ equation
           pattern=LinePattern.None,
           fillPattern=FillPattern.Solid,
           extent={{-7.0,-7.0},{7.0,7.0}})}),
-                                 Documentation(revisions="<html>
-<ul>
-  <li>
-  October 17, 2017, by Mirko Engelpracht, Christian Vering:<br />
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
+                                 Documentation(revisions="<html><ul>
+  <li>October 17, 2017, by Mirko Engelpracht, Christian Vering:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a model of modular sensors that is used, for example, for components 
-of modular heat pumps like modular expansion valves or modular compressors.<br />
-It consists of four types of sensors that are introduced as vectors and that 
-are mainly used in heat pumps:
+  This is a model of modular sensors that is used, for example, for
+  components of modular heat pumps like modular expansion valves or
+  modular compressors.<br/>
+  It consists of four types of sensors that are introduced as vectors
+  and that are mainly used in heat pumps:
 </p>
 <ul>
-<li>Absolute pressure.</li>
-<li>Temperature.</li>
-<li>Mass flow rate.</li>
-<li>Steam quality.</li>
+  <li>Absolute pressure.
+  </li>
+  <li>Temperature.
+  </li>
+  <li>Mass flow rate.
+  </li>
+  <li>Steam quality.
+  </li>
 </ul>
 </html>"));
 end ModularSensors;

@@ -34,11 +34,10 @@ model CoolingOnly
     "Outdoor air temperature"
     annotation (Placement(transformation(extent={{-110,-110},{-90,-90}})));
   AixLib.Controls.Continuous.LimPID conPID(
-    reverseAction=true,
+    reverseActing=false,
     Td=0,
     k=0.5,
     Ti=70,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     yMax=0.094) "Controller"
          annotation (Placement(transformation(extent={{-70,-20},{-50,0}})));
   Sources.MassFlowSource_T pum(
@@ -53,7 +52,7 @@ model CoolingOnly
     "Room air temperature sensor"
     annotation (Placement(transformation(extent={{-20,-40},{-40,-20}})));
   Modelica.Blocks.Sources.Sine sine(
-    freqHz=1/86400,
+    f=1/86400,
     amplitude=1,
     phase=-1.5707963267949) "Source for thermal loads"
     annotation (Placement(transformation(extent={{-110,-70},{-90,-50}})));
@@ -112,14 +111,14 @@ equation
 <p>
 This example tests the implementation of <a href=\"modelica://AixLib.Fluid.HeatExchangers.ActiveBeams.Cooling\">
 AixLib.Fluid.HeatExchangers.ActiveBeams.Cooling</a>.
-An air volume is maintained at a temperature below <i>25&circ;</i>C by a controller
+An air volume is maintained at a temperature below <i>25&deg;</i>C by a controller
 that regulates the water flow rate in the active beam.
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>

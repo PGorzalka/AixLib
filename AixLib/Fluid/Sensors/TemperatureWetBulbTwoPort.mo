@@ -13,7 +13,7 @@ model TemperatureWetBulbTwoPort "Ideal wet bulb temperature sensor"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,110})));
-  parameter Modelica.SIunits.Temperature TWetBul_start = Medium.T_default
+  parameter Modelica.Units.SI.Temperature TWetBul_start=Medium.T_default
     "Initial or guess value of wet bulb temperature (used to compute initial output signal))"
     annotation (Dialog(group="Initialization"));
 
@@ -23,7 +23,7 @@ protected
   AixLib.Utilities.Psychrometrics.TWetBul_TDryBulXi wetBulMod(
     redeclare package Medium = Medium,
     TWetBul(start=TWetBul_start)) "Block for wet bulb temperature";
-  Modelica.SIunits.SpecificEnthalpy h "Specific enthalpy";
+  Modelica.Units.SI.SpecificEnthalpy h "Specific enthalpy";
   Medium.MassFraction Xi[Medium.nXi]
     "Species vector, needed because indexed argument for the operator inStream is not supported";
 initial equation
@@ -95,7 +95,11 @@ annotation (defaultComponentName="senWetBul",
         Line(
           points={{12,60},{12,-24}},
           thickness=0.5),
-        Line(points={{0,100},{0,50}}, color={0,0,127})}),
+        Line(points={{0,100},{0,50}}, color={0,0,127}),
+        Text(
+         extent={{-20,120},{-140,70}},
+          lineColor={0,0,0},
+          textString=DynamicSelect("", String(T-273.15, format=".1f")))}),
     Documentation(info="<html>
 <p>
 This sensor outputs the wet bulb temperature of the medium in the flow
@@ -109,6 +113,12 @@ AixLib.Fluid.Sensors.UsersGuide</a> for an explanation.
 </html>",
 revisions="<html>
 <ul>
+<li>
+February 21, 2020, by Michael Wetter:<br/>
+Changed icon to display its operating state.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1294\">#1294</a>.
+</li>
 <li>
 January 18, 2016 by Filip Jorissen:<br/>
 Using parameter <code>tauInv</code>

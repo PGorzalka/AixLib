@@ -196,7 +196,7 @@ required from medium model \"" + mediumName + "\".");
   function h_TX "Return specific enthalpy"
     import Modelica.Media.Interfaces.Choices;
      extends Modelica.Icons.Function;
-     input Modelica.SIunits.Temperature T "Temperature";
+    input Modelica.Units.SI.Temperature T "Temperature";
      input MassFraction X[nX]=reference_X
       "Independent Mass fractions of gas mixture";
      input Boolean exclEnthForm=excludeEnthalpyOfFormation
@@ -204,10 +204,10 @@ required from medium model \"" + mediumName + "\".");
      input Modelica.Media.Interfaces.Choices.ReferenceEnthalpy
                                      refChoice=referenceChoice
       "Choice of reference enthalpy";
-     input Modelica.SIunits.SpecificEnthalpy h_off=h_offset
-        "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
-     output Modelica.SIunits.SpecificEnthalpy h
-        "Specific enthalpy at temperature T";
+    input Modelica.Units.SI.SpecificEnthalpy h_off=h_offset
+      "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
+    output Modelica.Units.SI.SpecificEnthalpy h
+      "Specific enthalpy at temperature T";
   algorithm
     h :=(if fixedX then reference_X else X)*
          {Modelica.Media.IdealGases.Common.Functions.h_T(
@@ -218,15 +218,15 @@ required from medium model \"" + mediumName + "\".");
   function h_TX_der "Return specific enthalpy derivative"
     import Modelica.Media.Interfaces.Choices;
      extends Modelica.Icons.Function;
-     input Modelica.SIunits.Temperature T "Temperature";
+    input Modelica.Units.SI.Temperature T "Temperature";
      input MassFraction X[nX] "Independent Mass fractions of gas mixture";
      input Boolean exclEnthForm=excludeEnthalpyOfFormation
       "If true, enthalpy of formation Hf is not included in specific enthalpy h";
      input Modelica.Media.Interfaces.Choices.ReferenceEnthalpy
                                      refChoice=referenceChoice
       "Choice of reference enthalpy";
-     input Modelica.SIunits.SpecificEnthalpy h_off=h_offset
-        "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
+    input Modelica.Units.SI.SpecificEnthalpy h_off=h_offset
+      "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
     input Real dT "Temperature derivative";
     input Real dX[nX] "Independent mass fraction derivative";
     output Real h_der "Specific enthalpy at temperature T";
@@ -265,7 +265,7 @@ required from medium model \"" + mediumName + "\".");
 
   function MixEntropy "Return mixing entropy of ideal gases / R"
     extends Modelica.Icons.Function;
-    input Modelica.SIunits.MoleFraction x[:] "Mole fraction of mixture";
+    input Modelica.Units.SI.MoleFraction x[:] "Mole fraction of mixture";
     output Real smix "Mixing entropy contribution, divided by gas constant";
   algorithm
     smix := sum(if x[i] > Modelica.Constants.eps then -x[i]*Modelica.Math.log(x[i]) else
@@ -616,14 +616,14 @@ end lowPressureThermalConductivity;
      input Modelica.Media.Interfaces.Choices.ReferenceEnthalpy
                                      refChoice=referenceChoice
       "Choice of reference enthalpy";
-     input Modelica.SIunits.SpecificEnthalpy h_off=h_offset
-        "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
+    input Modelica.Units.SI.SpecificEnthalpy h_off=h_offset
+      "User defined offset for reference enthalpy, if referenceChoice = UserDefined";
     output Temperature T "Temperature";
   protected
     MassFraction[nX] Xfull = if size(X,1) == nX then X else cat(1,X,{1-sum(X)});
   package Internal
       "Solve h(data,T) for T with given h (use only indirectly via temperature_phX)"
-    extends Modelica.Media.Common.OneNonLinearEquation;
+    extends ObsoleteModelica4.Media.Common.OneNonLinearEquation;
     redeclare record extends f_nonlinear_Data
         "Data to be passed to non-linear function"
       extends Modelica.Media.IdealGases.Common.DataRecord;
@@ -655,7 +655,7 @@ end lowPressureThermalConductivity;
     MassFraction[nX] Xfull = if size(X,1) == nX then X else cat(1,X,{1-sum(X)});
   package Internal
       "Solve h(data,T) for T with given h (use only indirectly via temperature_phX)"
-    extends Modelica.Media.Common.OneNonLinearEquation;
+    extends ObsoleteModelica4.Media.Common.OneNonLinearEquation;
     redeclare record extends f_nonlinear_Data
         "Data to be passed to non-linear function"
       extends Modelica.Media.IdealGases.Common.DataRecord;

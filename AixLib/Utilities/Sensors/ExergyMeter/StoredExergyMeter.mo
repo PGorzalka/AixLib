@@ -1,28 +1,29 @@
 within AixLib.Utilities.Sensors.ExergyMeter;
 model StoredExergyMeter
 
-    extends Modelica.Icons.RotationalSensor;
+    extends Modelica.Icons.RoundSensor;
 
   replaceable package Medium = Modelica.Media.Interfaces.PartialMedium
     "Medium in the sensor" annotation (choicesAllMatching=true);
 
   parameter Integer n=1 "Number of identical volumes";
 
-  parameter Modelica.SIunits.Mass mass=100 "mass of each layer";
-  parameter Modelica.SIunits.Temperature T_start=323.15
+  parameter Modelica.Units.SI.Mass mass=100 "mass of each layer";
+  parameter Modelica.Units.SI.Temperature T_start=323.15
     "Start reference temperature of medium"
     annotation (Dialog(tab="Initialisation"));
-  parameter Modelica.SIunits.Temperature T_ref_start=273.15
+  parameter Modelica.Units.SI.Temperature T_ref_start=273.15
     "Start reference temperature" annotation (Dialog(tab="Initialisation"));
-  parameter Modelica.SIunits.Energy exergyContent_start = 1e+05
+  parameter Modelica.Units.SI.Energy exergyContent_start=1e+05
     "Start exergy content" annotation (Dialog(tab="Initialisation"));
 
-  Modelica.Fluid.Sensors.SpecificEntropy specificEntropy[n](redeclare package
-      Medium = Medium)
+  Modelica.Fluid.Sensors.SpecificEntropy specificEntropy[n](redeclare package Medium =
+               Medium)
     "Specific entropy of the medium used in exergy calculations"
     annotation (Placement(transformation(extent={{70,0},{50,20}})));
   Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpy[n](redeclare package
-      Medium = Medium)
+                                                                                Medium =
+               Medium)
     "Specific enthalpy of the medium used in exergy calculations"
     annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
 
@@ -36,10 +37,12 @@ model StoredExergyMeter
     annotation (Placement(transformation(extent={{-120,-20},{-80,20}}),
         iconTransformation(extent={{-120,-20},{-80,20}})));
   Modelica.Fluid.Sensors.SpecificEnthalpy specificEnthalpyRef[n](redeclare
-      package Medium = Medium) "Specific enthalpy of the reference environment"
+      package                                                                      Medium =
+                       Medium) "Specific enthalpy of the reference environment"
     annotation (Placement(transformation(extent={{-10,60},{-30,40}})));
   Modelica.Fluid.Sensors.SpecificEntropy specificEntropyRef[n](redeclare
-      package Medium = Medium) "Specific enthalpy of the reference environment"
+      package                                                                    Medium =
+                       Medium) "Specific enthalpy of the reference environment"
     annotation (Placement(transformation(extent={{10,60},{30,40}})));
   Modelica.Blocks.Interfaces.RealOutput exergyChangeRate(final quantity="Power",
       final unit="W")
@@ -209,19 +212,21 @@ equation
           0,-22},{-4,-22},{-4,-12}}, color={0,0,127}));
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), Documentation(info="<html>
-            <p><span style=\"font-family: MS Shell Dlg 2;\">The model calculates 
-            the exergy content and its rate of change of a stratefied storage 
-            i. e. with multiple layers) filled with a medium consisting of 
-            multiple substances. The reference environment is variable and is 
-            modeled using a boundary with temperature, pressure and composition
-            as input. The medium model is replaceable. The physical enthalpy and
-            entropy are determined using the respective sensors from MSL. The 
-            rate of change of the exergy content is calculated using the 
-            approximate derivative block from MSL.</span></p>
-</html>", revisions="<html>
- <ul>
- <li>by Marc Baranski and Roozbeh Sangi:<br/>implemented</li>
- </ul>
+            -100},{100,100}})), Documentation(info="<html><p>
+  <span style=\"font-family: MS Shell Dlg 2;\">The model calculates the
+  exergy content and its rate of change of a stratefied storage i. e.
+  with multiple layers) filled with a medium consisting of multiple
+  substances. The reference environment is variable and is modeled
+  using a boundary with temperature, pressure and composition as input.
+  The medium model is replaceable. The physical enthalpy and entropy
+  are determined using the respective sensors from MSL. The rate of
+  change of the exergy content is calculated using the approximate
+  derivative block from MSL.</span>
+</p>
+<ul>
+  <li>by Marc Baranski and Roozbeh Sangi:<br/>
+    implemented
+  </li>
+</ul>
 </html>"));
 end StoredExergyMeter;

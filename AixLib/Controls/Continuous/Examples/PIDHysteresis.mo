@@ -4,7 +4,6 @@ model PIDHysteresis "Example model for PID controller with hysteresis"
 
   AixLib.Controls.Continuous.PIDHysteresis con(
     pre_y_start=false,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     yMin=0.3,
     Ti=600,
     Td=60)
@@ -25,7 +24,7 @@ model PIDHysteresis "Example model for PID controller with hysteresis"
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow Q_flow
     annotation (Placement(transformation(extent={{16,20},{36,40}})));
   Modelica.Blocks.Sources.Sine sine(
-    freqHz=1/86400,
+    f=1/86400,
     offset=273.15,
     amplitude=20,
     phase=-1.5707963267949,

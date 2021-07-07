@@ -6,7 +6,6 @@ model PIDHysteresisTimer
   AixLib.Controls.Continuous.PIDHysteresisTimer con(
     yMin=0.3,
     minOffTime=10000,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Ti=60,
     Td=10)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
@@ -26,7 +25,7 @@ model PIDHysteresisTimer
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow Q_flow
     annotation (Placement(transformation(extent={{16,20},{36,40}})));
   Modelica.Blocks.Sources.Sine sine(
-    freqHz=1/86400,
+    f=1/86400,
     offset=273.15,
     amplitude=20,
     phase=-1.5707963267949)

@@ -7,7 +7,7 @@ block CheckWindSpeed "Ensures that the wind speed is non-negative"
   Modelica.Blocks.Interfaces.RealOutput winSpeOut(final quantity="Velocity",
       final unit="m/s") "Wind speed"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-  constant Modelica.SIunits.Velocity winSpeMin=1e-6
+  constant Modelica.Units.SI.Velocity winSpeMin=1e-6
     "Minimum allowed wind speed";
 
 equation
@@ -20,16 +20,13 @@ equation
 
   annotation (
     defaultComponentName="cheWinSpe",
-    Documentation(info="<html>
-<p>
-This component ensures that the wind speed is non-negative.
+    Documentation(info="<html><p>
+  This component ensures that the wind speed is non-negative.
 </p>
-</html>", revisions="<html>
 <ul>
-<li>
-July 14, 2010, by Wangda Zuo:<br/>
-First implementation.
-</li>
+  <li>July 14, 2010, by Wangda Zuo:<br/>
+    First implementation.
+  </li>
 </ul>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,

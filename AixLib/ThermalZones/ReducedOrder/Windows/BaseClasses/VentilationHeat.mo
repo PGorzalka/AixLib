@@ -3,20 +3,17 @@ block VentilationHeat "heat input due to ventilation with closed sunblind"
   extends Modelica.Blocks.Icons.Block;
   parameter Real x_f(min=0,max=1) "Percentage of open windowarea"
     annotation(dialog(group="window"));
-  parameter Modelica.SIunits.Distance d "Distance sunscreen to window"
-    annotation(dialog(group="sunscreen"));
+  parameter Modelica.Units.SI.Distance d "Distance sunscreen to window"
+    annotation (dialog(group="sunscreen"));
   parameter Boolean screen "If screen: true, if blind: false"
     annotation(dialog(group="sunscreen"));
-  parameter Modelica.SIunits.TransmissionCoefficient tau_e
+  parameter Modelica.Units.SI.TransmissionCoefficient tau_e
     "Transmission coefficient of sunscreen"
-     annotation(dialog(group="sunscreen"));
-  parameter Modelica.SIunits.ReflectionCoefficient rho_e
-    "Reflection coefficient of sunscreen"
-     annotation(dialog(group="sunscreen"));
-  parameter Modelica.SIunits.Angle til(displayUnit="deg")
-    "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
-    roof"
-    annotation (Dialog(group="window"));
+    annotation (dialog(group="sunscreen"));
+  parameter Modelica.Units.SI.ReflectionCoefficient rho_e
+    "Reflection coefficient of sunscreen" annotation (dialog(group="sunscreen"));
+  parameter Modelica.Units.SI.Angle til(displayUnit="deg") "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
+    roof" annotation (Dialog(group="window"));
 
    Modelica.Blocks.Interfaces.BooleanInput sunscreen
     "True: sunscreen closed, false: sunscreen open"
@@ -54,8 +51,7 @@ block VentilationHeat "heat input due to ventilation with closed sunblind"
     annotation (Placement(transformation(extent={{-140,-110},{-100,-70}}),
         iconTransformation(extent={{-120,-90},{-100,-70}})));
 
-   parameter Modelica.SIunits.ReflectionCoefficient rho=0.2
-    "Ground reflection";
+  parameter Modelica.Units.SI.ReflectionCoefficient rho=0.2 "Ground reflection";
 protected
    Real factor_gv "Calculation factor";
 
@@ -84,18 +80,23 @@ equation
               "modelica://AixLib/Resources/Images/ThermalZones/ReducedOrder/Windows/BaseClasses/VentilationHeat.png")}),
                                                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    Documentation(info="<html>
-The model considers additional heat input in the event of window ventilation
- and simultaneously closed external solar protection based on VDI 6007 part 3.
-<br/>The closed external solar protection absorbs solar irradiation which is
- brought into the room by convection.
-  <h4>References</h4>
-  <p>VDI. German Association of Engineers Guideline VDI 6007-3
-  June 2015. Calculation of transient thermal response of rooms
-  and buildings - Modelling of solar radiation.</p>
-</html>", revisions="<html>
+    Documentation(info="<html>The model considers additional heat input in the event of window
+ventilation and simultaneously closed external solar protection based
+on VDI 6007 part 3.<br/>
+The closed external solar protection absorbs solar irradiation which is
+brought into the room by convection.
+<h4>
+  References
+</h4>
+<p>
+  VDI. German Association of Engineers Guideline VDI 6007-3 June 2015.
+  Calculation of transient thermal response of rooms and buildings -
+  Modelling of solar radiation.
+</p>
 <ul>
-<li>May 5, 2016,&nbsp; by Stanley Risch:<br/>Implemented. </li>
+  <li>May 5, 2016,&#160; by Stanley Risch:<br/>
+    Implemented.
+  </li>
 </ul>
 </html>"));
 end VentilationHeat;

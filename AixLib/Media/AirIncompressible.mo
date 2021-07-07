@@ -1,4 +1,4 @@
-within AixLib.Media;
+﻿within AixLib.Media;
 package AirIncompressible
   "Package with incopressible moist air model for air duct simulations"
   extends Modelica.Media.Interfaces.PartialCondensingGases(
@@ -51,12 +51,12 @@ package AirIncompressible
     final standardOrderComponents=true) "Base properties"
 
   protected
-    constant Modelica.SIunits.MolarMass[2] MMX = {steam.MM,dryair.MM}
+    constant Modelica.Units.SI.MolarMass[2] MMX={steam.MM,dryair.MM}
       "Molar masses of components";
 
     MassFraction X_steam "Mass fraction of steam water";
     MassFraction X_air "Mass fraction of air";
-    Modelica.SIunits.TemperatureDifference dT(start=T_default-reference_T)
+    Modelica.Units.SI.TemperatureDifference dT(start=T_default - reference_T)
       "Temperature difference used to compute enthalpy";
   equation
     assert(T >= 200.0, "
@@ -230,7 +230,7 @@ Documentation(info="<html><p>
   pressure, which is zero for this medium. The isobaric expansion
   coefficient at constant pressure is
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   β<sub>p</sub> = - 1 ⁄ v &#160; (∂ v ⁄ ∂ T)<sub>p</sub> = 0,
 </p>
 <p>
@@ -257,7 +257,7 @@ algorithm
   This function returns the isothermal compressibility coefficient. The
   isothermal compressibility is
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   κ<sub>T</sub> = -1 ⁄ v &#160; (∂ v ⁄ ∂ p)<sub>T</sub> = -1 ⁄ p,
 </p>
 <p>
@@ -287,7 +287,7 @@ redeclare function extends specificEntropy
     "Return the specific entropy, only valid for phi<1"
 
   protected
-    Modelica.SIunits.MoleFraction[2] Y "Molar fraction";
+    Modelica.Units.SI.MoleFraction[2] Y "Molar fraction";
 algorithm
     Y := massToMoleFractions(
          state.X, {steam.MM,dryair.MM});
@@ -303,7 +303,7 @@ algorithm
 <p>
   The specific entropy of the mixture is obtained from
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   s = s<sub>s</sub> + s<sub>m</sub>,
 </p>
 <p>
@@ -315,7 +315,7 @@ algorithm
 <p>
   The entropy change due to change in state is obtained from
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   s<sub>s</sub> = c<sub>v</sub> ln(T/T<sub>0</sub>) + R
   ln(v/v<sub>0</sub>)<br/>
   = c<sub>v</sub> ln(T/T<sub>0</sub>) + R ln(ρ<sub>0</sub>/ρ)
@@ -324,7 +324,7 @@ algorithm
   If we assume <i>ρ = p<sub>0</sub>/(R T)</i>, and because
   <i>c<sub>p</sub> = c<sub>v</sub> + R</i>, we can write
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   s<sub>s</sub> = c<sub>v</sub> ln(T/T<sub>0</sub>) + R
   ln(T/T<sub>0</sub>)<br/>
   =c<sub>p</sub> ln(T/T<sub>0</sub>).
@@ -333,7 +333,7 @@ algorithm
   Next, the entropy of mixing is obtained from a reversible isothermal
   expansion process. Hence,
 </p>
-<p align=\"center\" style=\"font-style:italic;\">
+<p style=\"text-align:center;font-style:italic;\">
   s<sub>m</sub> = -R ∑<sub>i</sub>( X<sub>i</sub> ⁄ M<sub>i</sub>
   ln(Y<sub>i</sub> p/p<sub>0</sub>)),
 </p>
@@ -352,7 +352,6 @@ algorithm
 <p>
   This function is only valid for a relative humidity below 100%.
 </p>
-</html>", revisions="<html>
 <ul>
   <li>November 27, 2013, by Michael Wetter:<br/>
     First implementation.
@@ -392,13 +391,13 @@ algorithm
 "<html><p>
   This function computes the derivative of density with respect to
   temperature at constant pressure.
-</p>/html
-</html>", revisions=
-"<html><ul>
+</p>
+</html>",
+revisions="<html><ul>
   <li>December 18, 2013, by Michael Wetter:<br/>
     First implementation.
   </li>
-</ul>/html
+</ul>
 </html>"));
 end density_derT_p;
 
@@ -510,9 +509,9 @@ end setState_pTX;
 redeclare function extends setState_psX
     "Return the thermodynamic state as function of p, s and composition X or Xi"
   protected
-    Modelica.SIunits.MassFraction[2] X_int "Mass fraction";
-    Modelica.SIunits.MoleFraction[2] Y "Molar fraction";
-    Modelica.SIunits.Temperature T "Temperature";
+    Modelica.Units.SI.MassFraction[2] X_int "Mass fraction";
+    Modelica.Units.SI.MoleFraction[2] Y "Molar fraction";
+    Modelica.Units.SI.Temperature T "Temperature";
 algorithm
     if size(X, 1) == nX then
       X_int:=X;
@@ -550,7 +549,6 @@ Documentation(info="<html><p>
   \"modelica://AixLib.Media.Air.specificEntropy\">AixLib.Media.Air.specificEntropy</a>
   for temperature.
 </p>
-</html>", revisions="<html>
 <ul>
   <li>November 27, 2013, by Michael Wetter:<br/>
     First implementation.
@@ -571,10 +569,10 @@ end specificEnthalpy;
 
 redeclare replaceable function specificEnthalpy_pTX "Specific enthalpy"
   extends Modelica.Icons.Function;
-  input Modelica.SIunits.Pressure p "Pressure";
-  input Modelica.SIunits.Temperature T "Temperature";
-  input Modelica.SIunits.MassFraction X[:] "Mass fractions of moist air";
-  output Modelica.SIunits.SpecificEnthalpy h "Specific enthalpy at p, T, X";
+    input Modelica.Units.SI.Pressure p "Pressure";
+    input Modelica.Units.SI.Temperature T "Temperature";
+    input Modelica.Units.SI.MassFraction X[:] "Mass fractions of moist air";
+    output Modelica.Units.SI.SpecificEnthalpy h "Specific enthalpy at p, T, X";
 
 algorithm
   h := specificEnthalpy(setState_pTX(p, T, X));
@@ -699,9 +697,9 @@ end temperature_phX;
 redeclare function extends thermalConductivity
     "Thermal conductivity of dry air as a polynomial in the temperature"
 algorithm
-  lambda := Modelica.Media.Incompressible.TableBased.Polynomials_Temp.evaluate(
-      {(-4.8737307422969E-008), 7.67803133753502E-005, 0.0241814385504202},
-   Modelica.SIunits.Conversions.to_degC(state.T));
+  lambda :=Modelica.Math.Polynomials.evaluate({(-4.8737307422969E-008),
+      7.67803133753502E-005,0.0241814385504202},
+      Modelica.Units.Conversions.to_degC(state.T));
 annotation(LateInline=true);
 end thermalConductivity;
 //////////////////////////////////////////////////////////////////////
@@ -716,11 +714,11 @@ protected
     "Coefficient data record for properties of perfect gases"
     extends Modelica.Icons.Record;
 
-    Modelica.SIunits.MolarMass MM "Molar mass";
-    Modelica.SIunits.SpecificHeatCapacity R "Gas constant";
-    Modelica.SIunits.SpecificHeatCapacity cp
+    Modelica.Units.SI.MolarMass MM "Molar mass";
+    Modelica.Units.SI.SpecificHeatCapacity R "Gas constant";
+    Modelica.Units.SI.SpecificHeatCapacity cp
       "Specific heat capacity at constant pressure";
-    Modelica.SIunits.SpecificHeatCapacity cv = cp-R
+    Modelica.Units.SI.SpecificHeatCapacity cv=cp - R
       "Specific heat capacity at constant volume";
     annotation (
       preferredView="info",
@@ -728,7 +726,6 @@ protected
       Documentation(info="<html><p>
   This data record contains the coefficients for perfect gases.
 </p>
-</html>", revisions="<html>
 <ul>
   <li>September 12, 2014, by Michael Wetter:<br/>
     Corrected the wrong location of the <code>preferredView</code> and
@@ -743,30 +740,26 @@ protected
   // In the assignments below, we compute cv as OpenModelica
   // cannot evaluate cv=cp-R as defined in GasProperties.
   constant GasProperties dryair(
-    R =    Modelica.Media.IdealGases.Common.SingleGasesData.Air.R,
-    MM =   Modelica.Media.IdealGases.Common.SingleGasesData.Air.MM,
-    cp =   AixLib.Utilities.Psychrometrics.Constants.cpAir,
-    cv =   AixLib.Utilities.Psychrometrics.Constants.cpAir
-             -Modelica.Media.IdealGases.Common.SingleGasesData.Air.R)
+    R=Modelica.Media.IdealGases.Common.SingleGasesData.Air.R_s,
+    MM=Modelica.Media.IdealGases.Common.SingleGasesData.Air.MM,
+    cp=AixLib.Utilities.Psychrometrics.Constants.cpAir,
+    cv=AixLib.Utilities.Psychrometrics.Constants.cpAir - Modelica.Media.IdealGases.Common.SingleGasesData.Air.R_s)
     "Dry air properties";
   constant GasProperties steam(
-    R =    Modelica.Media.IdealGases.Common.SingleGasesData.H2O.R,
-    MM =   Modelica.Media.IdealGases.Common.SingleGasesData.H2O.MM,
-    cp =   AixLib.Utilities.Psychrometrics.Constants.cpSte,
-    cv =   AixLib.Utilities.Psychrometrics.Constants.cpSte
-             -Modelica.Media.IdealGases.Common.SingleGasesData.H2O.R)
+    R=Modelica.Media.IdealGases.Common.SingleGasesData.H2O.R_s,
+    MM=Modelica.Media.IdealGases.Common.SingleGasesData.H2O.MM,
+    cp=AixLib.Utilities.Psychrometrics.Constants.cpSte,
+    cv=AixLib.Utilities.Psychrometrics.Constants.cpSte - Modelica.Media.IdealGases.Common.SingleGasesData.H2O.R_s)
     "Steam properties";
 
   constant Real k_mair =  steam.MM/dryair.MM "Ratio of molar weights";
 
-  constant Modelica.SIunits.MolarMass[2] MMX={steam.MM,dryair.MM}
+  constant Modelica.Units.SI.MolarMass[2] MMX={steam.MM,dryair.MM}
     "Molar masses of components";
 
-  constant Modelica.SIunits.SpecificEnergy h_fg=
-    AixLib.Utilities.Psychrometrics.Constants.h_fg
+  constant Modelica.Units.SI.SpecificEnergy h_fg=AixLib.Utilities.Psychrometrics.Constants.h_fg
     "Latent heat of evaporation of water";
-  constant Modelica.SIunits.SpecificHeatCapacity cpWatLiq=
-    AixLib.Utilities.Psychrometrics.Constants.cpWatLiq
+  constant Modelica.Units.SI.SpecificHeatCapacity cpWatLiq=AixLib.Utilities.Psychrometrics.Constants.cpWatLiq
     "Specific heat capacity of liquid water";
 
 replaceable function der_enthalpyOfLiquid
@@ -865,7 +858,7 @@ end der_specificHeatCapacityCv;
 <p>
   This medium uses the gas law
 </p>
-<p align=\"center\">
+<p style=\"text-align:center;\">
   <i>ρ = ρ<sub>stp</sub>,</i>
 </p>
 <p>
@@ -881,7 +874,7 @@ end der_specificHeatCapacityCv;
   Note that models in this package implement the equation for the
   internal energy as
 </p>
-<p align=\"center\">
+<p style=\"text-align:center;\">
   <i>u = h - p<sub>stp</sub> ⁄ ρ<sub>stp</sub>,</i>
 </p>
 <p>
@@ -891,13 +884,13 @@ end der_specificHeatCapacityCv;
   and temperature. The reason for this implementation is that in
   general,
 </p>
-<p align=\"center\">
+<p style=\"text-align:center;\">
   <i>h = u + p v,</i>
 </p>
 <p>
   from which follows that
 </p>
-<p align=\"center\">
+<p style=\"text-align:center;\">
   <i>u = h - p v = h - p ⁄ ρ = h - p<sub>stp</sub> ⁄
   ρ<sub>std</sub>,</i>
 </p>
@@ -909,7 +902,6 @@ end der_specificHeatCapacityCv;
   The enthalpy is computed using the convention that <i>h=0</i> if
   <i>T=0</i> °C and no water vapor is present.
 </p>
-</html>", revisions="<html>
 <ul>
   <li>January 09, 2020 by Alexander Kümpel:<br/>
     Copy from <a href=\"modelica://AixLib/Media/Air.mo\">Air</a> and

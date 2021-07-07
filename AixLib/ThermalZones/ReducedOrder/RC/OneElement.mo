@@ -2,62 +2,61 @@ within AixLib.ThermalZones.ReducedOrder.RC;
 model OneElement "Thermal Zone with one element for exterior walls"
   extends AixLib.Fluid.Interfaces.LumpedVolumeDeclarations;
 
-  parameter Modelica.SIunits.Volume VAir "Air volume of the zone"
-    annotation(Dialog(group="Thermal zone"));
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer hRad
+  parameter Modelica.Units.SI.Volume VAir "Air volume of the zone"
+    annotation (Dialog(group="Thermal zone"));
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer hRad
     "Coefficient of heat transfer for linearized radiation exchange between walls"
-    annotation(Dialog(group="Thermal zone"));
+    annotation (Dialog(group="Thermal zone"));
   parameter Integer nOrientations(min=1) "Number of orientations"
     annotation(Dialog(group="Thermal zone"));
   parameter Integer nPorts=0 "Number of fluid ports"
     annotation(Evaluate=true,
     Dialog(connectorSizing=true, tab="General",group="Ports"));
-  parameter Modelica.SIunits.Area AWin[nOrientations]
+  parameter Modelica.Units.SI.Area AWin[nOrientations]
     "Vector of areas of windows by orientations"
-    annotation(Dialog(group="Windows"));
-  parameter Modelica.SIunits.Area ATransparent[nOrientations] "Vector of areas of transparent (solar radiation transmittend) elements by
-    orientations"
-    annotation(Dialog(group="Windows"));
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer hConWin
+    annotation (Dialog(group="Windows"));
+  parameter Modelica.Units.SI.Area ATransparent[nOrientations] "Vector of areas of transparent (solar radiation transmittend) elements by
+    orientations" annotation (Dialog(group="Windows"));
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer hConWin
     "Convective coefficient of heat transfer of windows (indoor)"
-    annotation(Dialog(group="Windows"));
-  parameter Modelica.SIunits.ThermalResistance RWin "Resistor for windows"
-    annotation(Dialog(group="Windows"));
-  parameter Modelica.SIunits.TransmissionCoefficient gWin
-    "Total energy transmittance of windows"
-    annotation(Dialog(group="Windows"));
+    annotation (Dialog(group="Windows"));
+  parameter Modelica.Units.SI.ThermalResistance RWin "Resistor for windows"
+    annotation (Dialog(group="Windows"));
+  parameter Modelica.Units.SI.TransmissionCoefficient gWin
+    "Total energy transmittance of windows" annotation (Dialog(group="Windows"));
   parameter Real ratioWinConRad
     "Ratio for windows between indoor convective and radiative heat emission"
     annotation(Dialog(group="Windows"));
   parameter Boolean indoorPortWin = false
     "Additional heat port at indoor surface of windows"
     annotation(Dialog(group="Windows"),choices(checkBox = true));
-  parameter Modelica.SIunits.Area AExt[nOrientations]
+  parameter Modelica.Units.SI.Area AExt[nOrientations]
     "Vector of areas of exterior walls by orientations"
-    annotation(Dialog(group="Exterior walls"));
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer hConExt
+    annotation (Dialog(group="Exterior walls"));
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer hConExt
     "Convective coefficient of heat transfer of exterior walls (indoor)"
-    annotation(Dialog(group="Exterior walls"));
+    annotation (Dialog(group="Exterior walls"));
   parameter Integer nExt(min = 1) "Number of RC-elements of exterior walls"
     annotation(Dialog(group="Exterior walls"));
-  parameter Modelica.SIunits.ThermalResistance RExt[nExt](
-    each min=Modelica.Constants.small)
+  parameter Modelica.Units.SI.ThermalResistance RExt[nExt](each min=Modelica.Constants.small)
     "Vector of resistances of exterior walls, from inside to outside"
-    annotation(Dialog(group="Exterior walls"));
-  parameter Modelica.SIunits.ThermalResistance RExtRem(
-    min=Modelica.Constants.small)
+    annotation (Dialog(group="Exterior walls"));
+  parameter Modelica.Units.SI.ThermalResistance RExtRem(min=Modelica.Constants.small)
     "Resistance of remaining resistor RExtRem between capacity n and outside"
-    annotation(Dialog(group="Exterior walls"));
-  parameter Modelica.SIunits.HeatCapacity CExt[nExt](
-    each min=Modelica.Constants.small)
+    annotation (Dialog(group="Exterior walls"));
+  parameter Modelica.Units.SI.HeatCapacity CExt[nExt](each min=Modelica.Constants.small)
     "Vector of heat capacities of exterior walls, from inside to outside"
-    annotation(Dialog(group="Exterior walls"));
+    annotation (Dialog(group="Exterior walls"));
   parameter Boolean indoorPortExtWalls = false
     "Additional heat port at indoor surface of exterior walls"
     annotation(Dialog(group="Exterior walls"),choices(checkBox = true));
   parameter Boolean use_moisture_balance = false
     "If true, input connector QLat_flow is enabled and room air computes moisture balance"
     annotation(choices(checkBox = true));
+
+  parameter Boolean use_C_flow = false
+    "Set to true to enable input connector for trace substance"
+    annotation(Evaluate=true, Dialog(tab="Advanced"));
 
   Modelica.Blocks.Interfaces.RealInput solRad[nOrientations](
     each final quantity="RadiantEnergyFluenceRate",
@@ -139,7 +138,7 @@ model OneElement "Thermal Zone with one element for exterior walls"
     final C_start=C_start,
     final C_nominal=C_nominal,
     final mSenFac=mSenFac,
-    final use_C_flow=false) if VAir > 0 and not use_moisture_balance
+    final use_C_flow=use_C_flow) if VAir > 0 and not use_moisture_balance
     "Indoor air volume"
     annotation (Placement(transformation(extent={{42,-26},{22,-6}})));
   Fluid.MixingVolumes.MixingVolumeMoistAir volMoiAir(
@@ -155,7 +154,7 @@ model OneElement "Thermal Zone with one element for exterior walls"
     final C_start=C_start,
     final C_nominal=C_nominal,
     final mSenFac=mSenFac,
-    final use_C_flow=false) if VAir > 0 and use_moisture_balance
+    final use_C_flow=use_C_flow) if VAir > 0 and use_moisture_balance
     "Indoor air volume"
     annotation (Placement(transformation(extent={{-20,-26},{0,-6}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalResistor resWin(final R=RWin) if
@@ -192,15 +191,20 @@ model OneElement "Thermal Zone with one element for exterior walls"
     final T_start=T_start) if ATotExt > 0 "RC-element for exterior walls"
     annotation (Placement(transformation(extent={{-158,-50},{-178,-28}})));
 
+  Modelica.Blocks.Interfaces.RealInput[Medium.nC] C_flow if use_C_flow
+    "Trace substance mass flow rate added to the thermal zone"
+    annotation (Placement(transformation(extent={{-280,70},{-240,110}}), iconTransformation(extent={{-260,90},{-240,110}})));
+
 protected
-  constant Modelica.SIunits.SpecificEnergy h_fg=
-    AixLib.Media.Air.enthalpyOfCondensingGas(273.15+37) "Latent heat of water vapor";
-  parameter Modelica.SIunits.Area ATot=sum(AArray) "Sum of wall surface areas";
-  parameter Modelica.SIunits.Area ATotExt=sum(AExt)
+  constant Modelica.Units.SI.SpecificEnergy h_fg=
+      AixLib.Media.Air.enthalpyOfCondensingGas(273.15 + 37)
+    "Latent heat of water vapor";
+  parameter Modelica.Units.SI.Area ATot=sum(AArray) "Sum of wall surface areas";
+  parameter Modelica.Units.SI.Area ATotExt=sum(AExt)
     "Sum of exterior wall surface areas";
-  parameter Modelica.SIunits.Area ATotWin=sum(AWin)
+  parameter Modelica.Units.SI.Area ATotWin=sum(AWin)
     "Sum of window surface areas";
-  parameter Modelica.SIunits.Area[:] AArray = {ATotExt, ATotWin}
+  parameter Modelica.Units.SI.Area[:] AArray={ATotExt,ATotWin}
     "List of all wall surface areas";
   parameter Integer dimension = sum({if A>0 then 1 else 0 for A in AArray})
     "Number of non-zero wall surface areas";
@@ -381,7 +385,7 @@ equation
   connect(volMoiAir.heatPort, senTAir.port)
     annotation (Line(points={{-20,-16},{-20,0},{80,0}}, color={191,0,0}));
   connect(senTAir.T, TAir)
-    annotation (Line(points={{100,0},{108,0},{108,160},{250,160}},
+    annotation (Line(points={{101,0},{108,0},{108,160},{250,160}},
     color={0,0,127}));
   connect(convWin.solid, windowIndoorSurface)
     annotation (Line(points={{-116,40},{-130,40},{-130,-10},{-212,-10},{-212,
@@ -396,8 +400,9 @@ equation
     Line(points={{210,100},{210,100},{210,100},{210,86}}, color={191,
     0,0}));
   connect(senTRad.T, TRad)
-    annotation (Line(points={{210,120},{210,128},{228,128},{228,128},{228,120},
-    {250,120}}, color={0,0,127}));
+    annotation (Line(points={{210,121},{210,128},{228,128},{228,128},{228,120},
+          {250,120}},
+                color={0,0,127}));
   connect(solRad, eConvSol.u)
     annotation (Line(
     points={{-260,140},{-226,140},{-226,124},{-207,124}},
@@ -410,13 +415,11 @@ equation
     pattern=LinePattern.Dash));
   connect(sumSolRad.y, convHeatSol.Q_flow)
     annotation (Line(points={{-173.4,124},{-166,124}}, color={0,0,127}));
-  if use_moisture_balance then
-    connect(mWat_flow.y, volMoiAir.mWat_flow) annotation (Line(
+  connect(mWat_flow.y, volMoiAir.mWat_flow) annotation (Line(
         points={{-179,-90},{-168,-90},{-168,-80},{-34,-80},{-34,-8},{-22,-8}},
         color={0,0,127},
         pattern=LinePattern.Dash));
 
-  end if;
   connect(conQLat_flow.port, volMoiAir.heatPort) annotation (Line(points={{-182,
           -120},{-166,-120},{-166,-82},{-32,-82},{-32,-16},{-20,-16}}, color={191,
           0,0}));
@@ -425,6 +428,10 @@ equation
   connect(conQLat_flow.Q_flow, QLat_flow)
     annotation (Line(points={{-202,-120},{-232,-120},{-232,-130},{-260,-130}},
                                                        color={0,0,127}));
+  connect(volMoiAir.C_flow, C_flow) annotation (Line(points={{-22,-22},{-52,-22},
+          {-52,90},{-260,90}}, color={0,0,127}));
+  connect(volAir.C_flow, C_flow) annotation (Line(points={{44,-22},{56,-22},{56,
+          90},{-260,90}}, color={0,0,127}));
   annotation (defaultComponentName="theZon",Diagram(coordinateSystem(
   preserveAspectRatio=false, extent={{-240,-180},{240,180}},
   grid={2,2}),  graphics={

@@ -9,15 +9,15 @@ model SimpleHeatTransfer
    Modelica.Media.R134a.R134a_ph
    "Medium of the compressor";
 
-  parameter Modelica.SIunits.AbsolutePressure pInl=
-    Medium.pressure(Medium.setBubbleState(Medium.setSat_T(TInl+2)))
+  parameter Modelica.Units.SI.AbsolutePressure pInl=Medium.pressure(
+      Medium.setBubbleState(Medium.setSat_T(TInl + 2)))
     "Current pressure at inlet conditions";
-  parameter Modelica.SIunits.Temperature TInl = 283.15
+  parameter Modelica.Units.SI.Temperature TInl=283.15
     "Current temperature at inlet conditions";
-  parameter Modelica.SIunits.AbsolutePressure pOut=
-    Medium.pressure(Medium.setDewState(Medium.setSat_T(TOut-5)))
+  parameter Modelica.Units.SI.AbsolutePressure pOut=Medium.pressure(
+      Medium.setDewState(Medium.setSat_T(TOut - 5)))
     "Current set point of the compressor's outlet pressure";
-  parameter Modelica.SIunits.Temperature TOut = 333.15
+  parameter Modelica.Units.SI.Temperature TOut=333.15
     "Current temperature at outlet conditions";
 
   // Definition of submodels and connectors
@@ -60,18 +60,17 @@ equation
     annotation (Line(points={{10,0},{34,0},{34,1.77636e-015},
                 {60,1.77636e-015}}, color={0,127,255}));
 
-  annotation (Documentation(revisions="<html>
-<ul>
-  <li>
-  October 30, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
+  annotation (Documentation(revisions="<html><ul>
+  <li>October 30, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a simple validation model to test the one-directional 
-heat transfer. Therefore, an ambient temeprature is prediscribed 
-and an expansion vassel is located at the model's outlet.
+  This is a simple validation model to test the one-directional heat
+  transfer. Therefore, an ambient temeprature is prediscribed and an
+  expansion vassel is located at the model's outlet.
+</p>
 </html>"));
 end SimpleHeatTransfer;

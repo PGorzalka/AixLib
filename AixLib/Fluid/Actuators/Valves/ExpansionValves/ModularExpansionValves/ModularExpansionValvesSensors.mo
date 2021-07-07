@@ -6,41 +6,37 @@ model ModularExpansionValvesSensors
 
   // Definition of parameters
   //
-  parameter Modelica.SIunits.Time tau = 1
-    "Time constant at nominal flow rate"
-    annotation(Dialog(tab="General",group="Sensors"),
-               HideResult=not show_parSen);
+  parameter Modelica.Units.SI.Time tau=1 "Time constant at nominal flow rate"
+    annotation (Dialog(tab="General", group="Sensors"), HideResult=not
+        show_parSen);
 
   parameter Boolean transferHeat = false
     "if true, temperature T converges towards TAmb when no flow"
     annotation(Dialog(tab="General",group="Sensors"),
                HideResult=not show_parSen);
-  parameter Modelica.SIunits.Temperature TAmb = Medium.T_default
-    "Fixed ambient temperature for heat transfer"
-    annotation(Dialog(tab="General",group="Sensors"),
-               HideResult=not show_parSen);
-  parameter Modelica.SIunits.Time tauHeaTra = 1200
-    "Time constant for heat transfer, default 20 minutes"
-    annotation(Dialog(tab="General",group="Sensors"),
-               HideResult=not show_parSen);
+  parameter Modelica.Units.SI.Temperature TAmb=Medium.T_default
+    "Fixed ambient temperature for heat transfer" annotation (Dialog(tab=
+          "General", group="Sensors"), HideResult=not show_parSen);
+  parameter Modelica.Units.SI.Time tauHeaTra=1200
+    "Time constant for heat transfer, default 20 minutes" annotation (Dialog(
+        tab="General", group="Sensors"), HideResult=not show_parSen);
 
   parameter Modelica.Blocks.Types.Init initTypeSen=
     Modelica.Blocks.Types.Init.InitialState
     "Type of initialization (InitialState and InitialOutput are identical)"
     annotation(Dialog(tab="Advanced",group="Initialisation Sensors"),
                HideResult=not show_parSen);
-  parameter Modelica.SIunits.Temperature T_start = Medium.T_default
-    "Initial or guess value of output (= state)"
-    annotation(Dialog(tab="Advanced",group="Initialisation Sensors"),
-               HideResult=not show_parSen);
-  parameter Modelica.SIunits.SpecificEnthalpy h_out_start=
+  parameter Modelica.Units.SI.Temperature T_start=Medium.T_default
+    "Initial or guess value of output (= state)" annotation (Dialog(tab=
+          "Advanced", group="Initialisation Sensors"), HideResult=not
+        show_parSen);
+  parameter Modelica.Units.SI.SpecificEnthalpy h_out_start=
       Medium.specificEnthalpy_pTX(
       p=Medium.p_default,
       T=Medium.T_default,
-      X=Medium.X_default)
-      "Initial or guess value of output (= state)"
-    annotation(Dialog(tab="Advanced",group="Initialisation Sensors"),
-               HideResult=not show_parSen);
+      X=Medium.X_default) "Initial or guess value of output (= state)"
+    annotation (Dialog(tab="Advanced", group="Initialisation Sensors"),
+      HideResult=not show_parSen);
 
   parameter Boolean show_parSen = false
     "= true, if sensors' input parameters are shown in results"
@@ -87,42 +83,46 @@ equation
     annotation (Line(points={{46,-10},{46,-10},{46,-20},{46,-90},{0.05,-90},{0.05,
           -99.95}},color={0,0,127}));
 
-  annotation (Documentation(revisions="<html>
-<ul>
-  <li>
-  October 17, 2017, by Mirko Engelpracht, Christian Vering:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
+  annotation (Documentation(revisions="<html><ul>
+  <li>October 17, 2017, by Mirko Engelpracht, Christian Vering:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a model of modular expansion valves that are used, for example, 
-in close-loop systems like heat pumps or chillers.<br />
-It consists of <code>nVal</code> expansion valves in parallel and also 
-<code>nVal</code> PID conrollers if no external controller is used.
-Additionally, four different sensors (i.e. absolute pressure, temperature,
-mass flow rate, steam quality) are located at each expansion valve's outlet.
+  This is a model of modular expansion valves that are used, for
+  example, in close-loop systems like heat pumps or chillers.<br/>
+  It consists of <code>nVal</code> expansion valves in parallel and
+  also <code>nVal</code> PID conrollers if no external controller is
+  used. Additionally, four different sensors (i.e. absolute pressure,
+  temperature, mass flow rate, steam quality) are located at each
+  expansion valve's outlet.
 </p>
-<h4>Modeling approaches</h4>
+<h4>
+  Modeling approaches
+</h4>
 <p>
-This base model mainly consists of three sub-models. Therefore, please 
-checkout these sub-models for further information of underlying modeling
-approaches and parameterisation:
+  This base model mainly consists of three sub-models. Therefore,
+  please checkout these sub-models for further information of
+  underlying modeling approaches and parameterisation:
 </p>
 <ul>
-<li>
-<a href=\"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.SimpleExpansionValves.IsenthalpicExpansionValve\">
-AixLib.Fluid.Actuators.Valves.ExpansionValves.SimpleExpansionValves.IsenthalpicExpansionValve</a>.
-</li>
-<li>
-<a href=\"modelica://AixLib.Controls.HeatPump.ModularHeatPumps.ModularExpansionValveController\">
-AixLib.Controls.HeatPump.ModularHeatPumps.ModularExpansionValveController</a>.
-</li>
-<li>
-<a href=\"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.Utilities.ModularSensors\">
-AixLib.Fluid.Actuators.Valves.ExpansionValves.Utilities.ModularSensors</a>.
-</li>
+  <li>
+    <a href=
+    \"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.SimpleExpansionValves.IsenthalpicExpansionValve\">
+    AixLib.Fluid.Actuators.Valves.ExpansionValves.SimpleExpansionValves.IsenthalpicExpansionValve</a>.
+  </li>
+  <li>
+    <a href=
+    \"modelica://AixLib.Controls.HeatPump.ModularHeatPumps.ModularExpansionValveController\">
+    AixLib.Controls.HeatPump.ModularHeatPumps.ModularExpansionValveController</a>.
+  </li>
+  <li>
+    <a href=
+    \"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.Utilities.ModularSensors\">
+    AixLib.Fluid.Actuators.Valves.ExpansionValves.Utilities.ModularSensors</a>.
+  </li>
 </ul>
 </html>"), Icon(graphics={
         Rectangle(

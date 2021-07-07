@@ -22,33 +22,32 @@ model FlowControlled_dp
             dp =     {i/(nOri-1)*2.0*dp_nominal for i in (nOri-1):-1:0}),
       final use_powerCharacteristic = if per.havePressureCurve then per.use_powerCharacteristic else false)));
 
-  parameter Modelica.SIunits.PressureDifference dp_start(
+  parameter Modelica.Units.SI.PressureDifference dp_start(
     min=0,
-    displayUnit="Pa")=0 "Initial value of pressure raise"
-    annotation(Dialog(tab="Dynamics", group="Filtered speed"));
+    displayUnit="Pa") = 0 "Initial value of pressure raise"
+    annotation (Dialog(tab="Dynamics", group="Filtered speed"));
 
   // For air, we set dp_nominal = 600 as default, for water we set 10000
-  parameter Modelica.SIunits.PressureDifference dp_nominal(
+  parameter Modelica.Units.SI.PressureDifference dp_nominal(
     min=0,
-    displayUnit="Pa")=
-      if rho_default < 500 then 500 else 10000 "Nominal pressure raise, used to normalized the filter if use_inputFilter=true,
+    displayUnit="Pa") = if rho_default < 500 then 500 else 10000 "Nominal pressure raise, used to normalized the filter if use_inputFilter=true,
         to set default values of constantHead and heads, and
         and for default pressure curve if not specified in record per"
-    annotation(Dialog(group="Nominal condition"));
+    annotation (Dialog(group="Nominal condition"));
 
-  parameter Modelica.SIunits.PressureDifference constantHead(
+  parameter Modelica.Units.SI.PressureDifference constantHead(
     min=0,
-    displayUnit="Pa")=dp_nominal
-    "Constant pump head, used when inputType=Constant"
-    annotation(Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Constant));
+    displayUnit="Pa") = dp_nominal
+    "Constant pump head, used when inputType=Constant" annotation (Dialog(
+        enable=inputType == AixLib.Fluid.Types.InputType.Constant));
 
   // By default, set heads proportional to sqrt(speed/speed_nominal)
-  parameter Modelica.SIunits.PressureDifference[:] heads(
+  parameter Modelica.Units.SI.PressureDifference[:] heads(
     each min=0,
-    each displayUnit="Pa")=
-    dp_nominal*{(per.speeds[i]/per.speeds[end])^2 for i in 1:size(per.speeds, 1)}
-    "Vector of head set points, used when inputType=Stages"
-    annotation(Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Stages));
+    each displayUnit="Pa") = dp_nominal*{(per.speeds[i]/per.speeds[end])^2 for
+    i in 1:size(per.speeds, 1)}
+    "Vector of head set points, used when inputType=Stages" annotation (Dialog(
+        enable=inputType == AixLib.Fluid.Types.InputType.Stages));
   parameter Boolean prescribeSystemPressure = false
     "=true, to control mover such that pressure difference is obtained across two remote points in system"
     annotation(Evaluate=true, Dialog(tab="Advanced"));
@@ -111,7 +110,14 @@ equation
   connect(senRelPre.p_rel, dp_actual) annotation (Line(points={{50.5,-26.35},{
           50.5,-38},{74,-38},{74,50},{110,50}},
                                            color={0,0,127}));
-  annotation (defaultComponentName="fan",
+  annotation (
+    Icon(graphics={
+        Text(
+          extent={{-40,126},{-160,76}},
+          lineColor={0,0,127},
+          visible=inputType == AixLib.Fluid.Types.InputType.Continuous or inputType == AixLib.Fluid.Types.InputType.Stages,
+          textString=DynamicSelect("dp", if inputType == AixLib.Fluid.Types.InputType.Continuous then String(dp_in, format=".0f") else String(stage)))}),
+  defaultComponentName="fan",
   Documentation(info="<html>
 <p>
 This model describes a fan or pump with prescribed head.
@@ -156,6 +162,12 @@ AixLib.Fluid.Movers.Validation.FlowControlled_dpSystem</a>.
 </html>",
       revisions="<html>
 <ul>
+<li>
+February 21, 2020, by Michael Wetter:<br/>
+Changed icon to display its operating stage.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1294\">#1294</a>.
+</li>
 <li>
 May 5, 2017, by Filip Jorissen:<br/>
 Added parameters, documentation and functionality for
@@ -253,37 +265,5 @@ Revised implementation to allow zero flow rate.
     by Michael Wetter:<br/>
        Added model to the AixLib library.
 </ul>
-</html>"),
-    Icon(graphics={
-        Line(
-          points={{2,50},{100,50}},
-          color={0,0,0},
-          smooth=Smooth.None),
-        Text(
-          visible = inputType == AixLib.Fluid.Types.InputType.Continuous,
-          extent={{20,142},{104,108}},
-          textString="dp_in"),
-        Text(extent={{60,66},{110,52}},
-          lineColor={0,0,127},
-          textString="dp"),
-        Rectangle(
-          visible=use_inputFilter,
-          extent={{-34,40},{32,100}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid),
-        Ellipse(
-          visible=use_inputFilter,
-          extent={{-34,100},{32,40}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid),
-        Text(
-          visible=use_inputFilter,
-          extent={{-22,92},{20,46}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          textString="M",
-          textStyle={TextStyle.Bold})}));
+</html>"));
 end FlowControlled_dp;

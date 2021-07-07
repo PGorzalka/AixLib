@@ -2,30 +2,33 @@ within AixLib.Utilities.HeatTransfer;
 model HeatConvPipeInsideDynamic
   "Dynamic model for Heat Transfer through convection inside a pipe, based on Nussel Correlations"
   extends Modelica.Thermal.HeatTransfer.Interfaces.Element1D;
-  parameter Modelica.SIunits.Length length = 1 "Length of total pipe";
-  parameter Modelica.SIunits.Length d_i = 0.02 "Inner diameter of exhaust pipe";
-  parameter Modelica.SIunits.Area A_sur = 2 "Surface for heat transfer";
+  parameter Modelica.Units.SI.Length length=1 "Length of total pipe";
+  parameter Modelica.Units.SI.Length d_i=0.02 "Inner diameter of exhaust pipe";
+  parameter Modelica.Units.SI.Area A_sur=2 "Surface for heat transfer";
   parameter Boolean calculateHConv=true
     "Use calculated value for inside heat coefficient";
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer hConvInsideFix=30   annotation(Dialog(enable=not
-          calculateHConv));
-  input Modelica.SIunits.MassFlowRate m_flow "Mass flow rate of gas";
-  input Modelica.SIunits.SpecificHeatCapacity c
-    "Heat capacity of considered medium" annotation(Dialog(group="Parameters"));
-  input Modelica.SIunits.Density rho  "Density of considered medium" annotation(Dialog(group="Parameters"));
-  input Modelica.SIunits.ThermalConductivity lambda
-    "Thermal conductivity of considered medium" annotation(Dialog(group="Parameters"));
-  input Modelica.SIunits.DynamicViscosity eta
-    "Dynamic viscosity of considered medium" annotation(Dialog(group="Parameters"));
-  Modelica.SIunits.ReynoldsNumber Re;
-  Modelica.SIunits.Velocity v;
-  Modelica.SIunits.NusseltNumber Nu;
-  Modelica.SIunits.NusseltNumber Nu_lam_1;
-  Modelica.SIunits.NusseltNumber Nu_lam_2;
-  Modelica.SIunits.NusseltNumber Nu_lam;
-  Modelica.SIunits.NusseltNumber Nu_tur;
-  Modelica.SIunits.PrandtlNumber Pr;
-  Modelica.SIunits.CoefficientOfHeatTransfer alpha;
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer hConvInsideFix=30
+    annotation (Dialog(enable=not calculateHConv));
+  input Modelica.Units.SI.MassFlowRate m_flow "Mass flow rate of gas";
+  input Modelica.Units.SI.SpecificHeatCapacity c
+    "Heat capacity of considered medium" annotation (Dialog(group="Parameters"));
+  input Modelica.Units.SI.Density rho "Density of considered medium"
+    annotation (Dialog(group="Parameters"));
+  input Modelica.Units.SI.ThermalConductivity lambda
+    "Thermal conductivity of considered medium"
+    annotation (Dialog(group="Parameters"));
+  input Modelica.Units.SI.DynamicViscosity eta
+    "Dynamic viscosity of considered medium"
+    annotation (Dialog(group="Parameters"));
+  Modelica.Units.SI.ReynoldsNumber Re;
+  Modelica.Units.SI.Velocity v;
+  Modelica.Units.SI.NusseltNumber Nu;
+  Modelica.Units.SI.NusseltNumber Nu_lam_1;
+  Modelica.Units.SI.NusseltNumber Nu_lam_2;
+  Modelica.Units.SI.NusseltNumber Nu_lam;
+  Modelica.Units.SI.NusseltNumber Nu_tur;
+  Modelica.Units.SI.PrandtlNumber Pr;
+  Modelica.Units.SI.CoefficientOfHeatTransfer alpha;
   Real zeta "pressure loss coefficient";
 
 equation
@@ -57,18 +60,27 @@ equation
 
   annotation (Diagram(coordinateSystem(preserveAspectRatio=true,   extent={{-100,
             -100},{100,100}}),                                                                                                                                                                                                        lineColor = {0, 0, 0}, pattern = LinePattern.Solid, fillColor = {211, 243, 255}, fillPattern = FillPattern.Solid, lineColor = {0, 0, 0}),                                                                                                                                                                                                        Icon(
-      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),                                                                                                                                                                                                        graphics={  Rectangle(extent = {{-76, 80}, {4, -80}}, lineColor = {0, 0, 0}, pattern = LinePattern.None, fillColor = {211, 243, 255},
-            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent = {{-76, 80}, {84, -80}}, lineColor = {0, 0, 0}), Rectangle(extent = {{64, 80}, {84, -80}}, lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {244, 244, 244},
-            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent = {{44, 80}, {64, -80}}, lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {207, 207, 207},
-            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent = {{24, 80}, {44, -80}}, lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {182, 182, 182},
-            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent = {{4, 80}, {24, -80}}, lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {156, 156, 156},
-            fillPattern =                                                                                                   FillPattern.Solid)}), Documentation(info = "<html>
- <h4><font color=\"#008000\">Overview</font></h4>
- <p>This model represents the phenomenon of heat convection inside a pipe by a flowing medium.</p>
- <p>The heat transfer coefficient at the inside could be calculated by formular from VDI-Waermeatlas or a fixed value can be choosen.</p>
- </html>", revisions = "<html>
- <ul>
- <li><i>August 11, 2017;</i> by David Jansen:<br/></li>
- </ul>
- </html>"));
+      coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),                                                                                                                                                                                                        graphics={  Rectangle(extent={{-80,80},{0,-80}},      lineColor = {0, 0, 0}, pattern = LinePattern.None, fillColor = {211, 243, 255},
+            fillPattern =                                                                                                   FillPattern.Solid),                                                                    Rectangle(extent={{60,80},{80,-80}},      lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {244, 244, 244},
+            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent={{40,80},{60,-80}},      lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {207, 207, 207},
+            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent={{20,80},{40,-80}},      lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {182, 182, 182},
+            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent={{0,80},{20,-80}},      lineColor = {0, 0, 255}, pattern = LinePattern.None, fillColor = {156, 156, 156},
+            fillPattern =                                                                                                   FillPattern.Solid), Rectangle(extent={{-80,80},{80,-80}},      lineColor = {0, 0, 0})}),
+                                                                                                                                                  Documentation(info = "<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  This model represents the phenomenon of heat convection inside a pipe
+  by a flowing medium.
+</p>
+<p>
+  The heat transfer coefficient at the inside could be calculated by
+  formular from VDI-Waermeatlas or a fixed value can be choosen.
+</p>
+<ul>
+  <li>
+    <i>August 11, 2017;</i> by David Jansen:<br/>
+  </li>
+</ul>
+</html>"));
 end HeatConvPipeInsideDynamic;

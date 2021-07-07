@@ -1,4 +1,4 @@
-within AixLib.Controls.HVACAgentBasedControl.CostFunctions.PrimaryExergy;
+﻿within AixLib.Controls.HVACAgentBasedControl.CostFunctions.PrimaryExergy;
 model HeatPump_PrimaryExergyDestruction_Cooling
   extends HVACAgentBasedControl.BaseClasses.PartialCostFunction;
   parameter Real T_0 = 298.15 "Exergy reference temperature";
@@ -61,10 +61,11 @@ model HeatPump_PrimaryExergyDestruction_Cooling
     annotation (Placement(transformation(extent={{-28,60},{-8,80}})));
   Modelica.Blocks.Math.Add add3(k2=-1)
     annotation (Placement(transformation(extent={{-68,22},{-48,42}})));
-  Modelica.Blocks.Tables.CombiTable2D PowerTable(table = tablePower) annotation(Placement(transformation(extent={{54,-62},
-            {74,-42}})));
-  Modelica.Blocks.Tables.CombiTable2D HeatFlowCondenserTable(table = tableHeatFlowCondenser) annotation(Placement(transformation(extent={{54,-94},
-            {74,-74}})));
+  Modelica.Blocks.Tables.CombiTable2Ds PowerTable(table=tablePower)
+    annotation (Placement(transformation(extent={{54,-62},{74,-42}})));
+  Modelica.Blocks.Tables.CombiTable2Ds HeatFlowCondenserTable(table=
+        tableHeatFlowCondenser)
+    annotation (Placement(transformation(extent={{54,-94},{74,-74}})));
   Modelica.Blocks.Math.Gain gain(k=PEF)
     annotation (Placement(transformation(extent={{8,60},{28,80}})));
 equation
@@ -213,16 +214,24 @@ equation
           fillColor={255,255,170},
           fillPattern=FillPattern.Solid,
           textString="ExergyOut")}),
-    Documentation(info="<html>
-<h4><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span></h4>
+    Documentation(info="<html><h4>
+  <span style=
+  \"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span>
+</h4>
 <ul>
-<li><span style=\"font-family: MS Shell Dlg 2;\">Identical to the cost function in the Exergy package, except a primary energy factor is included.</span></li>
+  <li>
+    <span style=\"font-family: MS Shell Dlg 2;\">Identical to the cost
+    function in the Exergy package, except a primary energy factor is
+    included.</span>
+  </li>
 </ul>
 </html>",
-    revisions="<html>
-<ul>
-<li>October 2015, by Felix B&uuml;nning: Developed and implemented</li>
-<li>December 2016, by Roozbeh Sangi:<br/>revised</li>
+    revisions="<html><ul>
+  <li>October 2015, by Felix Bünning: Developed and implemented
+  </li>
+  <li>December 2016, by Roozbeh Sangi:<br/>
+    revised
+  </li>
 </ul>
 </html>"));
 end HeatPump_PrimaryExergyDestruction_Cooling;

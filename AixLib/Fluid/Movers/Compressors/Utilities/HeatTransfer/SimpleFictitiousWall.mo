@@ -4,16 +4,13 @@ model SimpleFictitiousWall
 
   // Definition of parameters describing the fictitious wall
   //
-  parameter Modelica.SIunits.Mass mWal = 2.5
-    "Mass of the fictitious wall"
-    annotation (Dialog(tab="General",group="General"));
-  parameter Modelica.SIunits.SpecificHeatCapacity cpWal = 450
+  parameter Modelica.Units.SI.Mass mWal=2.5 "Mass of the fictitious wall"
+    annotation (Dialog(tab="General", group="General"));
+  parameter Modelica.Units.SI.SpecificHeatCapacity cpWal=450
     "Specific heat capacity of the fictitious wall"
-    annotation (Dialog(tab="General",group="General"));
-  parameter Modelica.SIunits.ThermalConductance kAMeaAmb = 10
-    "Effective mean thermal conductance coefficient between fictitious wall 
-    and ambient"
-    annotation (Dialog(tab="General",group="General"));
+    annotation (Dialog(tab="General", group="General"));
+  parameter Modelica.Units.SI.ThermalConductance kAMeaAmb=10 "Effective mean thermal conductance coefficient between fictitious wall 
+    and ambient" annotation (Dialog(tab="General", group="General"));
 
   // Definition of parameters describing advanced options
   //
@@ -21,9 +18,9 @@ model SimpleFictitiousWall
     "= true, if wall is initialised at fixed temperature; Otherwise, steady state
     initialisation"
     annotation (Dialog(tab="Advanced",group="Initialisation"));
-  parameter Modelica.SIunits.Temperature TWal0 = 343.15
+  parameter Modelica.Units.SI.Temperature TWal0=343.15
     "Temperature of wall at initialisation"
-    annotation (Dialog(tab="Advanced",group="Initialisation"));
+    annotation (Dialog(tab="Advanced", group="Initialisation"));
 
   // Definition of submodels and connectors
   //
@@ -46,11 +43,10 @@ model SimpleFictitiousWall
 
   // Definition of parameters
   //
-  Modelica.SIunits.Temperature TWal
-    "Temperature of fictitious wall";
+  Modelica.Units.SI.Temperature TWal "Temperature of fictitious wall";
 
 protected
-  Modelica.SIunits.Power Q_flow_amb
+  Modelica.Units.SI.Power Q_flow_amb
     "Heat flow between ambient and fictitious wall";
 
 initial equation
@@ -77,24 +73,21 @@ equation
 
   /*It is assumed that the heat flow flows out of the system*/
 
-  annotation (Documentation(revisions="<html>
-<ul>
-  <li>
-  October 28, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
+  annotation (Documentation(revisions="<html><ul>
+  <li>October 28, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a model of a fictitious wall that describes the shell of the 
-compressor. It consists of four heat ports, i.e. for the inlet and 
-outlet of the compressor as well as for the ambient and compression 
-chamber. 
-It is assumed that the wall consists of a time invariante heat capacity;
-additionally, it is assumed that the thermal conductance for the 
-calculation of the heat flow between ambient and fictitious wall is
-also time invariante.
+  This is a model of a fictitious wall that describes the shell of the
+  compressor. It consists of four heat ports, i.e. for the inlet and
+  outlet of the compressor as well as for the ambient and compression
+  chamber. It is assumed that the wall consists of a time invariante
+  heat capacity; additionally, it is assumed that the thermal
+  conductance for the calculation of the heat flow between ambient and
+  fictitious wall is also time invariante.
 </p>
 </html>"), Icon(graphics={Rectangle(
           extent={{-80,20},{80,-20}},

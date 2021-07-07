@@ -3,21 +3,20 @@ model ExergyMeters
 
   extends Modelica.Icons.Example;
 
-  parameter Modelica.SIunits.Temperature T_start=323.15
+  parameter Modelica.Units.SI.Temperature T_start=323.15
     "Start reference temperature of medium";
 
   parameter Integer n = 10 "Number of layers";
 
-  parameter Modelica.SIunits.Mass mass = 1000 "Mass of one layer";
+  parameter Modelica.Units.SI.Mass mass=1000 "Mass of one layer";
 
   package Medium = AixLib.Media.Water "Medium in the sensor"
                            annotation (choicesAllMatching=true);
 
   Modelica.Blocks.Sources.Sine pulse(
-    each freqHz=1/3600,
+    each f=1/3600,
     each offset=3000,
-    each amplitude=3000)
-                      "Sine wave to vary heat generation and demand"
+    each amplitude=3000) "Sine wave to vary heat generation and demand"
     annotation (Placement(transformation(extent={{-12,-14},{8,6}})));
   ExergyMeter.StoredExergyMeter exergyStorageMeterMedium(
     redeclare package Medium = Medium,
@@ -382,30 +381,45 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(StopTime=7200, Interval=10),
-    Documentation(info="<html>
-<p><b><span style=\"color: #008000;\">Overview</span></b> </p>
-<p>This model shows the usage of all three ExergyMeters, namely</p>
-<p>- enthalpy flow: 
-<a href=\"modelica://AixLib.Utilities.Sensors.ExergyMeter.FlowExergyMeter\">
-AixLib.Utilities.Sensors.ExergyMeter.FlowExergyMeter</a></p>
-<p>- heat flow: 
-<a href=\"modelica://AixLib.Utilities.Sensors.ExergyMeter.HeatExergyMeter\">
-AixLib.Utilities.Sensors.ExergyMeter.HeatExergyMeter</a></p>
-<p>- stored energy: 
-<a href=\"modelica://AixLib.Utilities.Sensors.ExergyMeter.StoredExergyMeter\">
-AixLib.Utilities.Sensors.ExergyMeter.StoredExergyMeter</a></p>
-<p>The system is a simplified energy supply system. The supplied heat flow rate
-matches the extracted heat flow rate. Due to the irreversibilities, especially
-in the storage, the exergy output is smaller than the exergy input.</p>
- <p>Two different exergy balances can be compared. One is calculated using the
- enthalpy flows. The other is calculated using the heat flow rates. Due to the
- different system boundaries, the exergy destructions is a little different, as
- the following figure shows. </p>
-  <p> <img src=\"modelica://AixLib/Resources/Images/Utilities/Sensors/ExergyMeter/ExergyMeters.jpg\" 
-  alt=\"Result of exergy meter example\"/> </p>
-</html>", revisions="<html>
- <ul>
- <li>by Marc Baranski and Roozbeh Sangi:<br/>implemented</li>
- </ul>
+    Documentation(info="<html><p>
+  <b><span style=\"color: #008000;\">Overview</span></b>
+</p>
+<p>
+  This model shows the usage of all three ExergyMeters, namely
+</p>
+<p>
+  - enthalpy flow: <a href=
+  \"modelica://AixLib.Utilities.Sensors.ExergyMeter.FlowExergyMeter\">AixLib.Utilities.Sensors.ExergyMeter.FlowExergyMeter</a>
+</p>
+<p>
+  - heat flow: <a href=
+  \"modelica://AixLib.Utilities.Sensors.ExergyMeter.HeatExergyMeter\">AixLib.Utilities.Sensors.ExergyMeter.HeatExergyMeter</a>
+</p>
+<p>
+  - stored energy: <a href=
+  \"modelica://AixLib.Utilities.Sensors.ExergyMeter.StoredExergyMeter\">AixLib.Utilities.Sensors.ExergyMeter.StoredExergyMeter</a>
+</p>
+<p>
+  The system is a simplified energy supply system. The supplied heat
+  flow rate matches the extracted heat flow rate. Due to the
+  irreversibilities, especially in the storage, the exergy output is
+  smaller than the exergy input.
+</p>
+<p>
+  Two different exergy balances can be compared. One is calculated
+  using the enthalpy flows. The other is calculated using the heat flow
+  rates. Due to the different system boundaries, the exergy
+  destructions is a little different, as the following figure shows.
+</p>
+<p>
+  <img src=
+  \"modelica://AixLib/Resources/Images/Utilities/Sensors/ExergyMeter/ExergyMeters.jpg\"
+  alt=\"Result of exergy meter example\">
+</p>
+<ul>
+  <li>by Marc Baranski and Roozbeh Sangi:<br/>
+    implemented
+  </li>
+</ul>
 </html>"));
 end ExergyMeters;

@@ -35,38 +35,35 @@ partial model PartialModularExpansionVavles
 
   // Definition of parameters describing the expansion valves
   //
-  parameter Modelica.SIunits.Area AVal[nVal] = fill(2e-6, nVal)
+  parameter Modelica.Units.SI.Area AVal[nVal]=fill(2e-6, nVal)
     "Cross-sectional areas of the valves when they are fully opened"
-    annotation(Dialog(tab="Expansion valves",group="Geometry"),
-               HideResult=not show_parVal);
-  parameter Modelica.SIunits.Diameter dInlPip[nVal] = fill(7.5e-3, nVal)
-    "Diameters of the pipes at valves' inlets"
-    annotation(Dialog(tab="Expansion valves",group="Geometry"),
-               HideResult=not show_parVal);
+    annotation (Dialog(tab="Expansion valves", group="Geometry"), HideResult=
+        not show_parVal);
+  parameter Modelica.Units.SI.Diameter dInlPip[nVal]=fill(7.5e-3, nVal)
+    "Diameters of the pipes at valves' inlets" annotation (Dialog(tab=
+          "Expansion valves", group="Geometry"), HideResult=not show_parVal);
 
   parameter Boolean useInpFil[nVal] = fill(false, nVal)
     "= true, if transient behaviours of valves opening or closing are computed"
     annotation(Dialog(tab="Expansion valves",group="Transient behaviour"),
                HideResult=not show_parVal);
-  parameter Modelica.SIunits.Time risTim[nVal] = fill(0.5, nVal)
-    "Time until valves opening reach 99.6 % of the set values"
-    annotation(Dialog(tab="Expansion valves",group="Transient behaviour"),
-               HideResult=not show_parVal);
+  parameter Modelica.Units.SI.Time risTim[nVal]=fill(0.5, nVal)
+    "Time until valves opening reach 99.6 % of the set values" annotation (
+      Dialog(tab="Expansion valves", group="Transient behaviour"), HideResult=
+        not show_parVal);
 
   parameter Utilities.Types.CalcProc calcProc[nVal]=fill(Utilities.Types.CalcProc.flowCoefficient,
       nVal) "Chose predefined calculation method for flow coefficients"
     annotation (Dialog(tab="Expansion valves", group="Flow Coefficient"),
       HideResult=not show_parVal);
-  parameter Modelica.SIunits.MassFlowRate mFlowNom[nVal]=
-    {m_flow_nominal/sum(AVal)*AVal[i] for i in 1:nVal}
-    "Mass flow at nominal conditions"
-    annotation(Dialog(tab="Expansion valves",group="Flow Coefficient"),
-               HideResult=not show_parVal);
-  parameter Modelica.SIunits.PressureDifference dpNom[nVal]=
-    fill(dp_nominal, nVal)
-    "Pressure drop at nominal conditions"
-    annotation(Dialog(tab="Expansion valves",group="Flow Coefficient"),
-               HideResult=not show_parVal);
+  parameter Modelica.Units.SI.MassFlowRate mFlowNom[nVal]={m_flow_nominal/sum(
+      AVal)*AVal[i] for i in 1:nVal} "Mass flow at nominal conditions"
+    annotation (Dialog(tab="Expansion valves", group="Flow Coefficient"),
+      HideResult=not show_parVal);
+  parameter Modelica.Units.SI.PressureDifference dpNom[nVal]=fill(dp_nominal,
+      nVal) "Pressure drop at nominal conditions" annotation (Dialog(tab=
+          "Expansion valves", group="Flow Coefficient"), HideResult=not
+        show_parVal);
 
   replaceable model FlowCoefficient =
     Utilities.FlowCoefficient.SpecifiedFlowCoefficients.ConstantFlowCoefficient
@@ -140,18 +137,16 @@ partial model PartialModularExpansionVavles
     "Gain of controller"
     annotation(Dialog(tab="Controller", group="PID setup"),
                HideResult=not show_parCon);
-  parameter Modelica.SIunits.Time Ti[nVal] = fill(0.5,nVal)
-    "Time constant of integrator block"
-    annotation(Dialog(tab="Controller", group="PID setup"),
-               HideResult=not show_parCon);
+  parameter Modelica.Units.SI.Time Ti[nVal]=fill(0.5, nVal)
+    "Time constant of integrator block" annotation (Dialog(tab="Controller",
+        group="PID setup"), HideResult=not show_parCon);
   parameter Real Ni[nVal] = fill(0.9,nVal)
     "Ni*Ti is time constant of anti-windup compensation"
     annotation(Dialog(tab="Controller", group="PID setup"),
                HideResult=not show_parCon);
-  parameter Modelica.SIunits.Time Td[nVal] = fill(0.1,nVal)
-    "Time constant of derivative block"
-    annotation(Dialog(tab="Controller", group="PID setup"),
-               HideResult=not show_parCon);
+  parameter Modelica.Units.SI.Time Td[nVal]=fill(0.1, nVal)
+    "Time constant of derivative block" annotation (Dialog(tab="Controller",
+        group="PID setup"), HideResult=not show_parCon);
   parameter Real Nd[nVal] = fill(10,nVal)
     "The higher Nd, the more ideal the derivative block"
     annotation(Dialog(tab="Controller", group="PID setup"),
@@ -174,11 +169,11 @@ partial model PartialModularExpansionVavles
     annotation(Dialog(tab="Controller", group="Weighting and limits"),
                HideResult=not show_parCon);
 
-  parameter Modelica.Blocks.Types.InitPID initType[nVal]=
-    fill(Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState,nVal)
+  parameter Modelica.Blocks.Types.Init initType[nVal]=fill(Modelica.Blocks.Types.Init.InitialState,
+      nVal)
     "Init: (1: no init, 2: steady state, 3: initial state, 4: initial output)"
-    annotation(Dialog(tab="Advanced", group="Initialisation Controller"),
-               HideResult=not show_parCon);
+    annotation (Dialog(tab="Advanced", group="Initialisation Controller"),
+      HideResult=not show_parCon);
   parameter Real xi_start[nVal]=fill(0, nVal)
     "Initial or guess value value for integrator output (= integrator state)"
     annotation(Dialog(tab="Advanced", group="Initialisation Controller"),
@@ -446,47 +441,56 @@ equation
         Line(
           points={{30,-66},{0,-66}},
           color={244,125,35},
-          thickness=0.5)}), Documentation(revisions="<html>
-<ul>
-  <li>
-  October 17, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
+          thickness=0.5)}), Documentation(revisions="<html><ul>
+  <li>October 17, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/457\">issue 457</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a base model for modular expansion valves that are used, for example, 
-in close-loop systems like heat pumps or chillers.
+  This is a base model for modular expansion valves that are used, for
+  example, in close-loop systems like heat pumps or chillers.
 </p>
-<h4>Definitions needed for completion</h4>
+<h4>
+  Definitions needed for completion
+</h4>
 <p>
-Three definitions need to be added by an extending class using this component:
+  Three definitions need to be added by an extending class using this
+  component:
 </p>
 <ul>
-<li>Redecleration of the model <code>SimpleExpansionValve</code>.</li>
-<li>Redecleration of the model <code>ModularController</code>.</li>
-<li>Connection of <code>expansionValves[i]</code> with <code>ports_b[i]</code>.</li>
+  <li>Redecleration of the model <code>SimpleExpansionValve</code>.
+  </li>
+  <li>Redecleration of the model <code>ModularController</code>.
+  </li>
+  <li>Connection of <code>expansionValves[i]</code> with
+  <code>ports_b[i]</code>.
+  </li>
 </ul>
 <p>
-The latter provides the possibility to add further components (e.g. sensors or
-pipes) located at the expansion valves' outlets.
+  The latter provides the possibility to add further components (e.g.
+  sensors or pipes) located at the expansion valves' outlets.
 </p>
-<h4>Modeling approaches</h4>
+<h4>
+  Modeling approaches
+</h4>
 <p>
-This base model mainly consists of two sub-models and, therefore, please 
-checkout these models for further information of underlying modeling
-approaches:
+  This base model mainly consists of two sub-models and, therefore,
+  please checkout these models for further information of underlying
+  modeling approaches:
 </p>
 <ul>
-<li>
-<a href=\"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.BaseClasses.PartialExpansionValve\">
-AixLib.Fluid.Actuators.Valves.ExpansionValves.BaseClasses.PartialExpansionValve</a>.
-</li>
-<li>
-<a href=\"modelica://AixLib.Controls.HeatPump.ModularHeatPumps.BaseClasses.PartialModularController\">
-AixLib.Controls.HeatPump.ModularHeatPumps.BaseClasses.PartialModularController</a>.
-</li>
+  <li>
+    <a href=
+    \"modelica://AixLib.Fluid.Actuators.Valves.ExpansionValves.BaseClasses.PartialExpansionValve\">
+    AixLib.Fluid.Actuators.Valves.ExpansionValves.BaseClasses.PartialExpansionValve</a>.
+  </li>
+  <li>
+    <a href=
+    \"modelica://AixLib.Controls.HeatPump.ModularHeatPumps.BaseClasses.PartialModularController\">
+    AixLib.Controls.HeatPump.ModularHeatPumps.BaseClasses.PartialModularController</a>.
+  </li>
 </ul>
 </html>"));
 end PartialModularExpansionVavles;

@@ -1,19 +1,18 @@
 within AixLib.Airflow.AirCurtain;
 model AirCurtainSimplified
   "Ideal model for the usage of an air curtain in the context of low order retail zones"
-  parameter Modelica.SIunits.VolumeFlowRate V_flowAirCur = 5
+  parameter Modelica.Units.SI.VolumeFlowRate V_flowAirCur=5
     "Design volume flow rate of the air curtain";
-  parameter Modelica.SIunits.TemperatureDifference TAddAirCur = 5
+  parameter Modelica.Units.SI.TemperatureDifference TAddAirCur=5
     "Temperature increase over the air curtain";
   parameter Real etaAirCur = 0.73
     "Efficiency of the air curtain";
-  parameter Modelica.SIunits.Density rho = 1.25
-    "Air density";
-  parameter Modelica.SIunits.SpecificHeatCapacity c = 1000
+  parameter Modelica.Units.SI.Density rho=1.25 "Air density";
+  parameter Modelica.Units.SI.SpecificHeatCapacity c=1000
     "Specific heat capacity of air";
-  parameter Modelica.SIunits.Temperature TBou = 287.15
+  parameter Modelica.Units.SI.Temperature TBou=287.15
     "Threshold of the ambient temperature when aircurtain becomes active";
-  parameter Modelica.SIunits.Power PAirCur = 27500
+  parameter Modelica.Units.SI.Power PAirCur=27500
     "The thermal Power of the air curtain, simplified use";
   Utilities.Psychrometrics.MixedTemperature mixedTemperature
     annotation (Placement(transformation(extent={{-6,-10},{14,10}})));
@@ -64,20 +63,40 @@ equation
           lineColor={0,0,255})}),
       Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{
             120,120}})),
-    Documentation(info="<html>
-<h4><span style=\"color: #008000\">Overview</span></h4>
-<p>This is an ideal model of an air curtain. It accounts for additional heat losses through an air curtain in the entrance zone.</p>
-<p>It accounts for an ideal temperature mixing of the ventilation air with the air curtain air.</p>
-<h4><span style=\"color: #008000\">Assumptions</span></h4>
-<p>Ideal mass balance: All air flow rate going outside through the entrance will be replace by ambient air flow going inside. This is mainly described by the air curtain efficiency. It mainly describes the share of total airflow of the air curtain staying inside.</p>
-<p>Ideal temperature mixing: Ideal mixing of two air flows with different temperatures</p>
-<p><img src=\"modelica://AixLib/Resources/Images/Airflow/AirCurtain/AirCurtain.png\"
-    alt=\"schema of AirCurtain\"/> </p>
-</html>", revisions="<html>
+    Documentation(info="<html><h4>
+  <span style=\"color: #008000\">Overview</span>
+</h4>
+<p>
+  This is an ideal model of an air curtain. It accounts for additional
+  heat losses through an air curtain in the entrance zone.
+</p>
+<p>
+  It accounts for an ideal temperature mixing of the ventilation air
+  with the air curtain air.
+</p>
+<h4>
+  <span style=\"color: #008000\">Assumptions</span>
+</h4>
+<p>
+  Ideal mass balance: All air flow rate going outside through the
+  entrance will be replace by ambient air flow going inside. This is
+  mainly described by the air curtain efficiency. It mainly describes
+  the share of total airflow of the air curtain staying inside.
+</p>
+<p>
+  Ideal temperature mixing: Ideal mixing of two air flows with
+  different temperatures
+</p>
+<p>
+  <img src=
+  \"modelica://AixLib/Resources/Images/Airflow/AirCurtain/AirCurtain.png\"
+  alt=\"schema of AirCurtain\">
+</p>
 <ul>
-  <li><i>Novmeber, 2018&nbsp;</i>
-    by Michael Mans:<br/>
-    Model implemented</li>
+  <li>
+    <i>Novmeber, 2018&#160;</i> by Michael Mans:<br/>
+    Model implemented
+  </li>
 </ul>
 </html>"));
 end AirCurtainSimplified;

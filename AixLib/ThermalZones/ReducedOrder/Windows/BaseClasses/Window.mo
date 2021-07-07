@@ -2,38 +2,31 @@ within AixLib.ThermalZones.ReducedOrder.Windows.BaseClasses;
 model Window "Calculation of solar energy transmitted through windows"
   parameter Integer n(min = 1) "Number of windows"
     annotation(dialog(group="window"));
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer UWin
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer UWin
     "Thermal transmission coefficient of whole window"
-    annotation(dialog(group="window"));
-   parameter Modelica.SIunits.TransmissionCoefficient g[n]
-    "Total energy transmittance of windows"
-    annotation(Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient g_TotDir[n]
-    "Total energy transmittance of windows with closed sunscreen for direct
-    radiation"
-    annotation(Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient g_TotDif[n]
-    "Total energy transmittance of windows with closed sunscreen for diffuse
-     radiation"
-    annotation(Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient tau_vis[n]
+    annotation (dialog(group="window"));
+  parameter Modelica.Units.SI.TransmissionCoefficient g[n]
+    "Total energy transmittance of windows" annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.TransmissionCoefficient g_TotDir[n] "Total energy transmittance of windows with closed sunscreen for direct
+    radiation" annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.TransmissionCoefficient g_TotDif[n] "Total energy transmittance of windows with closed sunscreen for diffuse
+     radiation" annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.TransmissionCoefficient tau_vis[n]
     "Degree of light transmission for direct irradiation"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient tau_visTotDir[n]
+  parameter Modelica.Units.SI.TransmissionCoefficient tau_visTotDir[n]
     "Degree of light transmission for direct irradiation, with sunscreen"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient tau_visTotDif[n]
+  parameter Modelica.Units.SI.TransmissionCoefficient tau_visTotDif[n]
     "Degree of light transmission for diffuse irradiation, with sunscreen"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.RadiantEnergyFluenceRate lim
+  parameter Modelica.Units.SI.RadiantEnergyFluenceRate lim
     "Limit for the sunscreen to become active"
-    annotation(dialog(group="sunscreen"));
-  parameter Modelica.SIunits.Angle xi(  displayUnit="degree")= 0
+    annotation (dialog(group="sunscreen"));
+  parameter Modelica.Units.SI.Angle xi(displayUnit="degree") = 0
     "Elevation angle";
-  parameter Modelica.SIunits.Angle til[n](displayUnit="deg")
-    "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
-     roof"
-    annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.Angle til[n](displayUnit="deg") "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
+     roof" annotation (Dialog(group="window"));
 
   Modelica.Blocks.Interfaces.RealInput incAng[n](
     final quantity="Angle",
@@ -237,19 +230,25 @@ equation
 ")}),                                                            Diagram(
         coordinateSystem(preserveAspectRatio=false,
         extent={{-100,-100},{100,100}})),
-    Documentation(revisions="<html>
-<ul>
-<li>June 30, 2016,&nbsp; by Stanley Risch:<br/>Implemented. </li>
+    Documentation(revisions="<html><ul>
+  <li>June 30, 2016,&#160; by Stanley Risch:<br/>
+    Implemented.
+  </li>
 </ul>
 </html>", info="<html>
-<p>This model calculates the input of heat and visible light into the room due
- to solar irradiation. Therefore it uses the calculations of VDI 6007 part 3.
-   It considers  the correction values for non-vertical and non-parallel
-   radiation incidence.</p>
-
-  <h4>References</h4>
-  <p>VDI. German Association of Engineers Guideline VDI 6007-3
-  June 2015. Calculation of transient thermal response of rooms
-  and buildings - Modelling of solar radiation.</p>
+<p>
+  This model calculates the input of heat and visible light into the
+  room due to solar irradiation. Therefore it uses the calculations of
+  VDI 6007 part 3. It considers the correction values for non-vertical
+  and non-parallel radiation incidence.
+</p>
+<h4>
+  References
+</h4>
+<p>
+  VDI. German Association of Engineers Guideline VDI 6007-3 June 2015.
+  Calculation of transient thermal response of rooms and buildings -
+  Modelling of solar radiation.
+</p>
 </html>"));
 end Window;

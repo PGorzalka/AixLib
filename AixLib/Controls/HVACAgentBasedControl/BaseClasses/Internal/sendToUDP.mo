@@ -1,4 +1,4 @@
-within AixLib.Controls.HVACAgentBasedControl.BaseClasses.Internal;
+﻿within AixLib.Controls.HVACAgentBasedControl.BaseClasses.Internal;
 function sendToUDP
   extends Modelica.Icons.Function;
   input Modelica_DeviceDrivers.Communication.UDPSocket socket;
@@ -16,11 +16,13 @@ algorithm
     pkg,
     dataSize);
   dummy2 := dummy;
-  annotation (Documentation(info="<html>
-The function was copied from the Modelica_DeviceDrivers library and changed to the degree that the variable \"port\" is no longer of the type Integer but Real instead.
-</html>", revisions="<html>
+  annotation (Documentation(info="<html>The function was copied from the Modelica_DeviceDrivers library and
+changed to the degree that the variable \"port\" is no longer of the type
+Integer but Real instead.
 <ul>
-<li>November 2016: Adapted from Modelica_DeviceDrivers by Felix B&uuml;nning</li>
+  <li>November 2016: Adapted from Modelica_DeviceDrivers by Felix
+  Bünning
+  </li>
 </ul>
 </html>"));
 end sendToUDP;

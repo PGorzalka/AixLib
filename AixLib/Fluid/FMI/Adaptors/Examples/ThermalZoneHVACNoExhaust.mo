@@ -10,12 +10,12 @@ model ThermalZoneHVACNoExhaust
     "Adaptor for an HVAC system that is exposed through an FMI interface"
     annotation (Placement(transformation(extent={{20,0},{40,20}})));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = 30*6*6
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=30*6*6
     "Nominal heat loss of the room";
 
-  parameter Modelica.SIunits.Volume VRoo = 6*6*2.7 "Room volume";
+  parameter Modelica.Units.SI.Volume VRoo=6*6*2.7 "Room volume";
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=VRoo*2*1.2/3600
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=VRoo*2*1.2/3600
     "Nominal mass flow rate";
 
   AixLib.Fluid.FMI.Adaptors.ThermalZone con(
@@ -29,7 +29,6 @@ model ThermalZoneHVACNoExhaust
     startTime=7*3600) "Setpoint for room temperature"
     annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
   Controls.Continuous.LimPID conPI(
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=1,
     yMax=1,
     yMin=0,
@@ -151,7 +150,6 @@ equation
           pattern=LinePattern.None,
           lineColor={0,0,127},
           horizontalAlignment=TextAlignment.Left,
-          fontSize=12,
           textString="Simplified model of
 an HVAC system
 in Modelica that could
@@ -161,7 +159,6 @@ be exposed as an FMU"),
           pattern=LinePattern.None,
           lineColor={0,0,127},
           horizontalAlignment=TextAlignment.Left,
-          fontSize=12,
           textString="Simplified model of
 a thermal zone that
 may be in an FMU
@@ -191,6 +188,12 @@ connected to the adaptor <code>hvacAda</code>, rather than the volume <code>vol<
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+March 11, 2020, by Michael Wetter:<br/>
+Removed <code>fontSize</code> in annotation.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/pull/1318\">#1318</a>.
+</li>
 <li>
 November 29, 2016, by Michael Wetter:<br/>
 Added separate signal for outdoor temperature used by HVAC system. This is

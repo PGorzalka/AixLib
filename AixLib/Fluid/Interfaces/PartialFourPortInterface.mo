@@ -2,12 +2,10 @@ within AixLib.Fluid.Interfaces;
 partial model PartialFourPortInterface
   "Partial model transporting fluid between two ports without storing mass or energy"
   extends AixLib.Fluid.Interfaces.PartialFourPort;
-  parameter Modelica.SIunits.MassFlowRate m1_flow_nominal(min=0)
-    "Nominal mass flow rate"
-    annotation(Dialog(group = "Nominal condition"));
-  parameter Modelica.SIunits.MassFlowRate m2_flow_nominal(min=0)
-    "Nominal mass flow rate"
-    annotation(Dialog(group = "Nominal condition"));
+  parameter Modelica.Units.SI.MassFlowRate m1_flow_nominal(min=0)
+    "Nominal mass flow rate" annotation (Dialog(group="Nominal condition"));
+  parameter Modelica.Units.SI.MassFlowRate m2_flow_nominal(min=0)
+    "Nominal mass flow rate" annotation (Dialog(group="Nominal condition"));
   parameter Medium1.MassFlowRate m1_flow_small(min=0) = 1E-4*abs(m1_flow_nominal)
     "Small mass flow rate for regularization of zero flow"
     annotation(Dialog(tab = "Advanced"));
@@ -17,17 +15,20 @@ partial model PartialFourPortInterface
   // Diagnostics
   parameter Boolean show_T = false
     "= true, if actual temperature at port is computed"
-    annotation(Dialog(tab="Advanced",group="Diagnostics"));
+    annotation (
+      Dialog(tab="Advanced", group="Diagnostics"),
+      HideResult=true);
+
 
   Medium1.MassFlowRate m1_flow = port_a1.m_flow
     "Mass flow rate from port_a1 to port_b1 (m1_flow > 0 is design flow direction)";
-  Modelica.SIunits.PressureDifference dp1(displayUnit="Pa") = port_a1.p - port_b1.p
-    "Pressure difference between port_a1 and port_b1";
+  Modelica.Units.SI.PressureDifference dp1(displayUnit="Pa") = port_a1.p -
+    port_b1.p "Pressure difference between port_a1 and port_b1";
 
   Medium2.MassFlowRate m2_flow = port_a2.m_flow
     "Mass flow rate from port_a2 to port_b2 (m2_flow > 0 is design flow direction)";
-  Modelica.SIunits.PressureDifference dp2(displayUnit="Pa") = port_a2.p - port_b2.p
-    "Pressure difference between port_a2 and port_b2";
+  Modelica.Units.SI.PressureDifference dp2(displayUnit="Pa") = port_a2.p -
+    port_b2.p "Pressure difference between port_a2 and port_b2";
 
   Medium1.ThermodynamicState sta_a1=
       Medium1.setState_phX(port_a1.p,
@@ -80,6 +81,12 @@ mass transfer and pressure drop equations.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+March 30, 2021, by Michael Wetter:<br/>
+Added annotation <code>HideResult=true</code>.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1459\">AixLib, #1459</a>.
+</li>
 <li>
 November 3, 2016, by Michael Wetter:<br/>
 Moved computation of pressure drop to variable assignment so that

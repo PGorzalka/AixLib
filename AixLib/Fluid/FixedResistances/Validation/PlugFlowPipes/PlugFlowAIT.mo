@@ -3,7 +3,7 @@ model PlugFlowAIT
   "Validation pipe against data from Austrian Institute of Technology"
   extends Modelica.Icons.Example;
   package Medium = AixLib.Media.Water;
-  parameter Modelica.SIunits.Length Lcap=1
+  parameter Modelica.Units.SI.Length Lcap=1
     "Length over which transient effects typically take place";
   parameter Real R80(unit="(m.K)/W")=1/(2*0.024*Modelica.Constants.pi)
       *log(0.07/0.0337) + 1/(2*2.4*Modelica.Constants.pi)*log(2/0.07) "Thermal resistance per unit length of service pipes";
@@ -12,12 +12,12 @@ model PlugFlowAIT
     "Flag to decide whether volumes are included at the end points of the pipe";
   parameter Boolean allowFlowReversal=true
     "= true to allow flow reversal, false restricts to design direction (port_a -> port_b)";
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=1
     "Nominal mass flow rate, used for regularization near zero flow";
-  parameter Modelica.SIunits.Time tauHeaTra=6500
+  parameter Modelica.Units.SI.Time tauHeaTra=6500
     "Time constant for heat transfer, default 20 minutes";
 
-  parameter Modelica.SIunits.Length thickness=0.0032 "Pipe wall thickness";
+  parameter Modelica.Units.SI.Length thickness=0.0032 "Pipe wall thickness";
 
   Fluid.Sources.MassFlowSource_T Point1(
     redeclare package Medium = Medium,
@@ -147,7 +147,11 @@ model PlugFlowAIT
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={-50,-20})));
-  Modelica.Blocks.Sources.CombiTimeTable DataReader(table=pipeDataAIT151218.data)
+  Modelica.Blocks.Sources.CombiTimeTable DataReader(
+    tableOnFile=true,
+    tableName="dat",
+    columns=2:pipeDataAIT151218.nCol,
+    fileName=pipeDataAIT151218.filNam)
     "Read measurement data"
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
   Data.PipeDataAIT151218 pipeDataAIT151218 "Measurement data from AIT network"
@@ -407,8 +411,15 @@ R=1/(0.208)+1/(2 &nbsp; lambda_g &nbsp; Modelica.Constants.pi) &nbsp; log(1/0.18
 </html>", revisions="<html>
 <ul>
 <li>
+March 7, 2020, by Michael Wetter:<br/>
+Replaced measured data from specification in Modelica file to external table,
+as this reduces the computing time.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1289\"> #1289</a>.
+</li>
+<li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>July 4, 2016 by Bram van der Heijde:<br/>Added parameters to test the

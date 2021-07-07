@@ -9,15 +9,15 @@ model RotaryCompressorPressureLosses
    Modelica.Media.R134a.R134a_ph
    "Medium of the compressor";
 
-  parameter Modelica.SIunits.AbsolutePressure pInl=
-    Medium.pressure(Medium.setBubbleState(Medium.setSat_T(TInl+1)))
+  parameter Modelica.Units.SI.AbsolutePressure pInl=Medium.pressure(
+      Medium.setBubbleState(Medium.setSat_T(TInl + 1)))
     "Current pressure at inlet conditions";
-  parameter Modelica.SIunits.Temperature TInl = 283.15
+  parameter Modelica.Units.SI.Temperature TInl=283.15
     "Current temperature at inlet conditions";
-  parameter Modelica.SIunits.AbsolutePressure pOut=
-    Medium.pressure(Medium.setDewState(Medium.setSat_T(TOut-5)))
+  parameter Modelica.Units.SI.AbsolutePressure pOut=Medium.pressure(
+      Medium.setDewState(Medium.setSat_T(TOut - 5)))
     "Current set point of the compressor's outlet pressure";
-  parameter Modelica.SIunits.Temperature TOut = 333.15
+  parameter Modelica.Units.SI.Temperature TOut=333.15
     "Current temperature at outlet conditions";
 
   // Definition of models
@@ -31,8 +31,7 @@ model RotaryCompressorPressureLosses
   Modelica.Blocks.Sources.Sine rotSpe(
     amplitude=40,
     offset=80,
-    freqHz=1)
-    "Prescribed compressor's rotational speed"
+    f=1) "Prescribed compressor's rotational speed"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature fixTem(T=283.15)
     "Fixed ambient temperature"
@@ -54,15 +53,13 @@ model RotaryCompressorPressureLosses
   Modelica.Blocks.Sources.Sine valOpe(
     offset=0.5,
     amplitude=0.3,
-    freqHz=1)
-    "Prescribed valve's opening"
+    f=1) "Prescribed valve's opening"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-  Actuators.Valves.SimpleValve simVal(
+  Obsolete.Year2021.Fluid.Actuators.Valves.SimpleValve simVal(
     redeclare package Medium = Medium,
     m_flow_start=0.025,
     m_flow_small=1e-6,
-    Kvs=1.4) "Model of a simple valve to simulate pressure losses"
-    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+    Kvs=1.4) "Model of a simple valve to simulate pressure losses" annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Sources.Boundary_pT   sink(
     redeclare package Medium = Medium,
     nPorts=1,
@@ -86,22 +83,21 @@ equation
   connect(fixTem.port, rotCom.heatPort)
     annotation (Line(points={{-60,-50},{-20,-50},{-20,-10}}, color={191,0,0}));
 
-  annotation (Documentation(revisions="<html>
-<ul>
-  <li>
-  October 20, 2017, by Mirko Engelpracht:<br/>
-  First implementation
-  (see <a href=\"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
+  annotation (Documentation(revisions="<html><ul>
+  <li>October 20, 2017, by Mirko Engelpracht:<br/>
+    First implementation (see <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/467\">issue 467</a>).
   </li>
 </ul>
 </html>", info="<html>
 <p>
-This is a example model to test the simple rotary compressor presented in
-<a href=\"modelica://AixLib.Fluid.Movers.Compressors.SimpleCompressors.RotaryCompressors.RotaryCompressorPressureLosses\">
-AixLib.Fluid.Movers.Compressors.SimpleCompressors.RotaryCompressors.RotaryCompressorPressureLosses</a>.
-Therefore, both the compressor's inlet and outlet conditions are prescribed
-in terms of pressure and temperature and the User can select different
-efficiency models using the dialog menu.
+  This is a example model to test the simple rotary compressor
+  presented in <a href=
+  \"modelica://AixLib.Fluid.Movers.Compressors.SimpleCompressors.RotaryCompressors.RotaryCompressorPressureLosses\">
+  AixLib.Fluid.Movers.Compressors.SimpleCompressors.RotaryCompressors.RotaryCompressorPressureLosses</a>.
+  Therefore, both the compressor's inlet and outlet conditions are
+  prescribed in terms of pressure and temperature and the User can
+  select different efficiency models using the dialog menu.
 </p>
 </html>"),
 experiment(StopTime=1));

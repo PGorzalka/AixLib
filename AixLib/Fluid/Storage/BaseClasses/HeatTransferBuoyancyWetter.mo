@@ -2,15 +2,16 @@ within AixLib.Fluid.Storage.BaseClasses;
 model HeatTransferBuoyancyWetter "Heat transfer with buoyancy as in Buildings library"
   extends AixLib.Fluid.Storage.BaseClasses.PartialHeatTransferLayers;
 
-  parameter Modelica.SIunits.Time tau(min=0)=100 "Time constant for mixing";
-  Modelica.SIunits.HeatFlowRate[n-1] qFlow "Heat flow rate from segment i+1 to i";
+  parameter Modelica.Units.SI.Time tau(min=0) = 100 "Time constant for mixing";
+  Modelica.Units.SI.HeatFlowRate[n - 1] qFlow
+    "Heat flow rate from segment i+1 to i";
 
 protected
-   parameter Modelica.SIunits.Density rho0=1000
+  parameter Modelica.Units.SI.Density rho0=1000
     "Density, used to compute fluid mass";
-   parameter Modelica.SIunits.SpecificHeatCapacity cp0=4180
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp0=4180
     "Specific heat capacity";
-   Modelica.SIunits.TemperatureDifference dT[n-1]
+  Modelica.Units.SI.TemperatureDifference dT[n - 1]
     "Temperature difference between adjoining volumes";
    parameter Real k(unit="W/K2") = data.hTank*Modelica.Constants.pi/4*data.dTank^2*rho0*cp0/tau/n
     "Proportionality constant, since we use dT instead of dH";
@@ -27,20 +28,39 @@ equation
   end for;
   therm[n].Q_flow = -qFlow[n-1];
 
-  annotation (Diagram(graphics), Documentation(info="<html>
-<h4><font color=\"#008000\">Overview</font></h4>
-<p>Model for heat transfer between buffer storage layers. </p>
-<h4><font color=\"#008000\">Concept</font></h4>
-<p>Models buoyancy according to Buildings.Fluid.Storage.BaseClasses.Buoyancy
-model of Buildings library, cf. https://simulationresearch.lbl.gov/modelica. No
-conduction is implemented apart from when buoyancy occurs.</p>
+  annotation (Diagram(graphics), Documentation(info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  Model for heat transfer between buffer storage layers.
+</p>
+<h4>
+  <span style=\"color:#008000\">Concept</span>
+</h4>
+<p>
+  Models buoyancy according to
+  Buildings.Fluid.Storage.BaseClasses.Buoyancy model of Buildings
+  library, cf. https://simulationresearch.lbl.gov/modelica. No
+  conduction is implemented apart from when buoyancy occurs.
+</p>
 </html>",
-   revisions="<html>
-<ul>
-<li><i>October 12, 2016&nbsp;</i> by Marcus Fuchs:<br/>Add comments and fix documentation</li>
-<li><i>October 11, 2016&nbsp;</i> by Sebastian Stinner:<br/>Added to AixLib</li>
-<li><i>December 10, 2013</i> by Kristian Huchtemann:<br/>Added Documentation.</li>
-<li><i>October 2, 2013&nbsp;</i> by Ole Odendahl:<br/>Added documentation and formatted appropriately </li>
+   revisions="<html><ul>
+  <li>
+    <i>October 12, 2016&#160;</i> by Marcus Fuchs:<br/>
+    Add comments and fix documentation
+  </li>
+  <li>
+    <i>October 11, 2016&#160;</i> by Sebastian Stinner:<br/>
+    Added to AixLib
+  </li>
+  <li>
+    <i>December 10, 2013</i> by Kristian Huchtemann:<br/>
+    Added Documentation.
+  </li>
+  <li>
+    <i>October 2, 2013&#160;</i> by Ole Odendahl:<br/>
+    Added documentation and formatted appropriately
+  </li>
 </ul>
 </html>"));
 end HeatTransferBuoyancyWetter;

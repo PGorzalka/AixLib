@@ -3,12 +3,12 @@ model X_pSatpphi "Model to test X_pSatpphi function"
   extends Modelica.Icons.Example;
   package Medium = AixLib.Media.Air "Medium model"
            annotation (choicesAllMatching = true);
-  parameter Modelica.SIunits.Temperature T = 293.15 "Temperature";
-  parameter Modelica.SIunits.Pressure p = 101325 "Pressure of the fluid";
+  parameter Modelica.Units.SI.Temperature T=293.15 "Temperature";
+  parameter Modelica.Units.SI.Pressure p=101325 "Pressure of the fluid";
 
-  Modelica.SIunits.AbsolutePressure pSat "Saturation pressure";
+  Modelica.Units.SI.AbsolutePressure pSat "Saturation pressure";
   Real phi(min=0, max=1) "Relative humidity";
-  Modelica.SIunits.MassFraction X_w(
+  Modelica.Units.SI.MassFraction X_w(
     min=0,
     max=1,
     nominal=0.01) "Water vapor concentration per total mass of air";
@@ -26,7 +26,7 @@ __Dymola_Commands(file="modelica://AixLib/Resources/Scripts/Dymola/Utilities/Psy
 <p>
 This example computes the water content of air for a relative humidity between
 <i>0</i> and <i>100%</i>,
-a temperature of <i>20&circ;C</i>
+a temperature of <i>20&deg;C</i>
 and atmospheric pressure.
 </p>
 </html>", revisions="<html>

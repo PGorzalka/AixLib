@@ -12,15 +12,15 @@ model PIDHysteresis
     "Value of hysteresis output at initial time"
     annotation (Dialog(group="Hysteresis"));
 
-  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.PID
+  parameter Modelica.Blocks.Types.SimpleController controllerType=Modelica.Blocks.Types.SimpleController.PI
     "Type of controller"
     annotation (Dialog(group="Set point tracking"));
   parameter Real k=1 "Gain of controller"
     annotation (Dialog(group="Set point tracking"));
-  parameter Modelica.SIunits.Time Ti "Time constant of Integrator block"
+  parameter Modelica.Units.SI.Time Ti "Time constant of Integrator block"
     annotation (Dialog(group="Set point tracking"));
-  parameter Modelica.SIunits.Time Td "Time constant of Derivative block"
-      annotation (Dialog(group="Set point tracking"));
+  parameter Modelica.Units.SI.Time Td "Time constant of Derivative block"
+    annotation (Dialog(group="Set point tracking"));
   parameter Real yMax=1 "Upper limit of output"
     annotation (Dialog(group="Set point tracking"));
   parameter Real yMin=0 "Lower limit of output"
@@ -33,11 +33,11 @@ model PIDHysteresis
     annotation (Dialog(group="Set point tracking"));
   parameter Real Nd=10 "The higher Nd, the more ideal the derivative block"
     annotation (Dialog(group="Set point tracking"));
-  parameter Boolean reverseAction = false
-    "Set to true to enable reverse action (such as for a cooling coil controller)"
-     annotation (Dialog(group="Set point tracking"));
+  parameter Boolean reverseActing = true
+    "Set to true for reverse acting, or false for direct acting control action"
+    annotation (Dialog(group="Set point tracking"));
 
-  parameter Modelica.Blocks.Types.InitPID initType=Modelica.Blocks.Types.InitPID.DoNotUse_InitialIntegratorState
+  parameter Modelica.Blocks.Types.Init initType=Modelica.Blocks.Types.Init.InitialState
     "Type of initialization (1: no init, 2: steady state, 3: initial state, 4: initial output)"
     annotation (Dialog(group="Initialization"));
   parameter Real xi_start=0
@@ -67,7 +67,7 @@ model PIDHysteresis
     final xd_start=xd_start,
     final y_start=y_start,
     final Td=Td,
-    final reverseAction=reverseAction,
+    final reverseActing=reverseActing,
     final strict=strict) "Controller for room temperature"
     annotation (Placement(transformation(extent={{-30,-2},{-10,18}})));
   Modelica.Blocks.Logical.Hysteresis hys(
@@ -125,7 +125,8 @@ equation
   connect(swi1.y, PID.u_s) annotation (Line(
       points={{61,60},{70,60},{70,30},{-50,30},{-50,8},{-32,8}},
       color={0,0,127}));
-  annotation ( Icon(graphics={
+     annotation (Dialog(group="Set point tracking"),
+               Icon(graphics={
         Polygon(
           points={{-80,94},{-88,72},{-72,72},{-80,94}},
           lineColor={192,192,192},
@@ -167,6 +168,12 @@ is small enough.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+June 1, 2020, by Michael Wetter:<br/>
+Corrected wrong convention of reverse and direct action.<br/>
+Changed default configuration from PID to PI.<br/>
+This is for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1365\">issue 1365</a>.
+</li>
 <li>
 September 29, 2016, by Michael Wetter:<br/>
 Removed parameter <code>limitsAtInit</code> because it is no longer

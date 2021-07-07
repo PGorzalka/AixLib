@@ -1,4 +1,4 @@
-within AixLib.Controls.HVACAgentBasedControl.CostFunctions.PrimaryExergy;
+﻿within AixLib.Controls.HVACAgentBasedControl.CostFunctions.PrimaryExergy;
 model Boiler_PrimaryExergyDestruction_Simplified
   extends HVACAgentBasedControl.BaseClasses.PartialCostFunction;
   parameter Real T_0 = 298.15 "Exergy reference temperature";
@@ -136,16 +136,24 @@ equation
           fillPattern=FillPattern.Solid,
           textString="Exergy Destruction
 ")}),
-    Documentation(revisions="<html>
-<ul>
-<li>October 2015, by Felix B&uuml;nning: Developed and implemented</li>
-<li>December 2016, by Roozbeh Sangi:<br/>revised</li>
+    Documentation(revisions="<html><ul>
+  <li>October 2015, by Felix Bünning: Developed and implemented
+  </li>
+  <li>December 2016, by Roozbeh Sangi:<br/>
+    revised
+  </li>
 </ul>
 </html>",
-    info="<html>
-<h4><span style=\"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span></h4>
+    info="<html><h4>
+  <span style=
+  \"font-family: MS Shell Dlg 2; color: #008000;\">Overview</span>
+</h4>
 <ul>
-<li><span style=\"font-family: MS Shell Dlg 2;\">Identical to the cost function in the Exergy package, except a primary energy factor is included.</span></li>
+  <li>
+    <span style=\"font-family: MS Shell Dlg 2;\">Identical to the cost
+    function in the Exergy package, except a primary energy factor is
+    included.</span>
+  </li>
 </ul>
 </html>"));
 end Boiler_PrimaryExergyDestruction_Simplified;

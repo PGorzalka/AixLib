@@ -5,8 +5,8 @@ model HeaterCooler_u "Model that demonstrates the ideal heater model"
   package Medium = AixLib.Media.Air;
 
 
-  parameter Modelica.SIunits.MassFlowRate
-    m_flow_nominal=3000/1000/20 "Nominal mass flow rate";
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=3000/1000/20
+    "Nominal mass flow rate";
 
   AixLib.Fluid.Sources.Boundary_pT sin(
     redeclare package Medium = Medium,
@@ -33,7 +33,6 @@ model HeaterCooler_u "Model that demonstrates the ideal heater model"
     "Setpoint"
     annotation (Placement(transformation(extent={{-60,140},{-40,160}})));
   AixLib.Controls.Continuous.LimPID con1(
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Td=1,
     k=1,
     Ti=10)
@@ -53,7 +52,6 @@ model HeaterCooler_u "Model that demonstrates the ideal heater model"
     annotation (Placement(transformation(extent={{40,-20},{60,0}})));
 
   AixLib.Controls.Continuous.LimPID con2(
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Td=1,
     Ti=10,
     k=0.1)

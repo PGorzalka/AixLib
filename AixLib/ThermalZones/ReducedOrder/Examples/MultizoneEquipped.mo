@@ -55,9 +55,8 @@ model MultizoneEquipped "Illustrates the use of MultizoneEquipped"
     annotation (Placement(transformation(extent={{-14,-64},{6,-44}})));
   Modelica.Blocks.Sources.Sine sine(
     amplitude=500,
-    freqHz=1/86400,
-    offset=500)
-    "Sinusoidal excitation for additional internal gains"
+    f=1/86400,
+    offset=500) "Sinusoidal excitation for additional internal gains"
     annotation (Placement(transformation(extent={{-90,-74},{-70,-54}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow prescribedHeatFlow1[5]
     "Convective heat flow of additional internal gains"
@@ -139,13 +138,20 @@ equation
       StopTime=31536000,
       Interval=3600,
       __Dymola_Algorithm="Cvode"),
-    Documentation(revisions="<html>
-  <ul>
+    Documentation(revisions="<html><ul>
   <li>September 29, 2016, by Moritz Lauster:<br/>
-  Implemented.
+    Implemented.
   </li>
-  </ul>
+</ul>
 </html>", info="<html>
-<p>This example illustrates the use of <a href=\"AixLib.ThermalZones.ReducedOrder.Multizone.MultizoneEquipped\">AixLib.ThermalZones.ReducedOrder.Multizone.MultizoneEquipped</a>. Parameter set is for an office building build as passive house. All boundary conditions are generic to show how to apply different kinds of boundary conditions. The results should show typical profiles for indoor air temperatures, but are not related to a specific building or measurement data.</p>
+<p>
+  This example illustrates the use of <a href=
+  \"AixLib.ThermalZones.ReducedOrder.Multizone.MultizoneEquipped\">AixLib.ThermalZones.ReducedOrder.Multizone.MultizoneEquipped</a>.
+  Parameter set is for an office building build as passive house. All
+  boundary conditions are generic to show how to apply different kinds
+  of boundary conditions. The results should show typical profiles for
+  indoor air temperatures, but are not related to a specific building
+  or measurement data.
+</p>
 </html>"));
 end MultizoneEquipped;

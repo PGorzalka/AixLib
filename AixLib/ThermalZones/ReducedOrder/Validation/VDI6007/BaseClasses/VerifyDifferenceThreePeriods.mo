@@ -2,15 +2,15 @@ within AixLib.ThermalZones.ReducedOrder.Validation.VDI6007.BaseClasses;
 block VerifyDifferenceThreePeriods "Assert when condition is violated"
   extends AixLib.Utilities.Diagnostics.BaseClasses.PartialInputCheck(
     message="Inputs differ by more than threShold.\n  Check output 'satisfied' for when violation(s) happened.");
-  parameter Modelica.SIunits.Time endTime = 0
+  parameter Modelica.Units.SI.Time endTime=0
     "Start time for deactivating the assert (period one)";
-  parameter Modelica.SIunits.Time startTime2 = 0
+  parameter Modelica.Units.SI.Time startTime2=0
     "Start time for activating the assert (period two)";
-  parameter Modelica.SIunits.Time endTime2 = 0
+  parameter Modelica.Units.SI.Time endTime2=0
     "Start time for deactivating the assert (period two)";
-  parameter Modelica.SIunits.Time startTime3 = 0
+  parameter Modelica.Units.SI.Time startTime3=0
     "Start time for activating the assert (period three)";
-  parameter Modelica.SIunits.Time endTime3 = 0
+  parameter Modelica.Units.SI.Time endTime3=0
     "Start time for deactivating the assert (period three)";
 
   Modelica.Blocks.Interfaces.BooleanOutput satisfied(start=true, fixed=true)
@@ -20,15 +20,15 @@ block VerifyDifferenceThreePeriods "Assert when condition is violated"
     annotation (Placement(transformation(extent={{100,42},{140,82}}),
         iconTransformation(extent={{100,42},{140,82}})));
 protected
-  parameter Modelica.SIunits.Time t1(fixed=false)
+  parameter Modelica.Units.SI.Time t1(fixed=false)
     "Simulation end time period one";
-  parameter Modelica.SIunits.Time t3(fixed=false)
+  parameter Modelica.Units.SI.Time t3(fixed=false)
     "Simulation end time period two";
-  parameter Modelica.SIunits.Time t5(fixed=false)
+  parameter Modelica.Units.SI.Time t5(fixed=false)
     "Simulation end time period three";
-  parameter Modelica.SIunits.Time t2(fixed=false)
+  parameter Modelica.Units.SI.Time t2(fixed=false)
     "Simulation start time period two";
-  parameter Modelica.SIunits.Time t4(fixed=false)
+  parameter Modelica.Units.SI.Time t4(fixed=false)
     "Simulation start time period three";
   Integer nFai "Number of test violations";
 
@@ -84,7 +84,7 @@ Rewrote inequality to turn a state into a time event for Dymola 2019FD01.
 <li>
 December 16, 2016, by Michael Wetter:<br/>
 Reformulated model for
-<a href=\"modelica://https://github.com/ibpsa/modelica-ibpsa/issues/623\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/623\">
 https://github.com/ibpsa/modelica-ibpsa/issues/623</a>.
 </li>
 <li>

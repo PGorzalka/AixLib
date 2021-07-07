@@ -10,9 +10,9 @@ model TCPCommunicatorExample
           final port=portExample); //Extends basic TCP communication model
 
   /**************** necessary Input ****************************/
-  parameter Modelica.SIunits.Time samplePeriodExample = 1
+  parameter Modelica.Units.SI.Time samplePeriodExample=1
     "Sample period how often a telegram is send";
-  parameter Modelica.SIunits.Time startTimeExample = 0
+  parameter Modelica.Units.SI.Time startTimeExample=0
     "Start time when sampling starts";
   parameter String IP_AddressExample = "127.0.0.1"
     "IP address or name of Server";
@@ -47,25 +47,34 @@ algorithm
     end if;
   end when;
 
-annotation(Documentation(revisions="<html>
-<ul>
-<li><i>August 25, 2018&nbsp;</i>
-         by Thomas Beutlich:<br/>
-         Utilize TCPIPSocketClient_ functions from Modelica_DeviceDrivers library. This is for:<a href=\"https://github.com/RWTH-EBC/AixLib/issues/277\">#277</a></li>
-<li><i>June 01, 2013&nbsp;</i>
-         by Georg Ferdinand Schneider:<br />
-         Implemented</li>
- <li><i>September 03, 2013&nbsp;</i>
-         by Georg Ferdinand Schneider:<br />
-         Revised and updated </li>
+annotation(Documentation(revisions="<html><ul>
+  <li>
+    <i>August 25, 2018&#160;</i> by Thomas Beutlich:<br/>
+    Utilize TCPIPSocketClient_ functions from Modelica_DeviceDrivers
+    library. This is for:<a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/277\">#277</a>
+  </li>
+  <li>
+    <i>June 01, 2013&#160;</i> by Georg Ferdinand Schneider:<br/>
+    Implemented
+  </li>
+  <li>
+    <i>September 03, 2013&#160;</i> by Georg Ferdinand Schneider:<br/>
+    Revised and updated
+  </li>
 </ul>
 </html>", info="<html>
-
-<h4>Simple TCP Communicator Example</h4>
-
-<p>This is a small example block which allows to establish a TCP connection between a client (i.e., Dymola or SimulationX by ESI)
-and an external server. It sends the value of input <code>u[1]</code> as a floating-point number to the server and receives a floating-point number.
-Check <code>SocketCommunication.Examples.ExampleClientLoop</code> for an executable example.
+<h4>
+  Simple TCP Communicator Example
+</h4>
+<p>
+  This is a small example block which allows to establish a TCP
+  connection between a client (i.e., Dymola or SimulationX by ESI) and
+  an external server. It sends the value of input <code>u[1]</code> as
+  a floating-point number to the server and receives a floating-point
+  number. Check
+  <code>SocketCommunication.Examples.ExampleClientLoop</code> for an
+  executable example.
 </p>
 </html>"), Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={

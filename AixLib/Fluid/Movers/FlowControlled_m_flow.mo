@@ -23,24 +23,25 @@ model FlowControlled_m_flow
     preSou(m_flow_start=m_flow_start));
 
   // For air, we set dp_nominal = 600 as default, for water we set 10000
-  parameter Modelica.SIunits.PressureDifference dp_nominal(min=0, displayUnit="Pa")=
-    if rho_default < 500 then 500 else 10000
+  parameter Modelica.Units.SI.PressureDifference dp_nominal(
+    min=0,
+    displayUnit="Pa") = if rho_default < 500 then 500 else 10000
     "Nominal pressure raise, used for default pressure curve if not specified in record per"
-    annotation(Dialog(group="Nominal condition"));
+    annotation (Dialog(group="Nominal condition"));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_start(min=0)=0
+  parameter Modelica.Units.SI.MassFlowRate m_flow_start(min=0) = 0
     "Initial value of mass flow rate"
-    annotation(Dialog(tab="Dynamics", group="Filtered speed"));
+    annotation (Dialog(tab="Dynamics", group="Filtered speed"));
 
-  parameter Modelica.SIunits.MassFlowRate constantMassFlowRate=m_flow_nominal
-    "Constant pump mass flow rate, used when inputType=Constant"
-    annotation(Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Constant));
+  parameter Modelica.Units.SI.MassFlowRate constantMassFlowRate=m_flow_nominal
+    "Constant pump mass flow rate, used when inputType=Constant" annotation (
+      Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Constant));
 
   // By default, set massFlowRates proportional to (speed/speed_nominal)
-  parameter Modelica.SIunits.MassFlowRate[:] massFlowRates=
-    m_flow_nominal*{per.speeds[i]/per.speeds[end] for i in 1:size(per.speeds, 1)}
+  parameter Modelica.Units.SI.MassFlowRate[:] massFlowRates=m_flow_nominal*{per.speeds[
+      i]/per.speeds[end] for i in 1:size(per.speeds, 1)}
     "Vector of mass flow rate set points, used when inputType=Stage"
-    annotation(Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Stages));
+    annotation (Dialog(enable=inputType == AixLib.Fluid.Types.InputType.Stages));
 
   Modelica.Blocks.Interfaces.RealInput m_flow_in(
     final unit="kg/s",
@@ -81,7 +82,14 @@ equation
       points={{-22,50},{-26,50},{-26,80},{0,80},{0,120}},
       color={0,0,127},
       smooth=Smooth.None));
-  annotation (defaultComponentName="fan",
+  annotation (
+      Icon(graphics={
+        Text(
+          extent={{-40,126},{-160,76}},
+          lineColor={0,0,127},
+          visible=inputType == AixLib.Fluid.Types.InputType.Continuous or inputType == AixLib.Fluid.Types.InputType.Stages,
+          textString=DynamicSelect("m_flow", if inputType == AixLib.Fluid.Types.InputType.Continuous then String(m_flow_in, leftJustified=false, significantDigits=3) else String(stage)))}),
+  defaultComponentName="fan",
   Documentation(
    info="<html>
 <p>
@@ -100,6 +108,12 @@ User's Guide</a> for more information.
 </html>",
       revisions="<html>
 <ul>
+<li>
+February 21, 2020, by Michael Wetter:<br/>
+Changed icon to display its operating stage.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1294\">#1294</a>.
+</li>
 <li>
 March 24, 2017, by Michael Wetter:<br/>
 Renamed <code>filteredSpeed</code> to <code>use_inputFilter</code>.<br/>
@@ -145,37 +159,5 @@ Revised implementation to allow zero flow rate.
     by Michael Wetter:<br/>
        Model added to the AixLib library.
 </ul>
-</html>"),
-    Icon(graphics={
-        Text(
-          visible = inputType == AixLib.Fluid.Types.InputType.Continuous,
-          extent={{22,146},{114,102}},
-          textString="m_flow_in"),
-        Line(
-          points={{2,50},{100,50}},
-          color={0,0,0},
-          smooth=Smooth.None),
-        Text(extent={{50,66},{100,52}},
-          lineColor={0,0,127},
-          textString="m_flow"),
-        Rectangle(
-          visible=use_inputFilter,
-          extent={{-34,40},{32,100}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid),
-        Ellipse(
-          visible=use_inputFilter,
-          extent={{-34,100},{32,40}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid),
-        Text(
-          visible=use_inputFilter,
-          extent={{-22,92},{20,46}},
-          lineColor={0,0,0},
-          fillColor={135,135,135},
-          fillPattern=FillPattern.Solid,
-          textString="M",
-          textStyle={TextStyle.Bold})}));
+</html>"));
 end FlowControlled_m_flow;

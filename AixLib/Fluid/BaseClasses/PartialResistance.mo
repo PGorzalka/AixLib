@@ -9,32 +9,41 @@ partial model PartialResistance "Partial model for a hydraulic resistance"
           then m_flow_nominal_pos else 1),
      final m_flow_small = 1E-4*abs(m_flow_nominal));
 
+  constant Boolean homotopyInitialization = true "= true, use homotopy method"
+    annotation(HideResult=true);
+
   parameter Boolean from_dp = false
     "= true, use m_flow = f(dp) else dp = f(m_flow)"
     annotation (Evaluate=true, Dialog(tab="Advanced"));
 
-  parameter Modelica.SIunits.PressureDifference dp_nominal(displayUnit="Pa")
+  parameter Modelica.Units.SI.PressureDifference dp_nominal(displayUnit="Pa")
     "Pressure drop at nominal mass flow rate"
-    annotation(Dialog(group = "Nominal condition"));
-  parameter Boolean homotopyInitialization = true "= true, use homotopy method"
-    annotation(Evaluate=true, Dialog(tab="Advanced"));
+    annotation (Dialog(group="Nominal condition"));
+
   parameter Boolean linearized = false
     "= true, use linear relation between m_flow and dp for any flow rate"
     annotation(Evaluate=true, Dialog(tab="Advanced"));
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_turbulent(min=0)
+  parameter Modelica.Units.SI.MassFlowRate m_flow_turbulent(min=0)
     "Turbulent flow if |m_flow| >= m_flow_turbulent";
 
 protected
   parameter Medium.ThermodynamicState sta_default=
      Medium.setState_pTX(T=Medium.T_default, p=Medium.p_default, X=Medium.X_default);
-  parameter Modelica.SIunits.DynamicViscosity eta_default=Medium.dynamicViscosity(sta_default)
+  parameter Modelica.Units.SI.DynamicViscosity eta_default=
+      Medium.dynamicViscosity(sta_default)
     "Dynamic viscosity, used to compute transition to turbulent flow regime";
 
-  final parameter Modelica.SIunits.MassFlowRate m_flow_nominal_pos = abs(m_flow_nominal)
-    "Absolute value of nominal flow rate";
-  final parameter Modelica.SIunits.PressureDifference dp_nominal_pos(displayUnit="Pa") = abs(dp_nominal)
+  final parameter Modelica.Units.SI.MassFlowRate m_flow_nominal_pos=abs(
+      m_flow_nominal) "Absolute value of nominal flow rate";
+  final parameter Modelica.Units.SI.PressureDifference dp_nominal_pos(
+      displayUnit="Pa") = abs(dp_nominal)
     "Absolute value of nominal pressure difference";
+initial equation
+  assert(homotopyInitialization, "In " + getInstanceName() +
+    ": The constant homotopyInitialization has been modified from its default value. This constant will be removed in future releases.",
+    level = AssertionLevel.warning);
+
 equation
   // Isenthalpic state transformation (no storage and no loss of energy)
   port_a.h_outflow = if allowFlowReversal then inStream(port_b.h_outflow) else Medium.h_default;
@@ -68,7 +77,19 @@ equation
           fillPattern=FillPattern.Backward,
           fillColor={0,128,255},
           pattern=LinePattern.None,
-          lineColor={255,255,255})}),
+          lineColor={255,255,255}),
+        Rectangle(
+          extent=DynamicSelect({{-100,10},{-100,10}}, {{100,10},{100+200*max(-1, min(0, m_flow/(abs(m_flow_nominal)))),-10}}),
+          lineColor={28,108,200},
+          fillColor={255,0,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
+        Rectangle(
+          extent=DynamicSelect({{-100,10},{-100,10}}, {{-100,10},{-100+200*min(1, max(0, m_flow/abs(m_flow_nominal))),-10}}),
+          lineColor={28,108,200},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None)}),
           defaultComponentName="res",
 Documentation(info="<html>
 <p>
@@ -85,6 +106,18 @@ this base class.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+April 14, 2020, by Michael Wetter:<br/>
+Changed <code>homotopyInitialization</code> to a constant.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1341\">AixLib, #1341</a>.
+</li>
+<li>
+February 26, 2020, by Michael Wetter:<br/>
+Changed icon to display its operating state.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1294\">#1294</a>.
+</li>
 <li>
 October 25, 2019, by Jianjun Hu:<br/>
 Improved icon graphics annotation. This is for

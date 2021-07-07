@@ -3,24 +3,21 @@ model Illumination
   "Determining the activation and deactivation times of the illumination"
   extends Modelica.Blocks.Icons.Block;
   parameter Real D "Daylight quotient";
-  final parameter Modelica.SIunits.LuminousEfficacy k_mDifCov=115
+  final parameter Modelica.Units.SI.LuminousEfficacy k_mDifCov=115
     "Radiation equivalent for uniformly overcast skies";
 
   //Window parameter
   parameter Integer n(min=1) "Number of windows"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.Angle til[n](displayUnit="deg")
-    "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
-     roof"
-    annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.Angle til[n](displayUnit="deg") "Surface tilt. til=90 degree for walls; til=0 for ceilings; til=180 for
+     roof" annotation (Dialog(group="window"));
   parameter Real r[n] "Frame share"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.Area A[n] "Window area"
+  parameter Modelica.Units.SI.Area A[n] "Window area"
     annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.TransmissionCoefficient tau_vis[n]
-    "Degree of light transmission"
-    annotation (Dialog(group="window"));
-  parameter Modelica.SIunits.ReflectionCoefficient rho=0.2
+  parameter Modelica.Units.SI.TransmissionCoefficient tau_vis[n]
+    "Degree of light transmission" annotation (Dialog(group="window"));
+  parameter Modelica.Units.SI.ReflectionCoefficient rho=0.2
     "Degree of ground reflection";
 
   Modelica.Blocks.Interfaces.BooleanOutput Illumination
@@ -55,12 +52,12 @@ model Illumination
 
   Real r_DifCov[n] "Conversion factor";
 
-  Modelica.SIunits.EnergyFlowRate HLimVisi[n] "Thresholds within the room";
-  Modelica.SIunits.EnergyFlowRate HLimVis "Sum of H_LimInsi";
+  Modelica.Units.SI.EnergyFlowRate HLimVisi[n] "Thresholds within the room";
+  Modelica.Units.SI.EnergyFlowRate HLimVis "Sum of H_LimInsi";
 
-  Modelica.SIunits.EnergyFlowRate HVisi[n]
+  Modelica.Units.SI.EnergyFlowRate HVisi[n]
     "Solar energy entering the room in the visible area";
-  Modelica.SIunits.EnergyFlowRate HVisSum "Sum of HVisi";
+  Modelica.Units.SI.EnergyFlowRate HVisSum "Sum of HVisi";
 
 equation
   //Calculating HLimVis
@@ -89,21 +86,26 @@ equation
               "modelica://AixLib/Resources/Images/ThermalZones/ReducedOrder/Windows/BaseClasses/Illumination.png")}),
                                                                  Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    Documentation(revisions="<html>
-<ul>
-<li>May 23, 2016,&nbsp; by Stanley Risch:<br/>Implemented. </li>
+    Documentation(revisions="<html><ul>
+  <li>May 23, 2016,&#160; by Stanley Risch:<br/>
+    Implemented.
+  </li>
 </ul>
 </html>",
-      info="<html>
-This model calculates the activation and deactivation times of the illumination
- and gives it back as the Boolean \"Illumination\".
-It is based on VDI 6007 part 3. <br/>
-The total solar energy entering the room, which can be calculated by <a href=
-\"Windows.Window\">Window</a> or <a href=\"Windows.ShadedWindow\">
-ShadedWindow</a>, is compared to a limit value based on the parameters.
-  <h4>References</h4>
-  <p>VDI. German Association of Engineers Guideline VDI 6007-3
-  June 2015. Calculation of transient thermal response of rooms
-  and buildings - Modelling of solar radiation.</p>
+      info="<html>This model calculates the activation and deactivation times of the
+illumination and gives it back as the Boolean \"Illumination\". It is
+based on VDI 6007 part 3.<br/>
+The total solar energy entering the room, which can be calculated by
+<a href=\"Windows.Window\">Window</a> or <a href=
+\"Windows.ShadedWindow\">ShadedWindow</a>, is compared to a limit value
+based on the parameters.
+<h4>
+  References
+</h4>
+<p>
+  VDI. German Association of Engineers Guideline VDI 6007-3 June 2015.
+  Calculation of transient thermal response of rooms and buildings -
+  Modelling of solar radiation.
+</p>
 </html>"));
 end Illumination;

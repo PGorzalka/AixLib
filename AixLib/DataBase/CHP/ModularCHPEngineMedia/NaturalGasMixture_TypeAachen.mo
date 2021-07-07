@@ -2,8 +2,7 @@ within AixLib.DataBase.CHP.ModularCHPEngineMedia;
 package NaturalGasMixture_TypeAachen
   "Simple natural gas mixture (type Aachen) for CHP-engine combustion"
 
-  extends
-    AixLib.DataBase.CHP.ModularCHPEngineMedia.CHPCombustionMixtureGasNasa(
+  extends AixLib.DataBase.CHP.ModularCHPEngineMedia.CHPCombustionMixtureGasNasa(
     mediumName="NaturalGasMixtureForAachen",
     data={Modelica.Media.IdealGases.Common.SingleGasesData.N2,Modelica.Media.IdealGases.Common.SingleGasesData.CH4,
         Modelica.Media.IdealGases.Common.SingleGasesData.C2H4,Modelica.Media.IdealGases.Common.SingleGasesData.C2H6,
@@ -24,7 +23,7 @@ package NaturalGasMixture_TypeAachen
     Fuel=NaturalGasTypeAachen() "Needed natural gas data for calculations"
     annotation (choicesAllMatching=true, Dialog(group="Natural gas type"));
 
-   import Modelica.SIunits.*;
+   import Modelica.Units.SI.*;
 
   constant Boolean isGas = Fuel.isGasoline "True = Gasoline fuel, False = Liquid fuel";
   constant MoleFraction moleFractions_Gas[:] = Fuel.Xi_mole;
@@ -35,8 +34,7 @@ package NaturalGasMixture_TypeAachen
   constant Real L_st = l_min*0.02885/MM "Stoichiometric air consumption";
 
   record NaturalGasTypeAachen
-    extends
-      AixLib.DataBase.CHP.ModularCHPEngineMedia.CombustionEngineFuelDataBaseRecord(
+    extends AixLib.DataBase.CHP.ModularCHPEngineMedia.CombustionEngineFuelDataBaseRecord(
         fuelType="TypeAachen",
         isGasoline = true,
         Xi_mole={0.0089,0.9255,0,0.045,0.0063,0.0019,0.0004,0.0001,0.0119});

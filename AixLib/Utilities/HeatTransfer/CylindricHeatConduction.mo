@@ -7,11 +7,11 @@ model CylindricHeatConduction "Heat conduction through cylindric material"
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_b port_b
     annotation (Placement(transformation(extent={{-10,78},{10,98}},
           rotation=0)));
-  parameter Modelica.SIunits.Length d_out(min=0) "outer diameter of pipe";
-  parameter Modelica.SIunits.ThermalConductivity lambda=373
+  parameter Modelica.Units.SI.Length d_out(min=0) "outer diameter of pipe";
+  parameter Modelica.Units.SI.ThermalConductivity lambda=373
     "Heat conductivity of pipe";
-  parameter Modelica.SIunits.Length d_in(min=0) "inner diameter of pipe";
-  parameter Modelica.SIunits.Length length(min=0) " Length of pipe";
+  parameter Modelica.Units.SI.Length d_in(min=0) "inner diameter of pipe";
+  parameter Modelica.Units.SI.Length length(min=0) " Length of pipe";
   parameter Integer nParallel = 1 "Number of identical parallel pipes";
 
 equation
@@ -29,19 +29,30 @@ equation
           lineColor={255,255,255},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid)}),
-    Documentation(info="<html>
-<h4><font color=\"#008000\">Overview</font></h4>
-<p> Model to describe cylindric heat conduction, for example in pipe
-insulations. </p>
+    Documentation(info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  Model to describe cylindric heat conduction, for example in pipe
+  insulations.
+</p>
 </html>",
-      revisions="<html>
-<ul>
-<li><i>October 12, 2016&nbsp;</i> by Marcus Fuchs:<br/>Add description and fix documentation</li>
-<li><i>October 11, 2016&nbsp;</i> by Sebastian Stinner:<br/>Transferred to AixLib</li>
-<li><i>November 13, 2013&nbsp;</i> by Ole Odendahl:<br/>Added documentation and formatted appropriately</li>
+      revisions="<html><ul>
   <li>
-         by Alexander Hoh:<br/>
-         implemented</li>
+    <i>October 12, 2016&#160;</i> by Marcus Fuchs:<br/>
+    Add description and fix documentation
+  </li>
+  <li>
+    <i>October 11, 2016&#160;</i> by Sebastian Stinner:<br/>
+    Transferred to AixLib
+  </li>
+  <li>
+    <i>November 13, 2013&#160;</i> by Ole Odendahl:<br/>
+    Added documentation and formatted appropriately
+  </li>
+  <li>by Alexander Hoh:<br/>
+    implemented
+  </li>
 </ul>
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,

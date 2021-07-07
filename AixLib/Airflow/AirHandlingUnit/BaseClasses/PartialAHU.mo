@@ -47,16 +47,17 @@ partial model PartialAHU "Defines necessary parameters and connectors"
     (in case that a HRS is physically installed in the AHU)"
     annotation (Dialog(group="Settings AHU Value", enable=HRS));
   // assumed increase in ventilator pressure
-  parameter Modelica.SIunits.Pressure dp_sup=800
+  parameter Modelica.Units.SI.Pressure dp_sup=800
     "pressure difference over supply fan"
     annotation (Dialog(tab="Fans", group="Constant Assumptions"));
-  parameter Modelica.SIunits.Pressure dp_eta=800
+  parameter Modelica.Units.SI.Pressure dp_eta=800
     "pressure difference over extract fan"
     annotation (Dialog(tab="Fans", group="Constant Assumptions"));
   // assumed efficiencies of the ventilators
-  parameter Modelica.SIunits.Efficiency eta_sup=0.7 "efficiency of supply fan"
+  parameter Modelica.Units.SI.Efficiency eta_sup=0.7 "efficiency of supply fan"
     annotation (Dialog(tab="Fans", group="Constant Assumptions"));
-  parameter Modelica.SIunits.Efficiency eta_eta=0.7 "efficiency of extract fan"
+  parameter Modelica.Units.SI.Efficiency eta_eta=0.7
+    "efficiency of extract fan"
     annotation (Dialog(tab="Fans", group="Constant Assumptions"));
 
   Modelica.Blocks.Interfaces.RealInput Vflow_in(unit="m3/s") "m3/s"
@@ -166,11 +167,20 @@ equation
   annotation (Diagram(coordinateSystem(extent={{-100,-100},{100,100}},
           preserveAspectRatio=false)), Icon(coordinateSystem(extent={{-100,-40},
             {100,40}}, preserveAspectRatio=false)),
-    Documentation(revisions="<html>
-<ul>
-<li><i><span style=\"font-family: MS Shell Dlg 2;\">February, 2016&nbsp;</span></i> by Philipp Mehrfeld:<br/>Model implemented</li>
+    Documentation(revisions="<html><ul>
+  <li>
+    <i><span style=\"font-family: MS Shell Dlg 2;\">February,
+    2016&#160;</span></i> by Philipp Mehrfeld:<br/>
+    Model implemented
+  </li>
 </ul>
 </html>", info="<html>
-<p><span style=\"font-family: MS Shell Dlg 2;\">Base class to provide connectors. Thus, it is possible to declare parameters in a general way in superior building model and give the opportunity whether an <a href=\"AixLib.Airflow.AirHandlingUnit.AHU\">AHU exist</a> or <a href=\"AixLib.Airflow.AirHandlingUnit.NoAHU\">does not</a>.</span></p>
+<p>
+  <span style=\"font-family: MS Shell Dlg 2;\">Base class to provide
+  connectors. Thus, it is possible to declare parameters in a general
+  way in superior building model and give the opportunity whether an
+  <a href=\"AixLib.Airflow.AirHandlingUnit.AHU\">AHU exist</a> or
+  <a href=\"AixLib.Airflow.AirHandlingUnit.NoAHU\">does not</a>.</span>
+</p>
 </html>"));
 end PartialAHU;

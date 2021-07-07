@@ -6,17 +6,18 @@ extends Modelica.Fluid.Interfaces.PartialTwoPort;
 
 parameter Boolean isFloor = true;
 
-parameter Modelica.SIunits.Area A "Area of Floor part";
+  parameter Modelica.Units.SI.Area A "Area of Floor part";
 
-parameter Modelica.SIunits.Emissivity eps=0.95 "Emissivity";
+  parameter Modelica.Units.SI.Emissivity eps=0.95 "Emissivity";
 
-parameter Modelica.SIunits.Temperature T0=Modelica.SIunits.Conversions.from_degC(20)
+  parameter Modelica.Units.SI.Temperature T0=
+      Modelica.Units.Conversions.from_degC(20)
     "Initial temperature, in degrees Celsius";
 
-parameter Modelica.SIunits.Volume VWater "Volume of Water in m^3";
+  parameter Modelica.Units.SI.Volume VWater "Volume of Water in m^3";
 
-parameter Modelica.SIunits.CoefficientOfHeatTransfer kTop;
-parameter Modelica.SIunits.CoefficientOfHeatTransfer kDown;
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer kTop;
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer kDown;
 
 parameter HeatCapacityPerArea cTop;
 parameter HeatCapacityPerArea cDown;
@@ -29,10 +30,11 @@ parameter HeatCapacityPerArea cDown;
         choice=3 "Custom hCon (constant)",
         radioButtons=true));
 
-  parameter Modelica.SIunits.CoefficientOfHeatTransfer hCon_const=2.5 "Constant heat transfer coefficient"
-    annotation (Dialog(group="Heat convection",
-    descriptionLabel=true,
-        enable=if calcMethod == 3 then true else false));
+  parameter Modelica.Units.SI.CoefficientOfHeatTransfer hCon_const=2.5
+    "Constant heat transfer coefficient" annotation (Dialog(
+      group="Heat convection",
+      descriptionLabel=true,
+      enable=if calcMethod == 3 then true else false));
 
   Modelica.Fluid.Vessels.ClosedVolume vol(
     redeclare package Medium = Medium,
@@ -53,8 +55,7 @@ parameter HeatCapacityPerArea cDown;
     annotation (Placement(transformation(extent={{50,-36},{70,-16}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a thermConvWall
     annotation (Placement(transformation(extent={{-22,-110},{-2,-90}})));
-  Utilities.HeatTransfer.HeatToStar twoStar_RadEx(A=A, eps=eps) annotation (
-      Placement(transformation(
+  Utilities.HeatTransfer.HeatToRad twoStar_RadEx(A=A, eps=eps) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-30,74})));
@@ -107,9 +108,8 @@ equation
       points={{3.60822e-015,84},{3.60822e-015,92.5},{-2,92.5},{-2,100}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(twoStar_RadEx.Star,starRad)
-                                     annotation (Line(
-      points={{-30,83.1},{-30,102},{-28,102}},
+  connect(twoStar_RadEx.radPort, starRad) annotation (Line(
+      points={{-30,84.1},{-30,102},{-28,102}},
       color={95,95,95},
       pattern=LinePattern.None,
       smooth=Smooth.None));
@@ -117,8 +117,8 @@ equation
       points={{-12,-100},{-12,-100}},
       color={191,0,0},
       smooth=Smooth.None));
-  connect(panel_Segment1.port_b, twoStar_RadEx.Therm) annotation (Line(
-      points={{-16.9,39.1},{-16.9,51.55},{-30,51.55},{-30,64.8}},
+  connect(panel_Segment1.port_b, twoStar_RadEx.convPort) annotation (Line(
+      points={{-16.9,39.1},{-16.9,51.55},{-30,51.55},{-30,64}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(panel_Segment1.port_b, HeatConv.port_b) annotation (Line(
@@ -200,18 +200,32 @@ equation
           arrow={Arrow.None,Arrow.Filled},
           origin={-22,-54},
           rotation=180)}),
-    Documentation(revisions="<html>
-<ul>
-<li><i>February 06, 2017&nbsp;</i> by Philipp Mehrfeld:<br/>
-Naming according to AixLib standards.</li>
-<li><i>June 15, 2017&nbsp;</i> by Tobias Blacha:<br/>
-Moved into AixLib</li>
-<li><i>March 25, 2015&nbsp;</i> by Ana Constantin:<br/>Uses components from MSL</li>
-<li><i>November 06, 2014&nbsp;</i> by Ana Constantin:<br/>Added documentation.</li>
+    Documentation(revisions="<html><ul>
+  <li>
+    <i>February 06, 2017&#160;</i> by Philipp Mehrfeld:<br/>
+    Naming according to AixLib standards.
+  </li>
+  <li>
+    <i>June 15, 2017&#160;</i> by Tobias Blacha:<br/>
+    Moved into AixLib
+  </li>
+  <li>
+    <i>March 25, 2015&#160;</i> by Ana Constantin:<br/>
+    Uses components from MSL
+  </li>
+  <li>
+    <i>November 06, 2014&#160;</i> by Ana Constantin:<br/>
+    Added documentation.
+  </li>
 </ul>
 </html>",
-      info="<html>
-<h4><span style=\"color:#008000\">Overview</span></h4>
-<p>Model for a panel heating element, consisting of a water volume, heat conduction upwards and downwards through the wall layers, convection and radiation exchange at the room facing side.</p>
+      info="<html><h4>
+  <span style=\"color:#008000\">Overview</span>
+</h4>
+<p>
+  Model for a panel heating element, consisting of a water volume, heat
+  conduction upwards and downwards through the wall layers, convection
+  and radiation exchange at the room facing side.
+</p>
 </html>"));
 end PanelHeatingSegment;

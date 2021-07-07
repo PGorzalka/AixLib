@@ -3,7 +3,7 @@ model Humidifier_u
   extends Modelica.Icons.Example;
 
  package Medium = AixLib.Media.Air;
- parameter Modelica.SIunits.MassFlowRate mWat_flow_nominal = 0.001
+  parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal=0.001
     "Nominal water mass flow rate";
   Humidifier hea1(redeclare package Medium =
         Medium,
@@ -546,7 +546,7 @@ equation
           extent={{-198,-4},{-6,-38}},
           lineColor={0,0,255},
           textString="Same models as above, but flow is reversed")}),
-experiment(Tolerance=1e-6, StopTime=3600),
+experiment(Tolerance=1e-7, StopTime=3600),
 __Dymola_Commands(file="modelica://AixLib/Resources/Scripts/Dymola/Fluid/Interfaces/Examples/Humidifier_u.mos"
         "Simulate and plot"),
 Documentation(info="<html>

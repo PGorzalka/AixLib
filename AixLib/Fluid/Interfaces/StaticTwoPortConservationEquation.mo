@@ -29,11 +29,7 @@ model StaticTwoPortConservationEquation
     annotation (Placement(transformation(extent={{-140,-60},{-100,-20}})));
 
   // Outputs that are needed in models that extend this model
-  Modelica.Blocks.Interfaces.RealOutput hOut(unit="J/kg",
-                                             start=Medium.specificEnthalpy_pTX(
-                                                     p=Medium.p_default,
-                                                     T=Medium.T_default,
-                                                     X=Medium.X_default))
+  Modelica.Blocks.Interfaces.RealOutput hOut(final unit="J/kg")
     "Leaving specific enthalpy of the component"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=90,
@@ -68,7 +64,7 @@ protected
 
   Real m_flowInv(unit="s/kg") "Regularization of 1/m_flow of port_a";
 
-  Modelica.SIunits.MassFlowRate mXi_flow[Medium.nXi]
+  Modelica.Units.SI.MassFlowRate mXi_flow[Medium.nXi]
     "Mass flow rates of independent substances added to the medium";
 
   // Parameters for inverseXRegularized.
@@ -99,10 +95,10 @@ protected
       p=Medium.p_default,
       X=Medium.X_default[1:Medium.nXi]) "Medium state at default values";
   // Density at medium default values, used to compute the size of control volumes
-  final parameter Modelica.SIunits.SpecificHeatCapacity cp_default=
-    Medium.specificHeatCapacityCp(state=state_default)
+  final parameter Modelica.Units.SI.SpecificHeatCapacity cp_default=
+      Medium.specificHeatCapacityCp(state=state_default)
     "Specific heat capacity, used to verify energy conservation";
-  constant Modelica.SIunits.TemperatureDifference dTMax(min=1) = 200
+  constant Modelica.Units.SI.TemperatureDifference dTMax(min=1) = 200
     "Maximum temperature difference across the StaticTwoPortConservationEquation";
   // Conditional connectors
   Modelica.Blocks.Interfaces.RealInput mWat_flow_internal(unit="kg/s")
@@ -339,6 +335,13 @@ AixLib.Fluid.Interfaces.ConservationEquation</a>.
 </html>",
 revisions="<html>
 <ul>
+<li>
+September 18, 2020, by Michael Wetter:<br/>
+Removed start value for <code>hOut</code> as it will be set by
+<a href=\"modelica://AixLib.Fluid.MixingVolumes.BaseClasses.PartialMixingVolume\">
+AixLib.Fluid.MixingVolumes.BaseClasses.PartialMixingVolume</a>.<br/>
+See <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1397\">#1397</a>.
+</li>
 <li>
 February 12, 2019, by Filip Jorissen:<br/>
 Removed obsolete division by <code>TMax</code> in assert.<br/>
