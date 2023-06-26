@@ -18,6 +18,7 @@ LimiterCeilingHeight
 LimiterHorizontalInfraredIrradiation
 LimiterOpaqueSkyCover
 LimiterRelativeHumidity
+LimiterTerrestriallInfraredIrradiation
 LimiterTotalSkyCover
 LimiterWindDirection
 LimiterWindSpeed
