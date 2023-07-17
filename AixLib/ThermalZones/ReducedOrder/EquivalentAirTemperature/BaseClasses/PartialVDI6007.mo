@@ -4,7 +4,7 @@ partial model PartialVDI6007
 
   parameter Modelica.Units.SI.Emissivity aExt
     "Coefficient of absorption of exterior walls (outdoor)";
-  parameter Integer n "Number of orientations (without ground)";
+  parameter Integer n(min=2) "Number of orientations (without ground)";
   parameter Real wfWall[n](each final unit="1") "Weight factors of the walls";
   parameter Real wfWin[n](each final unit="1") "Weight factors of the windows";
   parameter Real wfGro(unit="1")
@@ -22,12 +22,17 @@ partial model PartialVDI6007
   parameter Boolean TGroundFromInput=false
     "Set to true to use TGro_in input connector instead of TGro constant"
     annotation(choices(checkBox = true));
+  parameter Boolean useTTerIR=false
+    "Set to true to include terrestrial temperature for longwave radiation"
+    annotation(choices(checkBox = true), Dialog(enable=withLongwave));
+  parameter Modelica.Units.SI.Angle orientations[n]=fill(0.0,n)
+    "Tilt for each orientation in rad (0: horizontal facing upwards, pi/2: vertical)";
 
   Modelica.Units.SI.Temperature TEqWall[n] "Equivalent wall temperature";
   Modelica.Units.SI.Temperature TEqWin[n] "Equivalent window temperature";
-  Modelica.Units.SI.TemperatureDifference delTEqLW
+  Modelica.Units.SI.TemperatureDifference delTEqLW[n]
     "Equivalent long wave temperature";
-  Modelica.Units.SI.TemperatureDifference delTEqLWWin
+  Modelica.Units.SI.TemperatureDifference delTEqLWWin[n]
     "Equivalent long wave temperature for windows";
   Modelica.Units.SI.TemperatureDifference delTEqSW[n]
     "Equivalent short wave temperature";
@@ -77,6 +82,15 @@ partial model PartialVDI6007
         origin={0,-120})));
 
 
+  Modelica.Blocks.Interfaces.RealInput TTerIR[n](
+    final quantity="ThermodynamicTemperature",
+    final unit="K",
+    displayUnit="degC") if useTTerIR "Black-body terrestrial temperature"
+    annotation (Placement(transformation(
+        extent={{-20,-20},{20,20}},
+        rotation=0,
+        origin={-120,-30})));
+
 protected
   SourceSelector TGroSouSel(final useInput=TGroundFromInput, p=TGro)
     "Input selector for ground temperature" annotation (Placement(
@@ -84,6 +98,11 @@ protected
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={8,-40})));
+  Modelica.Blocks.Logical.Switch switchTTerIR[n]
+    "gives TTerIR if true, otherwise replaces it by TBlaSky"
+    annotation (Placement(transformation(extent={{-70,-28},{-50,-8}})));
+  Modelica.Blocks.Sources.BooleanExpression useTTerIRSource[n](each y=useTTerIR)
+    annotation (Placement(transformation(extent={{-92,-24},{-80,-12}})));
 
 initial equation
   assert(noEvent(abs(sum(wfWall) + sum(wfWin) + wfGro) > 0.1),
@@ -93,10 +112,14 @@ initial equation
     irrelevant.",level=AssertionLevel.warning);
 
 equation
-  delTEqLW=(TBlaSky - TDryBul)*hRad/(hRad + hConWallOut);
+  for i in 1:n loop
+    delTEqLW[i]=(TBlaSky * (1+cos(orientations[i]))/2
+                 + switchTTerIR[i].y .* (1-cos(orientations[i]))/2
+                 - TDryBul)*hRad/(hRad + hConWallOut);
+  end for;
   delTEqSW=HSol*aExt/(hRad + hConWallOut);
   if withLongwave then
-    TEqWin=TDryBul.+delTEqLWWin*(ones(n)-sunblind);
+    TEqWin=TDryBul.+delTEqLWWin.*(ones(n)-sunblind);
     TEqWall=TDryBul.+delTEqLW.+delTEqSW;
   else
     TEqWin=TDryBul*ones(n);
@@ -105,6 +128,15 @@ equation
 
   connect(TGro_in, TGroSouSel.uCon)
     annotation (Line(points={{0,-120},{0,-51}}, color={0,0,127}));
+  connect(TTerIR, switchTTerIR.u1) annotation (Line(points={{-120,-30},{-98,-30},
+          {-98,-10},{-72,-10}}, color={0,0,127}));
+  for i in 1:n loop
+    connect(TBlaSky, switchTTerIR[i].u3) annotation (Line(points={{-120,0},{-100,
+            0},{-100,-26},{-72,-26}},
+                                  color={0,0,127}));
+  end for;
+  connect(useTTerIRSource.y, switchTTerIR.u2)
+    annotation (Line(points={{-79.4,-18},{-72,-18}}, color={255,0,255}));
   annotation (  Icon(coordinateSystem(preserveAspectRatio=false,
   extent={{-100,-100},{100,100}}),
   graphics={

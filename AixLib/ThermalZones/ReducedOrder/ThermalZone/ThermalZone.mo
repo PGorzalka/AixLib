@@ -105,6 +105,8 @@ model ThermalZone "Thermal zone containing moisture balance"
     final hConWallOut=zoneParam.hConWallOut,
     final hRad=zoneParam.hRadWall,
     TGroundFromInput=true,
+    useTTerIR=true,
+    orientations=zoneParam.tiltExtWall,
     final hConWinOut=zoneParam.hConWinOut,
     final aExt=zoneParam.aExt) if (sum(zoneParam.AExt) + sum(zoneParam.AWin)) > 0
     "Computes equivalent air temperature"
@@ -118,8 +120,8 @@ model ThermalZone "Thermal zone containing moisture balance"
     final hConWallOut=zoneParam.hConRoofOut,
     final hRad=zoneParam.hRadRoof,
     final wfWin=fill(0, zoneParam.nOrientationsRoof),
-    TGroundFromInput=true) if
-                          zoneParam.ARoof > 0
+    TGroundFromInput=true,
+    useTTerIR=true) if    zoneParam.ARoof > 0
     "Computes equivalent air temperature for roof"
     annotation (Placement(transformation(extent={{-40,66},{-28,78}})));
   Modelica.Blocks.Sources.Constant constSunblindRoof[zoneParam.nOrientationsRoof](
@@ -561,6 +563,15 @@ equation
         string="%second",
         index=1,
         extent={{6,3},{6,3}}));
+    connect(weaBus.TTerIR, eqAirTempWall.TTerIR[i]) annotation (Line(
+      points={{-100,34},{-86,34},{-86,10},{-60,10},{-60,14},{-50,14},{-50,14.2},
+            {-39.2,14.2}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   end for;
   for i in 1:zoneParam.nOrientationsRoof loop
     connect(weaBus, HDifTilRoof[i].weaBus) annotation (Line(
@@ -577,6 +588,15 @@ equation
         string="%first",
         index=-1,
         extent={{-6,3},{-6,3}}));
+    connect(weaBus.TTerIR, eqAirTempRoof.TTerIR[i]) annotation (Line(
+      points={{-100,34},{-86,34},{-86,60},{-46,60},{-46,70},{-44,70},{-44,70.2},
+          {-41.2,70.2}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   end for;
   connect(preTemWall.port, theConWall.fluid) annotation (Line(points={{-10,20},{
           18,20},{18,19},{16,19}}, color={191,0,0}));
@@ -828,6 +848,7 @@ end if;
   connect(TSoil.TGroundOut, eqAirTempRoof.TGro_in) annotation (Line(points={{43.4,
           19.6},{48,19.6},{48,28},{36,28},{36,62},{-34,62},{-34,64.8}}, color={0,
           0,127}));
+
   annotation (Documentation(revisions="<html><ul>
   <li>April 20, 2023, by Philip Groesdonk:<br/>
   Added five element RC model (for heat exchange with neighboured zones) and

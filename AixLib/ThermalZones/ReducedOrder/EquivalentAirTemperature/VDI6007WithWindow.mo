@@ -20,7 +20,11 @@ initial equation
    Normally, the sum should be 1.",level=AssertionLevel.warning);
 
 equation
-  delTEqLWWin=(TBlaSky - TDryBul)*hRad/(hRad + hConWinOut);
+  for i in 1:n loop
+    delTEqLWWin[i]=(TBlaSky * (1+cos(orientations[i]))/2
+                    + switchTTerIR[i].y .* (1-cos(orientations[i]))/2
+                    - TDryBul)*hRad/(hRad + hConWinOut);
+  end for;
   TEqAir = TEqWall*wfWall + TGroSouSel.y*wfGro;
   TEqAirWin = TEqWin*wfWin;
   annotation (defaultComponentName = "equAirTem",Documentation(revisions="<html>

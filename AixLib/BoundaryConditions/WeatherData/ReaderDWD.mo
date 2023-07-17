@@ -25,6 +25,12 @@ block ReaderDWD "Reader for DWD-sourced weather files"
 
   Bus weaBus "Weather data bus" annotation (Placement(transformation(extent={{88,-10},
             {108,10}}),          iconTransformation(extent={{190,-10},{210,10}})));
+  Modelica.Blocks.Math.Gain gain(k=1/(0.93*Modelica.Constants.sigma))
+    annotation (Placement(transformation(extent={{58,-16},{64,-10}})));
+  Modelica.Blocks.Math.Sqrt sqrt1
+    annotation (Placement(transformation(extent={{68,-16},{74,-10}})));
+  Modelica.Blocks.Math.Sqrt sqrt2
+    annotation (Placement(transformation(extent={{76,-16},{82,-10}})));
 protected
   final parameter Modelica.Units.SI.Time[2] timeSpan=
       AixLib.BoundaryConditions.WeatherData.BaseClasses.getTimeSpanTMY3(filNam,
@@ -57,17 +63,17 @@ protected
     verboseRead=false,
     final smoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative,
     final columns={31})                   "Data reader"
-    annotation (Placement(transformation(extent={{-14,-42},{6,-22}})));
+    annotation (Placement(transformation(extent={{-24,-40},{-4,-20}})));
   Modelica.Blocks.Math.Gain conTerRad(final k=-1)
     "Convert the terrestrial infrared radiation from downwards to upwards"
-    annotation (Placement(transformation(extent={{20,-42},{40,-22}})));
+    annotation (Placement(transformation(extent={{4,-40},{24,-20}})));
   BaseClasses.ConvertTime                                       conTim(final
       weaDatStaTim=timeSpan[1], final weaDatEndTim=timeSpan[2])
     "Convert simulation time to calendar time"
-    annotation (Placement(transformation(extent={{-44,-42},{-24,-22}})));
+    annotation (Placement(transformation(extent={{-52,-40},{-32,-20}})));
   BaseClasses.LimiterTerrestriallInfraredIrradiation limTerRad
     "Limits the terrestrial infrared irradiation"
-    annotation (Placement(transformation(extent={{50,-42},{70,-22}})));
+    annotation (Placement(transformation(extent={{32,-40},{52,-20}})));
 equation
   connect(modTim.y,add30Min. u2) annotation (Line(points={{-69,46},{-58,46},{-58,
           66},{-52,66}},    color={0,0,127}));
@@ -89,21 +95,33 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(conTerRad.u,datRea.y[1]) annotation (Line(points={{18,-32},{7,-32}},
+  connect(conTerRad.u,datRea.y[1]) annotation (Line(points={{2,-30},{-3,-30}},
                               color={0,0,127}));
   connect(conTim.calTim,datRea.u) annotation (Line(
-      points={{-23,-32},{-16,-32}},
+      points={{-31,-30},{-26,-30}},
       color={0,0,127}));
   connect(modTim.y, conTim.modTim) annotation (Line(points={{-69,46},{-58,46},{-58,
-          -32},{-46,-32}}, color={0,0,127}));
-  connect(limTerRad.HTerIR, weaBus.HTerIR) annotation (Line(points={{71,-32},{
-          78,-32},{78,0},{98,0}}, color={0,0,127}), Text(
+          -30},{-54,-30}}, color={0,0,127}));
+  connect(limTerRad.HTerIR, weaBus.HTerIR) annotation (Line(points={{53,-30},{88,
+          -30},{88,0},{98,0}},    color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(conTerRad.y, limTerRad.u)
-    annotation (Line(points={{41,-32},{48,-32}}, color={0,0,127}));
+    annotation (Line(points={{25,-30},{30,-30}}, color={0,0,127}));
+  connect(gain.u, limTerRad.HTerIR) annotation (Line(points={{57.4,-13},{57.4,-30},
+          {53,-30}}, color={0,0,127}));
+  connect(gain.y, sqrt1.u)
+    annotation (Line(points={{64.3,-13},{67.4,-13}}, color={0,0,127}));
+  connect(sqrt1.y, sqrt2.u)
+    annotation (Line(points={{74.3,-13},{75.4,-13}}, color={0,0,127}));
+  connect(sqrt2.y, weaBus.TTerIR) annotation (Line(points={{82.3,-13},{86,-13},{
+          86,-12},{88,-12},{88,0},{98,0}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end ReaderDWD;
