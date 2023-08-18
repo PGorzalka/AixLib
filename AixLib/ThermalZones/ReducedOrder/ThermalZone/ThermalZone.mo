@@ -106,7 +106,7 @@ model ThermalZone "Thermal zone containing moisture balance"
     final hRad=zoneParam.hRadWall,
     TGroundFromInput=true,
     useTTerIR=true,
-    orientations=zoneParam.tiltExtWall,
+    orientations=zoneParam.tiltExtWalls,
     final hConWinOut=zoneParam.hConWinOut,
     final aExt=zoneParam.aExt) if (sum(zoneParam.AExt) + sum(zoneParam.AWin)) > 0
     "Computes equivalent air temperature"
