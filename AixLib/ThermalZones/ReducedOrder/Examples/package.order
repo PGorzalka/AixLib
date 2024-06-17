@@ -9,6 +9,7 @@ SimpleRoomFourElementsTraceSubstance
 SimpleRoomOneElement
 SimpleRoomThreeElements
 SimpleRoomTwoElements
+SimpleRoomTwoElementsNonConstantTGround
 ThermalZone
 ThermalZoneAirExchange
 ThermalZoneMoistAir

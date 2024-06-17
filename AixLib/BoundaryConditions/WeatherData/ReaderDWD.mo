@@ -8,7 +8,7 @@ block ReaderDWD "Reader for DWD-sourced weather files"
   ReaderTMY3 weaDat(
     filNam=filNam,
     computeWetBulbTemperature=false,
-    pAtmSou=AixLib.BoundaryConditions.Types.DataSource.File,
+    pAtmSou=AixLib.BoundaryConditions.Types.DataSource.Parameter,
     TDryBulSou=AixLib.BoundaryConditions.Types.DataSource.File,
     TDewPoiSou=AixLib.BoundaryConditions.Types.DataSource.Parameter,
     TBlaSkySou=AixLib.BoundaryConditions.Types.DataSource.File,

@@ -11,7 +11,9 @@ partial model PartialVDI6007
     "Weight factor of the ground (0 if not considered)";
   parameter Modelica.Units.SI.Temperature TGro
     "Constant temperature of the ground in contact with floor plate"
-    annotation(Dialog(enable=not TGroundFromInput));
+    annotation (
+      HideResult=TGroundFromInput,
+      Dialog(enable=not TGroundFromInput));
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer hConWallOut
     "Exterior walls convective coefficient of heat transfer (outdoor)";
   parameter Modelica.Units.SI.CoefficientOfHeatTransfer hRad
@@ -27,6 +29,7 @@ partial model PartialVDI6007
     annotation(choices(checkBox = true), Dialog(enable=withLongwave));
   parameter Modelica.Units.SI.Angle orientations[n]=fill(0.0,n)
     "Tilt for each orientation in rad (0: horizontal facing upwards, pi/2: vertical)";
+
 
   Modelica.Units.SI.Temperature TEqWall[n] "Equivalent wall temperature";
   Modelica.Units.SI.Temperature TEqWin[n] "Equivalent window temperature";
@@ -81,7 +84,6 @@ partial model PartialVDI6007
         rotation=90,
         origin={0,-120})));
 
-
   Modelica.Blocks.Interfaces.RealInput TTerIR[n](
     final quantity="ThermodynamicTemperature",
     final unit="K",
@@ -93,11 +95,7 @@ partial model PartialVDI6007
 
 protected
   SourceSelector TGroSouSel(final useInput=TGroundFromInput, p=TGro)
-    "Input selector for ground temperature" annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={8,-40})));
+    "Input selector for ground temperature";
   Modelica.Blocks.Logical.Switch switchTTerIR[n]
     "gives TTerIR if true, otherwise replaces it by TBlaSky"
     annotation (Placement(transformation(extent={{-70,-28},{-50,-8}})));
@@ -107,9 +105,9 @@ protected
 initial equation
   assert(noEvent(abs(sum(wfWall) + sum(wfWin) + wfGro) > 0.1),
  "The sum of the weighting factors (walls,windows and ground) in the
-    equivalent air temperature calculation is close to 0.
-    If there are no walls, windows and ground at all, this might be
-    irrelevant.",level=AssertionLevel.warning);
+   equivalent air temperature calculation is close to 0.
+   If there are no walls, windows and ground at all, this might be
+   irrelevant.", level=AssertionLevel.warning);
 
 equation
   for i in 1:n loop
@@ -126,8 +124,7 @@ equation
     TEqWall=TDryBul.+delTEqSW;
   end if;
 
-  connect(TGro_in, TGroSouSel.uCon)
-    annotation (Line(points={{0,-120},{0,-51}}, color={0,0,127}));
+  connect(TGro_in, TGroSouSel.uCon);
   connect(TTerIR, switchTTerIR.u1) annotation (Line(points={{-120,-30},{-98,-30},
           {-98,-10},{-72,-10}}, color={0,0,127}));
   for i in 1:n loop
@@ -171,44 +168,44 @@ equation
   Line(points={{2,-78},{32,-48},{100,-48}}, color={0,0,0}),
   Line(points={{32,20},{32,-48}}, color={0,0,0})}),
   Documentation(info="<html>
-   <p><code>PartialVDI6007</code> is a partial model for <code>EquivalentAirTemperature</code>
-   models.</p>
-   </html>",
+  <p><code>PartialVDI6007</code> is a partial model for <code>EquivalentAirTemperature</code>
+  models.</p>
+  </html>",
   revisions="<html>
-   <ul>
-   <li>
-   May 5, 2023, by Philip Groesdonk:<br/>
-   Added an option for non-constant ground temperature from an input connector.
-   This is for
-   <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1744\">#1744</a>.
-   </li>
-   <li>
-   July 11, 2019, by Katharina Brinkmann:<br/>
-   Renamed <code>alphaRad</code> to <code>hRad</code>,
-   <code>alphaWinOut</code> to <code>hConWallOut</code>
-   </li>
-   <li>
-   September 26, 2016, by Moritz Lauster:<br/>
-   Removed deprecated parameters and values
-   0.93 and <code>eExt</code>.<br/>
-   Renamed <code>alphaRadWall</code> to
-   <code>alphaRad</code>. Deleted
-   <code>alphaRadWin</code>.<br/>
-   Moved calculations from
-   <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007\">
-   AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007</a> and
-   <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007WithWindow\">
-   AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007WithWindow</a> to here.
-   </li>
-   <li>
-   September 2015, by Moritz Lauster:<br/>
-   Got rid of cardinality and used assert for warnings.<br/>
-   Adapted to Annex 60 requirements.
-   </li>
-   <li>
-   October 2014, by Peter Remmen:<br/>
-   Implemented.
-   </li>
-   </ul>
- </html>"));
+  <ul>
+  <li>
+  May 5, 2023, by Philip Groesdonk:<br/>
+  Added an option for non-constant ground temperature from an input connector.
+  This is for
+  <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1744\">#1744</a>.
+  </li>
+  <li>
+  July 11, 2019, by Katharina Brinkmann:<br/>
+  Renamed <code>alphaRad</code> to <code>hRad</code>,
+  <code>alphaWinOut</code> to <code>hConWallOut</code>
+  </li>
+  <li>
+  September 26, 2016, by Moritz Lauster:<br/>
+  Removed deprecated parameters and values
+  0.93 and <code>eExt</code>.<br/>
+  Renamed <code>alphaRadWall</code> to
+  <code>alphaRad</code>. Deleted
+  <code>alphaRadWin</code>.<br/>
+  Moved calculations from
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007\">
+  AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007</a> and
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007WithWindow\">
+  AixLib.ThermalZones.ReducedOrder.EquivalentAirTemperature.VDI6007WithWindow</a> to here.
+  </li>
+  <li>
+  September 2015, by Moritz Lauster:<br/>
+  Got rid of cardinality and used assert for warnings.<br/>
+  Adapted to Annex 60 requirements.
+  </li>
+  <li>
+  October 2014, by Peter Remmen:<br/>
+  Implemented.
+  </li>
+  </ul>
+</html>"));
 end PartialVDI6007;
