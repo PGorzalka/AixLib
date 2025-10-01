@@ -12,12 +12,19 @@ partial model PartialMultizone "Partial model for multizone models"
     "Total surface area of building walls and windows (including interior walls)";
   parameter Integer numZones(min=1)
     "Number of zones";
-  parameter AixLib.DataBase.ThermalZones.ZoneBaseRecord zoneParam[:]
+  parameter Integer nZonCon(min=0) = 1
+    "Actual number of adjacent zone connectors";
+  parameter Integer zonConPaiArr[max(nZonCon, 1),2]=fill(1, max(nZonCon, 1), 2)
+    "List of pairs of interzonal element indices to connect, each index pointing to a concatenated array of all ThermalZones' interzonal element ports";
+  replaceable parameter AixLib.DataBase.ThermalZones.ZoneBaseRecord zoneParam[numZones]
     "Setup for zones" annotation (choicesAllMatching=false);
-  parameter Integer nPorts=0
-    "Number of fluid ports"
-    annotation(Evaluate=true,
+
+  parameter Integer nPorts = 0
+    "Number of fluid ports"  annotation(Evaluate=true,
     Dialog(connectorSizing=true, tab="General",group="Ports"));
+
+  parameter Boolean use_izeCon=false
+    "Consider heat flow connection between interzonal elements of thermal zones by setting true";
   parameter Boolean use_MechanicalAirExchange=true
     "Consider mechanical ventilation by setting true";
   parameter Boolean use_NaturalAirExchange=use_MechanicalAirExchange
@@ -54,14 +61,14 @@ partial model PartialMultizone "Partial model for multizone models"
     extent={{-10,-10},{10,10}},
     rotation=90,
     origin={60,-110})));
-  Modelica.Blocks.Interfaces.RealOutput TAir[size(zone, 1)](
+  Modelica.Blocks.Interfaces.RealOutput TAir[numZones](
     each final quantity="ThermodynamicTemperature",
     each final unit="K",
     each displayUnit="degC") if ASurTot > 0 or VAir > 0
     "Indoor air temperature"
     annotation (Placement(transformation(extent={{100,71},{120,91}}),
         iconTransformation(extent={{80,19},{100,40}})));
-  Modelica.Blocks.Interfaces.RealOutput TRad[size(zone, 1)](
+  Modelica.Blocks.Interfaces.RealOutput TRad[numZones](
     each final quantity="ThermodynamicTemperature",
     each final unit="K",
     each displayUnit="degC") if ASurTot > 0
@@ -73,13 +80,13 @@ partial model PartialMultizone "Partial model for multizone models"
     annotation (Placement(
     transformation(extent={{-117,53},{-83,85}}), iconTransformation(
     extent={{-90,30},{-70,50}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsConv[size(zone, 1)] if
-       ASurTot > 0 or VAir > 0
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsConv[size(zone, 1)]
+    if ASurTot > 0 or VAir > 0
     "Convective internal gains"
     annotation (Placement(transformation(extent={{-110,-80},{-90,-60}}),
         iconTransformation(extent={{-90,-92},{-70,-72}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsRad[size(zone, 1)] if
-       ASurTot > 0 "Radiative internal gains"
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsRad[size(zone, 1)]
+    if ASurTot > 0 "Radiative internal gains"
     annotation (Placement(transformation(extent={{-110,-30},{-90,-50}}),
         iconTransformation(extent={{-90,-60},{-70,-40}})));
   AixLib.ThermalZones.ReducedOrder.ThermalZone.ThermalZone zone[numZones](
@@ -104,6 +111,7 @@ partial model PartialMultizone "Partial model for multizone models"
     final zoneParam=zoneParam,
     redeclare each final model corG = corG,
     each final internalGainsMode=internalGainsMode,
+    redeclare package MediumPoolWater = MediumPoolWater,
     each final nPorts=nPorts,
     each final energyDynamics=energyDynamics,
     each final massDynamics=massDynamics,
@@ -148,6 +156,14 @@ partial model PartialMultizone "Partial model for multizone models"
       group="Cooler",
       enable=not recOrSep));
 
+
+  //Swimming pool params
+  parameter Boolean use_pools_tot = false "use swimming pools within at least one zone of the multizone" annotation(Dialog(tab="Moisture", group="Pools"));
+  replaceable package MediumPoolWater = Media.Water annotation (choices(choice(redeclare
+          package Medium =
+            AixLib.Media.Water
+              "Water")), Dialog(enable=use_pools_tot,tab="Moisture", group="Pools"));
+
   Modelica.Blocks.Interfaces.RealInput TSetHeat[numZones](
     each final quantity="ThermodynamicTemperature",
     each final unit="K",
@@ -160,6 +176,8 @@ partial model PartialMultizone "Partial model for multizone models"
     extent={{10,-10},{-10,10}},
     rotation=270,
     origin={-52,-110})));
+
+
   Modelica.Blocks.Interfaces.RealInput TSetCool[numZones](
     each final quantity="ThermodynamicTemperature",
     each final unit="K",
@@ -186,9 +204,23 @@ partial model PartialMultizone "Partial model for multizone models"
     extent={{80,-100},{100,-80}})));
   Modelica.Blocks.Interfaces.RealOutput QIntGains_flow[numZones,3](each final
       quantity="HeatFlowRate", each final unit="W") if ASurTot > 0 or VAir > 0
-    "Heat flow based on internal gains for each zone from persons, machines, and light"
+    "Heat flow based on internal gains for each zone from lights[1], machines[2], and persons[3]"
                         annotation (Placement(transformation(extent={{100,-90},{
             120,-70}}), iconTransformation(extent={{80,-100},{100,-80}})));
+  Modelica.Blocks.Interfaces.RealInput timeOpe
+    if use_moisture_balance and use_pools_tot
+    "Input profiles for opening hours for pools" annotation (Placement(
+        transformation(extent={{-20,-20},{20,20}},
+        rotation=90,
+        origin={42,-102}),
+        iconTransformation(extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={38,-110})));
+  AixLib.ThermalZones.ReducedOrder.Multizone.BaseClasses.FlowArrayRearranging
+    izeArrCon(nCon=max(nZonCon, 1), conPaiArr=zonConPaiArr)
+    if numZones > 1 and use_izeCon and nZonCon > 0
+    "Distributor for connection between adjacent zones" annotation (Placement(
+        transformation(extent={{-4,-4},{4,4}})));
 equation
   // if ASurTot or VAir < 0 PHeater and PCooler are set to dummy value zero
   if not (ASurTot > 0 or VAir > 0) then
@@ -230,12 +262,18 @@ equation
     end for;
   end if;
 
-
-
+  // connect heat flow between zones
+  if numZones > 1 and use_izeCon and nZonCon > 0 then
+    for i in 1:numZones loop
+      connect(zone[i].izeHeaFlow[1:zoneParam[i].nIze], izeArrCon.splPor[
+        sum(zoneParam[1:i - 1].nIze) + 1:(sum(zoneParam[1:i - 1].nIze) +
+        zoneParam[i].nIze)]);
+    end for;
+  end if;
 
   for i in 1:numZones loop
     connect(intGains[(i*3) - 2], zone[i].intGains[1]) annotation (Line(
-        points={{76,-100},{76,50.64},{75.8,50.64}},
+        points={{76,-100},{76,51.46},{75.8,51.46}},
         color={0,0,127},
         smooth=Smooth.None));
     connect(intGains[(i*3) - 1], zone[i].intGains[2]);
@@ -247,24 +285,11 @@ equation
       string="%second",
       index=1,
       extent={{6,3},{6,3}}));
-
-    // connect neighboured zone with higher index to this NZ, making sure that
-    // multiple NZ borders between two zones are connected in the same order
-    if sum(zoneParam[i].ANZ) > 0 then
-      for i_i in 1:zoneParam[i].nNZs loop
-        for j in i:numZones loop
-          if sum(zoneParam[j].ANZ) > 0 and zoneParam[i].otherNZIndex[i_i] == j then
-            for j_i in 1:zoneParam[j].nNZs loop
-              if zoneParam[j].otherNZIndex[j_i] == i then
-                if sum({if o == i then 1 else 0 for o in zoneParam[j].otherNZIndex[1:j_i]}) == sum({if o == j then 1 else 0 for o in zoneParam[i].otherNZIndex[1:i_i]}) then
-                  connect(zone[i].nzHeatFlow[i_i], zone[j].nzHeatFlow[j_i]) annotation (Line(points={{80,85.9},
-                          {90,85.9},{90,88},{86,88},{86,85.9},{80,85.9}},                                                                     color={191,0,0}));
-                end if;
-              end if;
-            end for;
-          end if;
-        end for;
-      end for;
+    if zone[i].use_pools then
+      connect(timeOpe,zone[i].timeOpe) annotation (Line(
+        points={{42,-102},{42,52.28},{44.3,52.28}},
+        color={0,0,127},
+        smooth=Smooth.None));
     end if;
   end for;
   connect(zone.intGainsConv, intGainsConv) annotation (Line(points={{80.42,70.32},
@@ -323,6 +348,10 @@ equation
           fillColor={95,95,95},
           fillPattern=FillPattern.Solid)}),
     Documentation(revisions="<html><ul>
+  <li>November 3, 2024, by Philip Groesdonk:<br/>
+    Added interzonal connections. This is for <a href=
+    \"https://github.com/RWTH-EBC/AixLib/issues/1080\">issue 1080</a>.
+  </li>
   <li>September 27, 2016, by Moritz Lauster:<br/>
     Reimplementation based on Annex60 and AixLib models.
   </li>

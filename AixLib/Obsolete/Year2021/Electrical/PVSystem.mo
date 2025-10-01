@@ -1,4 +1,4 @@
-within AixLib.Obsolete.Year2021.Electrical;
+﻿within AixLib.Obsolete.Year2021.Electrical;
 package PVSystem
 
   model PVSystem "PVSystem"
@@ -15,7 +15,7 @@ package PVSystem
       annotation (Placement(transformation(extent={{-124,-12},{-100,14}}),
           iconTransformation(extent={{-136,-24},{-100,14}})));
 
-    Modelica.Blocks.Sources.RealExpression realExpression(y=IcTotalRad.I)
+    Modelica.Blocks.Sources.RealExpression realExpression(y=IcTotalRad.H)
       annotation (Placement(transformation(extent={{-96,-10},{-76,10}})));
   equation
 
@@ -428,7 +428,7 @@ package PVSystem
     model PVInverterRMS "Inverter model including system management"
       extends AixLib.Obsolete.BaseClasses.ObsoleteModel;
 
-      parameter Modelica.Units.SI.Power uMax2
+      parameter Modelica.Units.SI.Power uMax2=3800
         "Upper limits of input signals (MaxOutputPower)";
      Modelica.Blocks.Interfaces.RealOutput PVPowerRmsW(
       final quantity="Power",

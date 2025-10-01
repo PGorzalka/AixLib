@@ -4,10 +4,20 @@ partial model PartialThermalZone "Partial model for thermal zone models"
 
   replaceable parameter DataBase.ThermalZones.ZoneBaseRecord zoneParam
     "Choose setup for this zone" annotation (choicesAllMatching=true);
-  parameter Integer nPorts=0
+  parameter Integer nPorts =  0
     "Number of fluid ports"
     annotation(Evaluate=true,
     Dialog(connectorSizing=true, tab="General",group="Ports"));
+   // Pool parameters
+   parameter Boolean use_pools = false
+    "If true, pool model and corresponding connections are enabled"
+  annotation(Dialog(tab="Moisture", group="Pools"));
+
+   final parameter Integer nPortsROM = if use_pools then nPorts + 2 else nPorts
+    "Number of fluid ports"
+    annotation(Evaluate=true,
+    Dialog(connectorSizing=true, tab="General",group="Ports"));
+
   parameter Boolean use_C_flow=false
     "Set to true to enable input connector for trace substance"
     annotation (Dialog(tab="CO2"));
@@ -50,8 +60,8 @@ partial model PartialThermalZone "Partial model for thermal zone models"
     "Auxilliary fluid inlets and outlets to indoor air volume"
     annotation (Placement(transformation(extent={{-49,-108},{49,-84}}),
         iconTransformation(extent={{-47,-84},{47,-60}})));
-  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsConv if
-    ATot > 0 or zoneParam.VAir > 0
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a intGainsConv
+ if ATot > 0 or zoneParam.VAir > 0
     "Convective internal gains"
     annotation (Placement(transformation(extent={{94,10},{114,30}}),
                               iconTransformation(extent={{92,-6},{112,14}})));
@@ -59,11 +69,11 @@ partial model PartialThermalZone "Partial model for thermal zone models"
     "Radiative internal gains"
     annotation (Placement(transformation(extent={{94,30},{114,50}}),
                             iconTransformation(extent={{92,24},{112,44}})));
-  RC.FiveElements ROM(
+  AixLib.ThermalZones.ReducedOrder.RC.FiveElements ROM(
     redeclare final package Medium = Medium,
     final use_moisture_balance=use_moisture_balance,
     final use_C_flow=use_C_flow,
-    final nPorts=nPorts,
+    final nPorts=nPortsROM,
     final VAir=if zoneParam.withAirCap then zoneParam.VAir else 0.0,
     final hRad=zoneParam.hRad,
     final nOrientations=size(zoneParam.AExt, 1),
@@ -96,16 +106,21 @@ partial model PartialThermalZone "Partial model for thermal zone models"
     final RRoof=zoneParam.RRoof,
     final RRoofRem=zoneParam.RRoofRem,
     final CRoof=zoneParam.CRoof,
-    final nNZs=zoneParam.nNZs,
-    final ANZ=zoneParam.ANZ,
-    final hConNZ=zoneParam.hConNZ,
-    final nNZ=zoneParam.nNZ,
-    final RNZ=zoneParam.RNZ,
-    final RNZRem=zoneParam.RNZRem,
-    final CNZ=zoneParam.CNZ,
-    final otherNZIndex=zoneParam.otherNZIndex,
-    final thisZoneIndex=zoneParam.thisZoneIndex,
+    final nIze=zoneParam.nIze,
+    final AIze=zoneParam.AIze,
+    final hConIze=zoneParam.hConIze,
+    final nIzeRC=zoneParam.nIzeRC,
+    final RIze=zoneParam.RIze,
+    final RIzeRem=zoneParam.RIzeRem,
+    final CIze=zoneParam.CIze,
+    final othZoneInd=zoneParam.othZoneInd,
+    final zoneInd=zoneParam.zoneInd,
     final energyDynamics=energyDynamics,
+    extWallRC(thermCapExt(each der_T(fixed=energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial))),
+    floorRC(thermCapExt(each der_T(fixed=energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial))),
+    intWallRC(thermCapInt(each der_T(fixed=energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial))),
+    roofRC(thermCapExt(each der_T(fixed=energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial))),
+    izeRC(extWalRC(thermCapExt(each der_T(fixed=energyDynamics == Modelica.Fluid.Types.Dynamics.FixedInitial)))),
     final p_start=p_start,
     final X_start=X_start,
     final T_start=T_start,
@@ -116,13 +131,12 @@ partial model PartialThermalZone "Partial model for thermal zone models"
 
 protected
   parameter Real ATot = (sum(zoneParam.AExt) + sum(zoneParam.AWin) +
-  zoneParam.AInt + zoneParam.ARoof+zoneParam.AFloor + sum(zoneParam.ANZ));
+  zoneParam.AInt + zoneParam.ARoof+zoneParam.AFloor + sum(zoneParam.AIze))
+                                                                          "Total area of elements in the zone";
 
 equation
   connect(ROM.TAir, TAir) annotation (Line(points={{87,90},{98,90},{98,80},{110,
           80}}, color={0,0,127}));
-  connect(ROM.ports, ports) annotation (Line(points={{77,56.05},{78,56.05},{78,
-          52},{58,52},{58,4},{0,4},{0,-96}},    color={0,127,255}));
   connect(ROM.intGainsConv, intGainsConv) annotation (Line(points={{86,78},{92,
           78},{92,20},{104,20}},
                                color={191,0,0}));
@@ -133,6 +147,12 @@ equation
   connect(ROM.intGainsRad, intGainsRad) annotation (Line(points={{86,82},{94,82},
           {94,40},{104,40}},
                            color={191,0,0}));
+
+  for i in 1:nPorts loop
+      connect(ROM.ports[i], ports[i]) annotation (Line(points={{77,56.05},{78,56.05},{78,
+          52},{58,52},{58,4},{0,4},{0,-96}},    color={0,127,255}));
+  end for;
+
   annotation(Icon(coordinateSystem(preserveAspectRatio=false,  extent={{-100,-100},
             {100,100}}),graphics={Text(extent={{
               -80,114},{92,64}},lineColor=

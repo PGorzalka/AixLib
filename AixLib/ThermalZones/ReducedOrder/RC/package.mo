@@ -18,7 +18,7 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   where simulation speed requirements, aggregation of multiple buildings
   and lack of data availability
   justify simpler models. However, this package allows users to
-  choose between models with one to five wall elements, and to define the
+  choose between models with one to four wall elements, and to define the
   number of RC-elements per wall for each wall. The latter can be done by setting
   <i>n<sub>k</sub></i>, which is the length of the vectors for resistances
   <i>R<sub>k</sub></i> and capacities <i>C<sub>k</sub></i>).
@@ -51,10 +51,10 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   <h4>Architecture</h4>
   <p>
   Each wall element uses either
-  <a href=\"AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ExteriorWall\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ExteriorWall\">
   AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ExteriorWall</a>
   or
-  <a href=\"AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.InteriorWall\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.InteriorWall\">
   AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.InteriorWall</a>
   to describe heat conduction and storage within the wall, depending if the wall
   contributes to heat transfer to the outdoor environment (exterior walls) or can
@@ -90,7 +90,7 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   The transmission of solar radiation through windows is split up into two parts.
   One part is connected to the indoor radiative heat exchange mesh network using
   a
-  <a href=\"AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter\">
   AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter</a>,
   while the other part is directly linked to the convective network. The split
   factor <code>ratioWinConRad </code> is a window property and depends on the
@@ -156,7 +156,7 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   temperature and thus of area as well, assuming that the temperature of the
   source is high compared to the wall surface temperatures.
   By using a
-  <a href=\"AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter\">
   AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.ThermSplitter</a>
   that distributes the heat flow of the source over the walls according to their
   area, we support this simplified approach. For solar radiation through windows,
@@ -164,7 +164,7 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   radiation is not taken into account for the distribution as such surfaces cannot
   be hit by the particular radiation. This calculation is performed for each
   orientation separately using
-  <a href=\"AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.splitFacVal\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.splitFacVal\">
   AixLib.ThermalZones.ReducedOrder.RC.BaseClasses.splitFacVal</a>.
   </p>
   </li>
@@ -184,7 +184,7 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   <p>
   The models in this package are typically used in combination with models from
   the parent package
-  <a href=\"AixLib.ThermalZones.ReducedOrder\">
+  <a href=\"modelica://AixLib.ThermalZones.ReducedOrder\">
   AixLib.ThermalZones.ReducedOrder</a>.
   A typical application is one building out of a large building stock for
   which the heating and cooling power over a year in hourly time steps should be
@@ -210,10 +210,6 @@ package RC "Package with reduced order thermal zones based on VDI 6007 Part 1"
   of the wall element if set to <code>true</code>. It can be used to add heat
   loads directly to a specific surface or to connect components that distribute
   radiation and have a specific surface temperature, e.g. a floor heating.
-  </p>
-  <p>
-  For borders to neighboured zones, one element per neighboured zone is created, 
-  which is why the R and C parameters have an additional array dimension.
   </p>
   <h4>Parameter calculation</h4>
   <p>To calculate parameters of all four models, the Python package TEASER <a

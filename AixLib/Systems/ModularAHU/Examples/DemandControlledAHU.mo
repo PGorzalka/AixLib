@@ -1,4 +1,4 @@
-﻿within AixLib.Systems.ModularAHU.Examples;
+within AixLib.Systems.ModularAHU.Examples;
 model DemandControlledAHU "Example for air handling unit with demand controlled ventilation"
   extends Modelica.Icons.Example;
 
@@ -23,15 +23,27 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
         parameterIso=AixLib.DataBase.Pipes.Insulation.Iso25pc(),
         length=1,
         Kv=10,
-        valveCharacteristic=AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0,0.13,0.205,0.566,0.813,0.88,0.91,0.95,1}, phi={0,0.001,0.002,0.176,0.60,0.75,0.97,0.98,1}), b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0,0.1,0.2,0.25,0.52,0.8,0.9,0.95,1}, phi={0,0.001,0.002,0.022,0.53,0.96,0.98,0.99,1})),
-        valve(use_inputFilter=true),
+        valveCharacteristic=
+            AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(
+            a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0,0.13,0.205,0.566,0.813,0.88,0.91,0.95,1},
+              phi={0,0.001,0.002,0.176,0.60,0.75,0.97,0.98,1}),
+            b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0,0.1,0.2,0.25,0.52,0.8,0.9,0.95,1},
+              phi={0,0.001,0.002,0.022,0.53,0.96,0.98,0.99,1})),
+        valve(use_strokeTime=true),
         pipe1(length=1.53),
         pipe2(length=0.54),
         pipe3(length=1.06),
-        pipe4(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(), length=0.48),
+        pipe4(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(),
+            length=0.48),
         pipe5(length=1.44, fac=16),
         pipe6(length=0.52),
-        redeclare HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled PumpInterface(pumpParam=AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN25_H1_8_V9(), calculatePower=true)),
+        redeclare
+          HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled
+          PumpInterface(pumpParam=
+              AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN25_H1_8_V9(),
+            calculatePower=true)),
       tau=90 + 70,
       T_amb=293.15,
       dynamicHX(
@@ -58,8 +70,15 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
         length=1,
         Kv=10,
         T_start=294.75,
-        valveCharacteristic=AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0,0.07,0.12,0.45,0.65,0.89,0.93,0.96,1}, phi={0,0.001,0.002,0.08,0.29,0.75,0.94,0.98,1}), b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0,0.1,0.2,0.26,0.52,0.8,0.9,0.95,1}, phi={0,0.001,0.002,0.05,0.45,0.96,0.98,0.99,1})),
-        valve(use_inputFilter=true),
+        valveCharacteristic=
+            AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(
+            a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0,0.07,0.12,0.45,0.65,0.89,0.93,0.96,1},
+              phi={0,0.001,0.002,0.08,0.29,0.75,0.94,0.98,1}),
+            b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0,0.1,0.2,0.26,0.52,0.8,0.9,0.95,1},
+              phi={0,0.001,0.002,0.05,0.45,0.96,0.98,0.99,1})),
+        valve(use_strokeTime=true),
         pipe1(
           T_start=283.15,
           parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_54x2(),
@@ -68,8 +87,13 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
         pipe3(length=0.9),
         pipe4(length=0.3),
         pipe5(length=2.95, fac=13),
-        pipe6(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_22x1_1(), length=0.5),
-        redeclare HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled PumpInterface(pumpParam=AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN32(), calculatePower=true)),
+        pipe6(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_22x1_1(),
+            length=0.5),
+        redeclare
+          HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled
+          PumpInterface(pumpParam=
+              AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN32(),
+            calculatePower=true)),
       T_start=293.65,
       tau=90,
       T_amb=296.65,
@@ -89,15 +113,30 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
         parameterIso=AixLib.DataBase.Pipes.Insulation.Iso25pc(),
         length=1,
         Kv=6.3,
-        valveCharacteristic=AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0.0,0.14,0.24,0.43,0.68,0.81,0.93,0.96,1.0}, phi={0.0,0.001,0.002,0.02,0.1,0.25,0.76,0.98,1.0}), b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(y={0.0,0.02,0.05,0.08,0.27,0.6,0.95,1.0}, phi={0.0,0.001,0.002,0.01,0.3,0.9,0.97,1.0})),
-        valve(use_inputFilter=false),
+        valveCharacteristic=
+            AixLib.Fluid.Actuators.Valves.Data.LinearEqualPercentage(
+            a_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0.0,0.14,0.24,0.43,0.68,0.81,0.93,0.96,1.0},
+              phi={0.0,0.001,0.002,0.02,0.1,0.25,0.76,0.98,1.0}),
+            b_ab=AixLib.Fluid.Actuators.Valves.Data.Generic(
+              y={0.0,0.02,0.05,0.08,0.27,0.6,0.95,1.0},
+              phi={0.0,0.001,0.002,0.01,0.3,0.9,0.97,1.0})),
+        valve(use_strokeTime=false),
         pipe1(length=2.8, fac=9),
-        pipe2(length=0.63, parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5()),
-        pipe3(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(), length=1.85),
-        pipe4(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(), length=0.4),
+        pipe2(length=0.63, parameterPipe=
+              AixLib.DataBase.Pipes.Copper.Copper_35x1_5()),
+        pipe3(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(),
+            length=1.85),
+        pipe4(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_35x1_5(),
+            length=0.4),
         pipe5(length=3.2, fac=10),
-        pipe6(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_16x1(), length=0.82),
-        redeclare HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled PumpInterface(pumpParam=AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN25_H1_8_V5(), calculatePower=true)),
+        pipe6(parameterPipe=AixLib.DataBase.Pipes.Copper.Copper_16x1(), length=
+              0.82),
+        redeclare
+          HydraulicModules.BaseClasses.PumpInterface_PumpSpeedControlled
+          PumpInterface(pumpParam=
+              AixLib.DataBase.Pumps.PumpPolynomialBased.Pump_DN25_H1_8_V5(),
+            calculatePower=true)),
       tau=90,
       T_amb=293.15,
       dynamicHX(
@@ -122,8 +161,9 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
     annotation (Placement(transformation(extent={{-58,-34},{62,32}})));
   ThermalZones.ReducedOrder.ThermalZone.ThermalZone thermalZone(
     redeclare package Medium = MediumAir,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final C_start={CO2Con_start/1E6 * (MolCO2/MolAir)},
-    zoneParam=AixLib.DataBase.ThermalZones.Office_1995_1000(),
+ redeclare AixLib.DataBase.ThermalZones.Office_1995_1000 zoneParam,
     use_C_flow=true,
     use_moisture_balance=true,
     internalGainsMode=3,
@@ -176,7 +216,8 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
   Fluid.Sources.Outside out(
     C={6.8355*0.0001},      nPorts=1, redeclare package Medium = MediumAir) annotation (Placement(transformation(extent={{-90,-14},
             {-70,6}})));
-  Fluid.Sources.Boundary_pT boundaryExhaustAir(nPorts=1, redeclare package Medium = MediumAir)
+  Fluid.Sources.Boundary_pT boundaryExhaustAir(nPorts=1, redeclare package
+      Medium =                                                                      MediumAir)
                           annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=180,
@@ -205,7 +246,9 @@ model DemandControlledAHU "Example for air handling unit with demand controlled 
     minVflowPer=0.2,
     CO2set=900,
     useTwoFanCtr=false,
-    kCO2=3000/3600) annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
+    kCO2=3000/3600,
+    initType=Modelica.Blocks.Types.Init.InitialState)
+                    annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
   Utilities.Psychrometrics.Phi_pTX phi
     annotation (Placement(transformation(extent={{128,56},{148,76}})));
   BoundaryConditions.WeatherData.Bus weaBus1
@@ -218,20 +261,23 @@ protected
     "molar mass of air";
 
 equation
-  connect(genericAHU.port_a2, thermalZone.ports[1]) annotation (Line(points={{62.5455,20},{72.83,20},{72.83,59.88}},                color={0,127,255}));
-  connect(genericAHU.port_b1, thermalZone.ports[2]) annotation (Line(points={{62.5455,-4},{83.17,-4},{83.17,59.88}},color={0,127,255}));
-  connect(SourcePreheater.ports[1], genericAHU.port_a3) annotation (Line(points={{-45,-66},{-45,-34},{-41.6364,-34}},
-                                               color={0,127,255}));
-  connect(SinkPreheater.ports[1], genericAHU.port_b3) annotation (Line(points={{-29,-66},{-29,-34},{-30.7273,-34}},
-                                              color={0,127,255}));
+  connect(genericAHU.port_a2, thermalZone.ports[1]) annotation (Line(points={{62.5455,
+          20},{75.415,20},{75.415,59.88}},                                                                                          color={0,127,255}));
+  connect(genericAHU.port_b1, thermalZone.ports[2]) annotation (Line(points={{62.5455,
+          -4},{80.585,-4},{80.585,59.88}},                                                                          color={0,127,255}));
+  connect(SourcePreheater.ports[1], genericAHU.port_a3) annotation (Line(points={{-45,-66},
+          {-45,-34},{-41.6364,-34}},           color={0,127,255}));
+  connect(SinkPreheater.ports[1], genericAHU.port_b3) annotation (Line(points={{-29,-66},
+          {-29,-34},{-30.7273,-34}},          color={0,127,255}));
   connect(SourceCooler.ports[1], genericAHU.port_a4) annotation (Line(points={{-3,-66},
           {-3,-54},{2,-54},{2,-34}},         color={0,127,255}));
   connect(SinkCooler.ports[1], genericAHU.port_b4) annotation (Line(points={{13,-66},
           {12,-66},{12,-34},{12.9091,-34}},      color={0,127,255}));
-  connect(SourceHeater.ports[1], genericAHU.port_a5) annotation (Line(points={{31,-66},{32,-66},{32,-62},{22,-62},{22,-34},{23.8182,-34}},
-                                                                   color={0,127,
+  connect(SourceHeater.ports[1], genericAHU.port_a5) annotation (Line(points={{31,-66},
+          {32,-66},{32,-62},{22,-62},{22,-34},{23.8182,-34}},      color={0,127,
           255}));
-  connect(SinkHeater.ports[1], genericAHU.port_b5) annotation (Line(points={{47,-66},{40,-66},{40,-56},{32,-56},{32,-46},{34.1818,-46},{34.1818,-34}},
+  connect(SinkHeater.ports[1], genericAHU.port_b5) annotation (Line(points={{47,-66},
+          {40,-66},{40,-56},{32,-56},{32,-46},{34.1818,-46},{34.1818,-34}},
                                                       color={0,127,255}));
   connect(out.ports[1], genericAHU.port_a1) annotation (Line(points={{-70,-4},{
           -58,-4}},                                                                                           color={0,127,255}));
@@ -260,8 +306,9 @@ equation
       points={{-80,88},{-76,88},{-76,90},{-70,90},{-70,88},{-72,88}},
       color={255,204,51},
       thickness=0.5));
-  connect(phi.p, weaBus1.pAtm) annotation (Line(points={{127,58},{110,58},{110,
-          100},{-72,100},{-72,88}}, color={0,0,127}), Text(
+  connect(phi.p, weaBus1.pAtm) annotation (Line(points={{127,58},{110,58},{110,100},
+          {-71.95,100},{-71.95,88.05}},
+                                    color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
@@ -269,9 +316,8 @@ equation
   annotation (experiment(
       StartTime=5961600,
       StopTime=6566400,
-      Interval=120.000096,
-      Tolerance=1e-05,
-      __Dymola_Algorithm="Dassl"), Documentation(info="<html>
+      Interval=120,
+      Tolerance=1e-05), Documentation(info="<html>
 This example shows the combination of the <code>GenericAHU</code> with a <code>ThermalZone</code>.
 The used controller is designed for demand controlled ventilation (DCV) based on the CO2-Concentration in the zone.
 The Example provides a ready-to-use framework for testing and tuning controllers.
@@ -285,6 +331,6 @@ The nominal values for heat exchangers are derived from data sheets and experime
 </ul>
 </html>"),
 __Dymola_Commands(file(ensureSimulated=true)=
-        "Resources/Scripts/Dymola/Systems/ModularAHU/Examples/DemandControlledAHU.mos"
+        "modelica://AixLib/Resources/Scripts/Dymola/Systems/ModularAHU/Examples/DemandControlledAHU.mos"
         "Simulate and plot"));
 end DemandControlledAHU;
