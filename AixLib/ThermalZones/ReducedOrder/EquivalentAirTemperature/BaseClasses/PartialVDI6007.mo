@@ -85,9 +85,9 @@ partial model PartialVDI6007
         origin={0,-120})));
 
   Modelica.Blocks.Interfaces.RealInput TTerIR[n](
-    final quantity="ThermodynamicTemperature",
-    final unit="K",
-    displayUnit="degC") if useTTerIR "Black-body terrestrial temperature"
+    each final quantity="ThermodynamicTemperature",
+    each final unit="K",
+    each displayUnit="degC") if useTTerIR "Black-body terrestrial temperature"
     annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},
         rotation=0,
